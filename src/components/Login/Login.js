@@ -1,7 +1,10 @@
-import React from 'react';
+import React from "react";
+import { connect } from "react-redux";
 import "./Login.scss";
+import { actionInitialLoadToken } from "../../actions/actions";
 
-export default class Login extends React.Component {
+
+class Login extends React.Component {
     constructor(){
         super();
 
@@ -23,6 +26,10 @@ export default class Login extends React.Component {
         })
     }
 
+    onClickNewUser = (e) => {
+        this.props.initLoadToken();
+    }
+
     render() {
         return (
             <form className="login__form" onSubmit={this.handleOnSubmit}>
@@ -35,7 +42,7 @@ export default class Login extends React.Component {
                 <input type="password" className="login__form_input_password" placeholder="пароль" 
                         name="userPassword" autoComplete="off"
                         value={this.state.userPassword}
-                        onChange={this.onChangePasswordHandle}/>
+                        onChange={this.onChangePasswordHandle}/> 
     
                     {/*this.props.deny && <p className="login__form_p_deny">Неверное имя или пароль</p>*/}    
                     <button className="login__form_button" type="submit">Вход</button>
@@ -44,7 +51,7 @@ export default class Login extends React.Component {
                 <h5>еще не зарегистрированы?</h5>
                 </div>
 
-                <button className="login__form_button" type="button">Создать аккаунт</button>
+                <button className="login__form_button" type="button" onClick={this.onClickNewUser}>Создать аккаунт</button>
 
 
             </form>
@@ -53,3 +60,17 @@ export default class Login extends React.Component {
     }
 
 }
+
+function mapStateToProps(state) {
+    return state;
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        initLoadToken: ()=>{
+            dispatch( actionInitialLoadToken() );
+        }
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

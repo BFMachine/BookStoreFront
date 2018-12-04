@@ -1,14 +1,42 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from "react-redux";
+import { applyMiddleware, createStore, compose } from "redux";
+import { createLogger } from "redux-logger";
+import createSagaMiddleware from "redux-saga";
+
 import './index.css';
-import App from './components/App/App';
+
 import * as serviceWorker from './serviceWorker';
+import App from "./components/App/App";
+import DevTools from "./components/DevTools/DevTools";
+import reducer from "./reducers/redusers";
+import saga from "./saga";
+
+
+const logger = createLogger();
+const sagaMiddleware = createSagaMiddleware();
+//const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+//export const store = createStore(reducer, composeEnhancers(applyMiddleware(logger, sagaMiddleware)));
+//store.dispatch(initialLoadToken());  
+const enhancer = compose(
+    applyMiddleware(logger, sagaMiddleware),
+    DevTools.instrument()
+);
+
+export const store = createStore(reducer, enhancer);
+sagaMiddleware.run(saga); 
 
 ReactDOM.render((
+  <Provider store={store}>
     <BrowserRouter>
-        <App />
+      <div> {/* DEbug wrapper div for devtools */}
+        <App /> 
+        <DevTools />
+      </div>
     </BrowserRouter>
+  </Provider>
 ), document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
