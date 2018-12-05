@@ -1,10 +1,10 @@
 import { put } from "redux-saga/effects";
 
 import isExpTokenValid from "../modules/isExpTokenValid";
-import { actionSetTokens } from "../actions/actions";
+import { actionSetTokens, actionRefreshAccessToken } from "../actions/actions";
 
 export default function* initialLoadToken() {
-    // initail load refresh token
+
     let refreshToken = localStorage.getItem("RefreshT");
     if (!isExpTokenValid(refreshToken))
         refreshToken = "";
@@ -13,4 +13,7 @@ export default function* initialLoadToken() {
         accessToken: "",
         refreshToken
     }));
+
+    if(refreshToken !== "")
+        yield put(actionRefreshAccessToken());
 }

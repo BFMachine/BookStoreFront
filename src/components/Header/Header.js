@@ -1,8 +1,10 @@
 import React from 'react';
+import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
+
 import "./Header.scss";
 
-function Header() {
+function Header({ name, authorized }) {
     return (
         <div className="Header__div-wrapper">
             <div className="Header__div-top-wrapper">
@@ -33,7 +35,7 @@ function Header() {
                 <div className="Header__div-user-menu">
                     <Link className="Header__div-menu-item" to='/login'>
                         <div className="Header__div-icon-cabinet" />
-                        Профиль
+                        {authorized ? name.match(/^\S+@/i) : "Профиль"}
                     </Link>
                     <Link className="Header__div-menu-item" to='/login/new'>  
                         <div className="Header__div-icon-order" />
@@ -58,4 +60,12 @@ function Header() {
         </div>
     );
 }
-export default Header;
+
+function mapStateToProps(state) {
+    return { 
+        name: state.authentications.email,
+        authorized: state.authentications.authorized
+    }
+}
+
+export default connect (mapStateToProps, null)(Header);

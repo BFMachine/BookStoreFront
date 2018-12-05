@@ -13,13 +13,12 @@ import App from "./components/App/App";
 import DevTools from "./components/DevTools/DevTools";
 import reducer from "./reducers/redusers";
 import saga from "./saga";
-
+import { actionInitialLoadToken } from "./actions/actions";
 
 const logger = createLogger();
 const sagaMiddleware = createSagaMiddleware();
 //const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 //export const store = createStore(reducer, composeEnhancers(applyMiddleware(logger, sagaMiddleware)));
-//store.dispatch(initialLoadToken());  
 const enhancer = compose(
     applyMiddleware(logger, sagaMiddleware),
     DevTools.instrument()
@@ -27,6 +26,8 @@ const enhancer = compose(
 
 export const store = createStore(reducer, enhancer);
 sagaMiddleware.run(saga); 
+
+store.dispatch( actionInitialLoadToken() );  
 
 ReactDOM.render((
   <Provider store={store}>

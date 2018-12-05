@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
+
 import './App.scss';
+
 import Login from "../Login/Login";
 import Header from "../Header/Header";
 import AddNewUser from "../AddNewUser/AddNewUser";
 import Cabinet from "../Cabinet/Cabinet";
+import PrivateRoute from "../PrivateRoute/PrivateRoute";
 
 class App extends Component {
   render() {
@@ -18,7 +21,8 @@ class App extends Component {
           <Switch>
             <Route exact path="/login" component={Login}/>
             <Route path="/login/new" component={AddNewUser}/>
-            <Route exact path="/cabinet" component={Cabinet}/>
+            <PrivateRoute exact path="/cabinet/" component={Cabinet} />
+
           </Switch>
 
         </div>
