@@ -32,10 +32,10 @@ store.dispatch( actionInitialLoadToken() );
 ReactDOM.render((
   <Provider store={store}>
     <BrowserRouter>
-      <div> {/* DEbug wrapper div for devtools */}
+      <React.Fragment>
         <App /> 
         <DevTools />
-      </div>
+      </React.Fragment>
     </BrowserRouter>
   </Provider>
 ), document.getElementById('root'));

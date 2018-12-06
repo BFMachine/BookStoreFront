@@ -1,14 +1,15 @@
+import * as jwt from "jsonwebtoken";
+
 import { put, call } from "redux-saga/effects";
-import { actionSetTokens, actionSetAuthentication, actionSetAuthUser } from "../actions/actions";
+import { actionSetTokens, actionSetAuthenticationError, actionSetAuthUser } from "../actions/actions";
+import config from "../config";
 
-let jwt = require("jsonwebtoken");
-
-export default function* getAuthentification({ email, password }) {
+export default function* getAuthentication({ email, password }) {
     
     console.log(`email ${email} password ${password}`);
 
     try {
-        const answer = yield call(fetch, "http://localhost:3000/api/auth", {
+        const answer = yield call(fetch, config.SERVER + "api/auth", {
             method: "post",
             headers: {
                 "Accept": "application/json",
@@ -26,21 +27,21 @@ export default function* getAuthentification({ email, password }) {
             localStorage.setItem("RefreshT", tokens.refreshToken);
             yield put(actionSetTokens(tokens));
             
-            const { email, role } = jwt.decode(tokens.accessToken, {complete: false});
-            yield put(actionSetAuthUser(true, email, role));
+            const { id, email, role } = jwt.decode(tokens.accessToken, {complete: false});
+            yield put(actionSetAuthUser(true, id, email, role));
 
         } else if (answer.status === 404 || answer.status === 401) {
             const answerJson = yield answer.json();
             console.log(answerJson);
-            yield put(actionSetAuthentication(true, answerJson));
+            yield put(actionSetAuthenticationError(answerJson));
 
         } else {
             console.log("server ansewr is not ok");
-            yield put(actionSetAuthentication(true, "Ошибка ответа сервера"));
+            yield put(actionSetAuthenticationError("Ошибка ответа сервера"));
         }
 
     } catch (error) {
         console.log("auth request throw ERROR");
-        yield put(actionSetAuthentication(true, "Ошибка ответа сервера"));
+        yield put(actionSetAuthenticationError("Ошибка ответа сервера"));
     }
 }

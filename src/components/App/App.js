@@ -8,6 +8,7 @@ import Header from "../Header/Header";
 import AddNewUser from "../AddNewUser/AddNewUser";
 import Cabinet from "../Cabinet/Cabinet";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
+import Orders from "../Orders/Orders";
 
 class App extends Component {
   render() {
@@ -21,8 +22,8 @@ class App extends Component {
           <Switch>
             <Route exact path="/login" component={Login}/>
             <Route path="/login/new" component={AddNewUser}/>
-            <PrivateRoute exact path="/cabinet/" component={Cabinet} />
-
+            <PrivateRoute path="/cabinet" component={Cabinet} />
+            <PrivateRoute path="/orders" component={Orders} />
           </Switch>
 
         </div>

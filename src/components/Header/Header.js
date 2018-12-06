@@ -2,9 +2,77 @@ import React from 'react';
 import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
 
+import PopupMenu from "../PopupMenu/PopupMenu";
 import "./Header.scss";
 
-function Header({ name, authorized }) {
+class Header extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      menuTimer: 0,
+      menuVisible: false
+    };
+  }
+
+  
+//({ name, authorized }) {
+
+  onMouseEnterHandler = (e) => {
+    console.log(`in this.state.menuTimer ${this.state.menuTimer}`);
+
+    if(!this.state.menuTimer) { 
+      this.setState({
+        menuTimer: setTimeout(()=>{
+          let self = this;
+          self.setState({
+            menuTimer: 0,
+            menuVisible: true
+          });
+          console.log("settimeout ended!!!");
+          
+
+
+        }, 1000)
+      });
+    }
+  }
+
+  onMouseLeaveHandler = (e) => {
+    console.log(`out this.state.menuTimer ${this.state.menuTimer}`);
+
+    /*    setTimeout(() => {
+        let self = this;
+        if(!self.state.menuTimer) {
+
+        }
+    }, 200); */
+    if(this.state.menuVisible) {
+        return;
+    }
+
+    const timer = this.state.menuTimer;
+    if(timer) {
+        clearTimeout(timer);
+    }
+    
+    this.setState({
+        menuTimer: 0,
+        menuVisible: false
+    });
+
+  }
+
+  menuVisibleOff = () => {
+      this.setState({
+        menuVisible: false
+    });
+  }
+
+
+  render() {
+      const { name, authorized } = this.props;
+      console.log(this.state.menuVisible);
     return (
         <div className="Header__div-wrapper">
             <div className="Header__div-top-wrapper">
@@ -32,20 +100,29 @@ function Header({ name, authorized }) {
                     </button>
                 </div>
 
-                <div className="Header__div-user-menu">
-                    <Link className="Header__div-menu-item" to='/login'>
-                        <div className="Header__div-icon-cabinet" />
-                        {authorized ? name.match(/^\S+@/i) : "Профиль"}
-                    </Link>
-                    <Link className="Header__div-menu-item" to='/login/new'>  
-                        <div className="Header__div-icon-order" />
-                        Заказы
-                    </Link>
-                    <Link className="Header__div-menu-item" to='/cabinet'>
-                        <div className="Header__div-icon-chart" />
-                        Корзина
-                    </Link>
-                </div>
+              <div 
+                className="Header__div-user-menu" 
+                onMouseLeave={this.onMouseLeaveHandler}
+                onMouseEnter={this.onMouseEnterHandler}
+              >
+                <Link className="Header__div-menu-item" to='/login'>
+                  <div className="Header__div-icon-cabinet" />
+                  {authorized ? name.match(/^\S+@/i) : "Профиль"}
+                  {this.state.menuVisible && <PopupMenu menuVisibleOff={this.menuVisibleOff} 
+                                                        menuVisible={this.state.menuVisible} />}
+                </Link>
+
+                
+
+                <Link className="Header__div-menu-item" to='/orders'>  
+                  <div className="Header__div-icon-order" />
+                  Заказы
+                </Link>
+                <Link className="Header__div-menu-item" to='/cabinet'>
+                  <div className="Header__div-icon-chart" />
+                  Корзина
+                </Link>
+              </div>
 
             </div>
             <div className="Header__div-bottom">
@@ -59,13 +136,14 @@ function Header({ name, authorized }) {
             </div>
         </div>
     );
+  }
 }
 
 function mapStateToProps(state) {
     return { 
         name: state.authentications.email,
         authorized: state.authentications.authorized
-    }
+    };
 }
 
 export default connect (mapStateToProps, null)(Header);

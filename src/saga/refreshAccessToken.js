@@ -1,11 +1,12 @@
-import { put, call, select } from "redux-saga/effects";
-import { actionSetTokens, actionSetAuthUser, actionSetAuthentication } from "../actions/actions";
+import * as jwt from "jsonwebtoken";
 
-let jwt = require("jsonwebtoken");
+import { put, call, select } from "redux-saga/effects";
+import { actionSetTokens, actionSetAuthUser, actionSetAuthenticationError } from "../actions/actions";
+import config from "../config";
 
 const getTokens = state => state.tokens;
 
-export default function* refreshAcessToken() {
+export default function* refreshAccessToken() {
     
     let tokens = yield select(getTokens);
 
@@ -21,7 +22,7 @@ export default function* refreshAcessToken() {
     }
 
     try{
-        const answer = yield call(fetch, "http://localhost:3000/api/refresh", {
+        const answer = yield call(fetch, config.SERVER + "api/refresh", {
             method: "get",
             headers: {
                 "Accept": "application/json",
@@ -39,19 +40,19 @@ export default function* refreshAcessToken() {
             localStorage.setItem("RefreshT", tokens.refreshToken);
             yield put(actionSetTokens(tokens));
 
-            const { email, role } = jwt.decode(tokens.accessToken, {complete: false});
-            yield put(actionSetAuthUser(true, email, role));
+            const { id, email, role } = jwt.decode(tokens.accessToken, {complete: false});
+            yield put(actionSetAuthUser(true, id, email, role));
 
         } else {
             console.log("server ansewr is not ok");
             yield put(actionSetAuthUser(false));
-            yield put(actionSetAuthentication(true, "Ошибка ответа сервера"));
+            yield put(actionSetAuthenticationError("Ошибка ответа сервера"));
         }
 
     } catch (error) {
         console.log("refresh token request throw ERROR");
         yield put(actionSetAuthUser(false));
-        yield put(actionSetAuthentication(true, "Ошибка ответа сервера"));
+        yield put(actionSetAuthenticationError("Ошибка ответа сервера"));
     }
  }
  

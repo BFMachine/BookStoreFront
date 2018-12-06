@@ -4,7 +4,7 @@ import { Redirect } from "react-router-dom";
 
 import "./Login.scss";
 
-import { actionGetAuthentication, actionSetAuthentication, actionRefreshAccessToken } from "../../actions/actions";
+import { actionGetAuthentication, actionSetAuthenticationError, actionRefreshAccessToken } from "../../actions/actions";
 
 
 class Login extends React.Component {
@@ -14,31 +14,31 @@ class Login extends React.Component {
         this.state = {
             userName: "",
             userPassword: ""
-        }
+        };
     }
 
     onChangeNameHandle = (e) => {
         if(this._refInputName)
             this._refInputName.setCustomValidity("");
 
-        if(this.props.responseError)
+        if(this.props.message.length)
             this.props.clearResposeError();
 
         this.setState({
             userName: e.target.value    
-        })
+        });
     }
 
     onChangePasswordHandle = (e) => {
         if(this._refInputPassword)
             this._refInputPassword.setCustomValidity("");
 
-        if(this.props.responseError)
+        if(this.props.message.length)
             this.props.clearResposeError();
 
         this.setState({
             userPassword: e.target.value
-        })
+        });
     }
 
     getInputNameRef = (ref) => {
@@ -84,35 +84,46 @@ class Login extends React.Component {
     render() {
 
         if (this.props.authorized)
-            return <Redirect to="/cabinet" />
+            return <Redirect to="/cabinet" />;
 
         return (
-            <form className="login__form" onSubmit={this.onSubmitHandle}>
-                {/*<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/150px-HTML5_logo_and_wordmark.svg.png" width="70px" />*/}
-                <p>Авторизируйтесь:</p>
-                <input type="text" className="login__form_input_name" placeholder="имя пользователя (e-mail)" 
-                        name="userName" autoComplete="off" title="Введите email, например: example@mail.com"
-                        value={this.state.userName}
-                        ref={this.getInputNameRef}
-                        onChange={this.onChangeNameHandle}/>
-                <input type="password" className="login__form_input_password" placeholder="пароль"
-                        name="userPassword" autoComplete="off" title="Введите пароль, не менее 3 символов"
-                        value={this.state.userPassword}
-                        ref={this.getInputPasswordRef}
-                        onChange={this.onChangePasswordHandle}/> 
+          <form className="login__form" onSubmit={this.onSubmitHandle}>
+            {/*<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/150px-HTML5_logo_and_wordmark.svg.png" width="70px" />*/}
+            <p>Авторизируйтесь:</p>
+            <input
+              type="text"
+              className="login__form_input_name"
+              placeholder="имя пользователя (e-mail)" 
+              name="userName"
+              autoComplete="off"
+              title="Введите email, например: temp@gmail.com"
+              value={this.state.userName}
+              ref={this.getInputNameRef}
+              onChange={this.onChangeNameHandle} 
+            />
+            <input
+              type="password"
+              className="login__form_input_password"
+              placeholder="пароль"
+              name="userPassword"
+              autoComplete="off"
+              title="Введите пароль, не менее 3 символов"
+              value={this.state.userPassword}
+              ref={this.getInputPasswordRef}
+              onChange={this.onChangePasswordHandle} 
+            /> 
     
-                <p className="login__form_p_deny">{this.props.responseError && this.props.message}</p>
+            <p className="login__form_p_deny">{this.props.message}</p>
 
+            <button className="login__form_button" onClick={this.onSubmitButtonClick} type="submit">Вход</button>
 
-                <button className="login__form_button" onClick={this.onSubmitButtonClick} type="submit">Вход</button>
+            <div className="login__div-break-line">
+              <h5>еще не зарегистрированы?</h5>
+            </div>
 
-                <div className="login__div-break-line">
-                    <h5>еще не зарегистрированы?</h5>
-                </div>
+            <button className="login__form_button" type="button" onClick={this.props.tempRefreshToken}>Создать аккаунт</button>
 
-                <button className="login__form_button" type="button" onClick={this.props.tempRefreshToken}>Создать аккаунт</button>
-
-            </form>  
+          </form>  
         );       
     }
 }
@@ -122,7 +133,7 @@ function mapStateToProps(state) {
         responseError: state.authentications.responseError,
         message: state.authentications.message,
         authorized: state.authentications.authorized
-    }
+    };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -131,7 +142,7 @@ function mapDispatchToProps(dispatch) {
                             dispatch( actionGetAuthentication(username, password) );
                         },
         clearResposeError: () => {
-                            dispatch( actionSetAuthentication(false, "") );
+                            dispatch( actionSetAuthenticationError("") );
                         },
         tempRefreshToken: () => {
                             dispatch( actionRefreshAccessToken());
