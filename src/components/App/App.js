@@ -9,6 +9,10 @@ import AddNewUser from "../AddNewUser/AddNewUser";
 import Cabinet from "../Cabinet/Cabinet";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
 import Orders from "../Orders/Orders";
+import InfoPage from "../InfoPage/InfoPage";
+
+
+/* eslint-disable */
 
 class App extends Component {
   render() {
@@ -24,6 +28,13 @@ class App extends Component {
             <Route path="/login/new" component={AddNewUser}/>
             <PrivateRoute path="/cabinet" component={Cabinet} />
             <PrivateRoute path="/orders" component={Orders} />
+            
+            <PrivateRoute path="/logout" 
+              render={(props) => (
+                <InfoPage {...props} message="Вы вышли из системы" />
+              )} 
+            />
+            
           </Switch>
 
         </div>
@@ -61,5 +72,5 @@ class App extends Component {
     );
   }
 }
-
+/* eslint-enable */
 export default App;

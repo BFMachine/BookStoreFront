@@ -1,45 +1,114 @@
 import React from "react";
-//import { connect } from "react-redux";
+import { Link } from 'react-router-dom';
+import PropTypes from "prop-types";
 import styled from "styled-components";
 
+const colorLine = "#0083ca";//"#c9d3d8";
 
+const Substrate = styled.div`
+  position: absolute;
+  top: 35px;
+  width: 130px;
+  left: -39px;
+  z-index: 3;
+  //border: 1px dashed gray;
+  //background-color: rgba(255,255,255,.8);
+`;
 const MainWin = styled.div`
-    position: absolute;
-    top: 45px;
-    padding: 5px;
-    border: 1px solid gray;
-    background-color: white;
+  margin: 10px;
+  padding: 0px;
+  border: 1px solid ${colorLine};
+  border-radius: 0.25rem;
+  background-color: white;
 `;
-
-const MenuItem = styled.div`
-    padding: 5px;
+const StyledLink = styled(Link)`
+  display: block;
+  text-decoration: none;
+  padding: 5px 20px;
+  
+  :first-child {
+    padding-top: 15px;
+  }
+  
+  :last-child {
+    padding-bottom: 15px;
+  }
 `;
+const ArrowUp = styled.div`
+  position: absolute;
+  top: -10px;
+  //width: 20px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
 
+  width: 0; 
+  height: 0; 
+  border: 10px solid transparent;
+  border-bottom-color: ${colorLine};
+`;  
 
 class PopupMenu extends React.Component {
-  constructor(props){
-    super(props);
-    console.log("");
+ 
+  onMouseLeaveHandler = (e) => {
+    this.props.mouseLeave(e);
   }
 
-  onMouseLeaveHandler = (e) => {
-    this.props.menuVisibleOff();
+  onClickMenuItem = (e) => {
+    e.stopPropagation();
+    this.props.mouseLeave(e);
+  }
+
+  onClickLogoutHandler = (e) => {
+    e.stopPropagation();
+    this.props.mouseLeave(e);
+    this.props.logoutUser();
   }
 
   render() {
     if(this.props.menuVisible) {
       return (
-        <MainWin onMouseLeave={this.onMouseLeaveHandler}>
-          <MenuItem>menuItem1</MenuItem> 
-          <MenuItem>menuItem1</MenuItem>
-          <MenuItem>menuItem1</MenuItem>
-          <MenuItem>menuItem1</MenuItem>
-        </MainWin>
+        <Substrate onMouseLeave={this.onMouseLeaveHandler}>
+          <ArrowUp />
+          <MainWin>
+            
+            <StyledLink to='/cabinet' onClick={this.onClickMenuItem}>
+              Кабинет 
+            </StyledLink>
+            <StyledLink to='/orders' onClick={this.onClickMenuItem}>
+              Заказы 
+            </StyledLink>
+            <StyledLink to='/login/new' onClick={this.onClickMenuItem}>
+              Новый 
+            </StyledLink>
+
+            {this.props.authorized ? 
+              (
+                <StyledLink to='/logout' onClick={this.onClickLogoutHandler}>
+                  Выход 
+                </StyledLink> 
+              ) : 
+              (
+                <StyledLink to='/login' onClick={this.onClickMenuItem}>
+                  Войти 
+                </StyledLink> 
+              )
+            } 
+
+          </MainWin>
+        </Substrate>
       );
     } else {
       return null;
     }
   }
 }
+
+PopupMenu.propTypes = {
+  authorized: PropTypes.bool.isRequired,
+  mouseLeave: PropTypes.func.isRequired,
+  menuVisible: PropTypes.bool.isRequired,
+  logoutUser: PropTypes.func.isRequired,
+};
 
 export default PopupMenu;

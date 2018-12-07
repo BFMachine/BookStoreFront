@@ -8,6 +8,8 @@ export const INITIAL_LOAD_TOKEN = "INITIAL_LOAD_TOKEN";
 export const GET_AUTHENTICATION = "GET_AUTHENTICATION";
 export const REFRESH_ACCESS_TOKEN = "REFRESH_ACCESS_TOKEN";
 export const GET_ORDERS = "GET_ORDERS";
+export const LOGOUT_USER = "LOGOUT_USER";
+
 
 export function actionSetTokens(tokens) {
     return {
@@ -63,5 +65,11 @@ export function actionSetOrders(payload) {
 export function actionGetOrders() {
     return {
         type: GET_ORDERS
+    };
+}
+
+export function actionLogoutUser() {
+    return {
+        type: LOGOUT_USER
     };
 }

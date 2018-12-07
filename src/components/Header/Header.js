@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
+import PropTypes from "prop-types";
 
 import PopupMenu from "../PopupMenu/PopupMenu";
+import { actionLogoutUser } from "../../actions/actions";
 import "./Header.scss";
 
 class Header extends React.Component {
@@ -15,11 +17,19 @@ class Header extends React.Component {
     };
   }
 
-  
-//({ name, authorized }) {
+  onClickPopupMenuHandler = () => {
 
-  onMouseEnterHandler = (e) => {
-    console.log(`in this.state.menuTimer ${this.state.menuTimer}`);
+    if(this.state.menuTimer) {
+      clearTimeout(this.state.menuTimer);
+    }
+
+    this.setState({
+      menuTimer: 0,
+      menuVisible: true
+    });
+  }
+
+  onMouseEnterHandler = () => {
 
     if(!this.state.menuTimer) { 
       this.setState({
@@ -29,38 +39,25 @@ class Header extends React.Component {
             menuTimer: 0,
             menuVisible: true
           });
-          console.log("settimeout ended!!!");
-          
-
-
-        }, 1000)
+        }, 400)
       });
     }
   }
 
   onMouseLeaveHandler = (e) => {
-    console.log(`out this.state.menuTimer ${this.state.menuTimer}`);
-
-    /*    setTimeout(() => {
-        let self = this;
-        if(!self.state.menuTimer) {
-
-        }
-    }, 200); */
-    if(this.state.menuVisible) {
-        return;
+    // eslint-disable-next-line
+    if(this.state.menuVisible && e.target == this) {
+      return;
     }
 
-    const timer = this.state.menuTimer;
-    if(timer) {
-        clearTimeout(timer);
+    if(this.state.menuTimer) {
+        clearTimeout(this.state.menuTimer);
     }
     
     this.setState({
         menuTimer: 0,
         menuVisible: false
     });
-
   }
 
   menuVisibleOff = () => {
@@ -69,75 +66,91 @@ class Header extends React.Component {
     });
   }
 
-
   render() {
-      const { name, authorized } = this.props;
-      console.log(this.state.menuVisible);
+    const { name, authorized, logoutUser } = this.props;
     return (
-        <div className="Header__div-wrapper">
-            <div className="Header__div-top-wrapper">
-                <div className="Header__div-top">
-                    <div className="Header__div-top_links">
-                        <a href="#p1">Пункты выдачи</a>
-                        <a href="#p1">Доставка</a>
-                        <a href="#p1">Оплата</a>
-                        <a href="#p1">Помощь</a>
-                     </div>
-                    <div className="Header__div-top_phone">
-                        +7 999 999-99-99
-                    </div>
-                </div>
+      <div className="Header__div-wrapper">
+        <div className="Header__div-top-wrapper">
+          <div className="Header__div-top">
+            <div className="Header__div-top_links">
+              <a href="#p1">Пункты выдачи</a>
+              <a href="#p1">Доставка</a>
+              <a href="#p1">Оплата</a>
+              <a href="#p1">Помощь</a>
             </div>
-            <div className="Header__div-middle">
-
-                <div className="Header__div-logo" />
-                
-                <div className="Header__div-search-bar">
-                    <input type="text" maxLength="255" autoComplete="off" placeholder="Выбирайте..."/>
-                    <button type="submit" className="Header__div-search-button">
-                        <div className="Header__div-search-bar_icon">
-                        </div>
-                    </button>
-                </div>
-
-              <div 
-                className="Header__div-user-menu" 
-                onMouseLeave={this.onMouseLeaveHandler}
-                onMouseEnter={this.onMouseEnterHandler}
-              >
-                <Link className="Header__div-menu-item" to='/login'>
-                  <div className="Header__div-icon-cabinet" />
-                  {authorized ? name.match(/^\S+@/i) : "Профиль"}
-                  {this.state.menuVisible && <PopupMenu menuVisibleOff={this.menuVisibleOff} 
-                                                        menuVisible={this.state.menuVisible} />}
-                </Link>
-
-                
-
-                <Link className="Header__div-menu-item" to='/orders'>  
-                  <div className="Header__div-icon-order" />
-                  Заказы
-                </Link>
-                <Link className="Header__div-menu-item" to='/cabinet'>
-                  <div className="Header__div-icon-chart" />
-                  Корзина
-                </Link>
-              </div>
-
+            <div className="Header__div-top_phone">
+                +7 999 999-99-99
             </div>
-            <div className="Header__div-bottom">
-                <a href="#p1">Классика</a>
-                <a href="#p1">Фэнтэзи</a>
-                <a href="#p1">Приключения</a>
-                <a href="#p1">Детектив</a>
-                <a href="#p1">Фантастика</a>
-                <a href="#p1">Научная литература</a>
-                <a href="#p1">Детская</a>
-            </div>
+          </div>
         </div>
+        <div className="Header__div-middle">
+
+          <div className="Header__div-logo" />
+          
+          <div className="Header__div-search-bar">
+            <input type="text" maxLength="255" autoComplete="off" placeholder="Выбирайте..." />
+            <button type="submit" className="Header__div-search-button">
+              <div className="Header__div-search-bar_icon" />
+            </button>
+          </div>
+
+          <div className="Header__div-user-menu">
+            <div
+              className="header__menu-popup" 
+              onMouseLeave={this.onMouseLeaveHandler}
+              onMouseEnter={this.onMouseEnterHandler}
+              onClick={this.onClickPopupMenuHandler}
+            >
+              {/*<Link className="Header__div-menu-item" to='/login'>*/}
+              <div className="Header__div-menu-item">
+                <div className="Header__div-icon-cabinet" />
+                {authorized ? name.match(/^\S+@/i) : "Профиль"}
+              </div>
+              {/*</Link>*/}
+              {<PopupMenu
+                mouseLeave={this.onMouseLeaveHandler} 
+                menuVisible={this.state.menuVisible} 
+                authorized={authorized}
+                logoutUser={logoutUser}
+              />}
+            </div>
+
+
+            
+
+            <Link className="Header__div-menu-item" to='/orders'>  
+              <div className="Header__div-icon-order" />
+              Заказы
+            </Link>
+            <Link className="Header__div-menu-item" to='/cabinet'>
+              <div className="Header__div-icon-chart" />
+              Корзина
+            </Link>
+          </div>
+
+        </div>
+        <div className="Header__div-bottom">
+          <a href="#p1">Классика</a>
+          <a href="#p1">Фэнтэзи</a>
+          <a href="#p1">Приключения</a>
+          <a href="#p1">Детектив</a>
+          <a href="#p1">Фантастика</a>
+          <a href="#p1">Научная литература</a>
+          <a href="#p1">Детская</a>
+        </div>
+      </div>
     );
   }
 }
+
+Header.propTypes = {
+  name: PropTypes.string,
+  logoutUser: PropTypes.func.isRequired,
+  authorized: PropTypes.bool.isRequired
+};
+Header.defaultProps = {
+  name: ""
+};
 
 function mapStateToProps(state) {
     return { 
@@ -146,4 +159,12 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect (mapStateToProps, null)(Header);
+let mapDipatchToProps = (dispatch) => {
+  return {
+    logoutUser: () => {
+      dispatch(actionLogoutUser());
+    }
+  };
+};
+
+export default connect (mapStateToProps, mapDipatchToProps)(Header);

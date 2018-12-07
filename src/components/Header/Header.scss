@@ -137,7 +137,15 @@ $font-color-search: #333;
         min-width: 190px;
         max-width: 380px;
 
+        .header__menu-popup {
+            position: relative;
+        }
+
         .Header__div-menu-item {
+            
+            width: 55px;
+            //overflow-wrap: break-word;
+            //white-space: pre-wrap;
             color: $font-color-header-footer;
             text-decoration: none;
             //display: block;
@@ -147,7 +155,7 @@ $font-color-search: #333;
             flex-direction: column;
             justify-content: flex-end;
             align-items: center;
-            position: relative;
+            cursor: pointer;
         }
 
         .Header__div-icon-cabinet {
