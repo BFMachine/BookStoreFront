@@ -31,26 +31,28 @@ export default function* refreshAccessToken() {
             }
         });
 
-        if(answer.ok) {
-            const responseBody = yield answer.json();
-            tokens = JSON.parse(responseBody);
-
-            console.log(`Server return new tokens: ${tokens.accessToken} ${tokens.refreshToken}`);
-
-            localStorage.setItem("RefreshT", tokens.refreshToken);
-            yield put(actionSetTokens(tokens));
-
-            const { id, email, role } = jwt.decode(tokens.accessToken, {complete: false});
-            yield put(actionSetAuthUser(true, id, email, role));
-
-        } else {
-            console.log("server ansewr is not ok");
-            yield put(actionSetAuthUser(false));
-            yield put(actionSetAuthenticationError("Ошибка ответа сервера"));
+        if(!answer.ok) {
+            throw new Error("Ошибка ответа сервера");
         }
 
+        const responseBody = yield answer.json();
+        const resJson = JSON.parse(responseBody);
+        const newTokens = { 
+            accessToken: resJson.accessToken, 
+            refreshToken: resJson.refreshToken
+        };
+
+        console.log(`Server return new tokens: ${newTokens.accessToken} ${newTokens.refreshToken}`);
+
+        localStorage.setItem("RefreshT", newTokens.refreshToken);
+        yield put(actionSetTokens(newTokens));
+
+        const { id, email, role } = jwt.decode(newTokens.accessToken, {complete: false});
+        yield put(actionSetAuthUser(true, id, email, role, resJson.full_name, resJson.address, resJson.phone));
+
     } catch (error) {
-        console.log("refresh token request throw ERROR");
+
+        console.log(`refresh token request throw error ${error.message}`);
         yield put(actionSetAuthUser(false));
         yield put(actionSetAuthenticationError("Ошибка ответа сервера"));
     }

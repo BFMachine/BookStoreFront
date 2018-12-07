@@ -119,6 +119,10 @@ class Header extends React.Component {
               <div className="Header__div-icon-order" />
               Заказы
             </Link>
+            <Link className="Header__div-menu-item" to='/favorite'>  
+              <div className="Header__div-icon-favorit" />
+              Избранное
+            </Link>
             <Link className="Header__div-menu-item" to='/cart'>
               <div className="Header__div-icon-chart" />
               Корзина

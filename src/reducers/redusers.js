@@ -40,7 +40,10 @@ function authentications(state = initialAuthState, action) {
         authorized: action.authorized,
         id: action.id,
         email: action.email,
-        role: action.role
+        role: action.role,
+        full_name: action.full_name,
+        address: action.address,
+        phone: action.phone
       };
 
       default:
@@ -70,11 +73,11 @@ function cart(state = [], action) {
   }
 }
 
-function favorite(state = {}, action) {
+function favorite(state = [], action) {
 
   switch(action.type) {
     case SET_FAVORITE:
-      return {...action.favorite};
+      return [...action.favorite];
   
     default:
         return state;  

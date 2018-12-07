@@ -5,7 +5,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import "moment/locale/ru";
 
-import { actionGetCart } from "../../actions/actions";
+import { actionGetFavorite } from "../../actions/actions";
 
 const colorLine = "#c9d3d8";
 
@@ -58,14 +58,14 @@ const Td = styled.td`
 `;
 
 
-class Cart extends React.Component {
+class Favorite extends React.Component {
   constructor() {
     super();
     this.state = {};
   }
 
   componentDidMount() {
-    this.props.getCart();
+    this.props.getFavorite();
   }
 
   render() {
@@ -94,7 +94,7 @@ class Cart extends React.Component {
               <Th>Рейтинг</Th>
             </tr>
 
-            {this.props.cart.length !==0 && this.props.cart.map((item, i) => {
+            {this.props.favorite.length !==0 && this.props.favorite.map((item, i) => {
               return (
                 <tr key={item.id}> 
                   <Td>{i + 1}</Td>
@@ -120,8 +120,8 @@ class Cart extends React.Component {
 }
 
 /* eslint-disable react/require-default-props */
-Cart.propTypes = {
-  cart: PropTypes.arrayOf(PropTypes.shape({
+Favorite.propTypes = {
+  favorite: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     author: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
@@ -136,23 +136,23 @@ Cart.propTypes = {
     address: PropTypes.string,
     phone: PropTypes.string
   }),
-  getCart: PropTypes.func.isRequired,
+  getFavorite: PropTypes.func.isRequired,
 };
 
 
 function mapStateToProps(state) {
   return {
-      cart: state.cart,
+      favorite: state.favorite,
       auth: state.authentications
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-      getCart: () => {
-          dispatch(actionGetCart());
+      getFavorite: () => {
+          dispatch(actionGetFavorite());
       }
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Cart);
+export default connect(mapStateToProps, mapDispatchToProps)(Favorite);

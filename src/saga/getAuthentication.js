@@ -6,8 +6,6 @@ import config from "../config";
 
 export default function* getAuthentication({ email, password }) {
     
-    console.log(`email ${email} password ${password}`);
-
     try {
         const answer = yield call(fetch, config.SERVER + "api/auth", {
             method: "post",
@@ -18,30 +16,36 @@ export default function* getAuthentication({ email, password }) {
             body: JSON.stringify({ email, password })
         });
 
-        if (answer.ok) {
-            const responseBody = yield answer.json();
-            const tokens = JSON.parse(responseBody);
-
-            console.log(`Server return new tokens: ${tokens.accessToken} ${tokens.refreshToken}`);
-
-            localStorage.setItem("RefreshT", tokens.refreshToken);
-            yield put(actionSetTokens(tokens));
-            
-            const { id, email, role } = jwt.decode(tokens.accessToken, {complete: false});
-            yield put(actionSetAuthUser(true, id, email, role));
-
-        } else if (answer.status === 404 || answer.status === 401) {
-            const answerJson = yield answer.json();
-            console.log(answerJson);
-            yield put(actionSetAuthenticationError(answerJson));
-
-        } else {
-            console.log("server ansewr is not ok");
-            yield put(actionSetAuthenticationError("Ошибка ответа сервера"));
+        if(!answer.ok) {
+            if (answer.status === 404 || answer.status === 401){
+                const answerJson = yield answer.json();
+                throw new Error(answerJson);
+            }
+            throw new Error("Ошибка ответа сервера");
         }
 
+        const responseBody = yield answer.json();
+        const resJson = JSON.parse(responseBody);
+        const tokens = { 
+            accessToken: resJson.accessToken, 
+            refreshToken: resJson.refreshToken
+        };
+
+        console.log(`Server return new tokens: ${tokens.accessToken} ${tokens.refreshToken}`);
+
+        localStorage.setItem("RefreshT", tokens.refreshToken);
+        yield put(actionSetTokens(tokens));
+        
+        const decToken = jwt.decode(tokens.accessToken, {complete: false});
+        yield put(actionSetAuthUser(true, decToken.id, decToken.email, decToken.role, resJson.full_name, resJson.address, resJson.phone));
+
     } catch (error) {
-        console.log("auth request throw ERROR");
-        yield put(actionSetAuthenticationError("Ошибка ответа сервера"));
+        
+        console.log(`auth request throw error ${error.message}`);
+
+        if( error.name !== "Error" ) {
+            error.message = "Ошибка запроса сервера";
+        }
+        yield put(actionSetAuthenticationError(error.message));
     }
 }

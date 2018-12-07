@@ -11,6 +11,7 @@ import PrivateRoute from "../PrivateRoute/PrivateRoute";
 import Orders from "../Orders/Orders";
 import InfoPage from "../InfoPage/InfoPage";
 import Cart from "../Cart/Cart";
+import Favorite from "../Favorite/Favorite";
 
 
 /* eslint-disable */
@@ -30,6 +31,7 @@ class App extends Component {
             <PrivateRoute path="/cabinet" component={Cabinet} />
             <PrivateRoute path="/orders" component={Orders} />
             <PrivateRoute path="/cart" component={Cart} />
+            <PrivateRoute path="/favorite" component={Favorite} />
 
             <PrivateRoute path="/logout" 
               render={(props) => (

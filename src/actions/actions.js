@@ -49,13 +49,24 @@ export function actionRefreshAccessToken() {
     };
 }
 
-export function actionSetAuthUser(authorized, id = null, email = "", role = "") {
+export function actionSetAuthUser(
+    authorized, 
+    id = null, 
+    email = "", 
+    role = "", 
+    full_name = "",
+    address = "",
+    phone = ""
+    ) {
     return {
         type: SET_AUTH_USER,
         authorized, 
         id,
         email,
-        role
+        role,
+        full_name,
+        address,
+        phone
     };
 }
 
