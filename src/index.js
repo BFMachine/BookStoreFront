@@ -2,39 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from "react-redux";
-import { applyMiddleware, createStore, compose } from "redux";
-import { createLogger } from "redux-logger";
-import createSagaMiddleware from "redux-saga";
+import * as serviceWorker from './serviceWorker';
 
 import './index.css';
-
-import * as serviceWorker from './serviceWorker';
 import App from "./components/App/App";
-import DevTools from "./components/DevTools/DevTools";
-import reducer from "./reducers/redusers";
-import saga from "./saga";
-import { actionInitialLoadToken } from "./actions/actions";
 
-const logger = createLogger();
-const sagaMiddleware = createSagaMiddleware();
-//const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-//export const store = createStore(reducer, composeEnhancers(applyMiddleware(logger, sagaMiddleware)));
-const enhancer = compose(
-    applyMiddleware(logger, sagaMiddleware),
-    DevTools.instrument()
-);
-
-export const store = createStore(reducer, enhancer);
-sagaMiddleware.run(saga); 
-
-store.dispatch( actionInitialLoadToken() );  
+import store from "./store/store";
 
 ReactDOM.render((
   <Provider store={store}>
     <BrowserRouter>
       <React.Fragment>
         <App /> 
-        <DevTools />
+        {/*<DevTools />*/}
       </React.Fragment>
     </BrowserRouter>
   </Provider>

@@ -1,6 +1,8 @@
 import { combineReducers } from "redux";
 
-import { SET_TOKENS, SET_AUTHENTICATION_ERROR, SET_AUTH_USER, SET_ORDERS } from "../actions/actions";
+import { SET_TOKENS, SET_AUTHENTICATION_ERROR, SET_AUTH_USER, SET_ORDERS,
+  SET_CART, SET_FAVORITE 
+} from "../actions/actions";
 
 function tokens(state = { accessToken: "", refreshToken: "" }, action) {
   switch(action.type) {
@@ -57,8 +59,32 @@ function orders(state = { orders: null }, action) {
   }
 }
 
+function cart(state = [], action) {
+
+  switch(action.type) {
+    case SET_CART:
+      return [...action.cart];
+  
+    default:
+        return state;  
+  }
+}
+
+function favorite(state = {}, action) {
+
+  switch(action.type) {
+    case SET_FAVORITE:
+      return {...action.favorite};
+  
+    default:
+        return state;  
+  }
+}
+
 export default combineReducers({
     tokens,
     authentications,
-    orders
+    orders,
+    cart,
+    favorite
 });

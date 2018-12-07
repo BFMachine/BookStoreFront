@@ -115,14 +115,11 @@ class Header extends React.Component {
               />}
             </div>
 
-
-            
-
             <Link className="Header__div-menu-item" to='/orders'>  
               <div className="Header__div-icon-order" />
               Заказы
             </Link>
-            <Link className="Header__div-menu-item" to='/cabinet'>
+            <Link className="Header__div-menu-item" to='/cart'>
               <div className="Header__div-icon-chart" />
               Корзина
             </Link>

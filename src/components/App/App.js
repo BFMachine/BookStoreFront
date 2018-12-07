@@ -10,6 +10,7 @@ import Cabinet from "../Cabinet/Cabinet";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
 import Orders from "../Orders/Orders";
 import InfoPage from "../InfoPage/InfoPage";
+import Cart from "../Cart/Cart";
 
 
 /* eslint-disable */
@@ -28,7 +29,8 @@ class App extends Component {
             <Route path="/login/new" component={AddNewUser}/>
             <PrivateRoute path="/cabinet" component={Cabinet} />
             <PrivateRoute path="/orders" component={Orders} />
-            
+            <PrivateRoute path="/cart" component={Cart} />
+
             <PrivateRoute path="/logout" 
               render={(props) => (
                 <InfoPage {...props} message="Вы вышли из системы" />
