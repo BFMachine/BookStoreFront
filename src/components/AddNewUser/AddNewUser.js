@@ -1,80 +1,197 @@
 import React from 'react';
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+
 import "./AddNewUser.scss";
 
-export default class AddNewUser extends React.Component {
-    constructor(){
-        super();
+import { actionCreateNewUser } from "../../actions/actions";
 
-        this.state = {
-            userName: "",
-            userPassword: ""
-        }
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/label-has-for */
+
+class AddNewUser extends React.Component {
+  constructor(){
+    super();
+
+    this.state = {
+        userName: "",
+        userPassword: ""
+    };
+  } 
+
+  onChangeNameHandle = (e) => {
+    if(this._refInputName)
+        this._refInputName.setCustomValidity("");
+
+    this.setState({
+        userName: e.target.value    
+    });
+  }
+
+  onChangePasswordHandle = (e) => {
+    if(this._refInputPassword)
+        this._refInputPassword.setCustomValidity("");
+
+    this.setState({
+        userPassword: e.target.value
+    });
+  }
+
+  getInputNameRef = (ref) => {
+    this._refInputName = ref;
+  }
+
+  getInputPasswordRef = (ref) => {
+    this._refInputPassword = ref;
+  }
+
+  onSubmitButtonClick = () => {
+  // use onClick button event, set custom validity BEFORE!!! event submit because chrome bug
+    if(this.state.userName.search(/^\S+@/i) === -1) {
+        this._refInputName.setCustomValidity("email должен содержать символ \"@\"");
+        return;
     }
 
-    onChangeNameHandle = (e) => {
-        this.setState({
-            userName: e.target.value    
-        })
+    if(this.state.userName.search(/^\S+@\S+\./i) === -1) {
+        this._refInputName.setCustomValidity("email должен содержать символ \".\"");
+        return;
     }
 
-    onChangePasswordHandle = (e) => {
-        this.setState({
-            userPassword: e.target.value
-        })
+    if(this.state.userName.search(/^\S+@\S+\.\S+$/i) === -1) {
+        this._refInputName.setCustomValidity("Введите email по шаблону adress@domain.com");
+        return;
     }
-
-    render() {
-        return (
-            <form className="add-new-user__form" onSubmit={this.handleOnSubmit}>
-                {/*<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/150px-HTML5_logo_and_wordmark.svg.png" width="70px" />*/}
-                <p>Регистрация:</p>
-
-                <label>
-                    <span>Имя</span>
-                    <input type="text" className="add-new-user__form_input_text" placeholder="Ф.И.О пользователя" 
-                            name="userName" autoComplete="off"
-                            value={this.state.userName}
-                            onChange={this.onChangeNameHandle}/>
-                </label>
-
-                <label>
-                    <span>Email</span>
-                    <input type="text" className="add-new-user__form_input_text" placeholder="логин для авторизации" 
-                            name="userName" autoComplete="off"
-                            value={this.state.userName}
-                            onChange={this.onChangeNameHandle}/>
-                </label>
-
-                <label>
-                    <span>Пароль</span>
-                    <input type="password" className="add-new-user__form_input_text" placeholder="не менее 6 символов" 
-                            name="userName" autoComplete="off"
-                            value={this.state.userName}
-                            onChange={this.onChangeNameHandle}/>
-                </label>
-
-                <label>
-                    <span>Адрес доставки</span>
-                    <input type="text" className="add-new-user__form_input_text" placeholder="полный адрес с почтовым индексом" 
-                            name="userName" autoComplete="off"
-                            value={this.state.userName}
-                            onChange={this.onChangeNameHandle}/>
-                </label>
-
-                <label>
-                    <span>Телефон</span>
-                    <input type="text" className="add-new-user__form_input_text" placeholder="в формате +7(ххх)ххх-хх-хх" 
-                            name="userName" autoComplete="off"
-                            value={this.state.userName}
-                            onChange={this.onChangeNameHandle}/>
-                </label>
-
-                <button className="add-new-user__form_button" type="button">Создать аккаунт</button>
-
-
-            </form>
-        );       
-
+    
+    if(this.state.userPassword.length < 3) {
+        this._refInputPassword.setCustomValidity("Пароль должен содержать не менее 3 символов");
+        return;
     }
+  }
 
+  onSubmitHandle = (e)=> {
+    const name = e.target["name"].value;
+    const address = e.target["address"].value;
+    const phone = e.target["phone"].value;
+
+    this.props.createNewUser( 
+      name, 
+      this.state.userName, 
+      this.state.userPassword, 
+      address, 
+      phone,
+      (this.props.authorized && this.props.role === "admin") ? "admin" : "user"
+    );
+
+    e.preventDefault();
+  }
+
+  render() {
+    return (
+      <form 
+        className="add-new-user__form" 
+        onSubmit={this.onSubmitHandle}
+      >
+        <p>
+          Регистрация
+          {this.props.authorized && this.props.role === "admin" && " администратора"}
+          :
+        </p>
+
+        <label>
+          <span>Имя</span>
+          <input  
+            type="text"
+            className="add-new-user__form_input_text"
+            placeholder="Ф.И.О пользователя" 
+            name="name"
+            autoComplete="off"
+            required
+          />
+        </label>
+
+        <label>
+          <span>Email</span>
+          <input 
+            type="text"
+            className="add-new-user__form_input_text"
+            placeholder="логин для авторизации" 
+            name="email"
+            autoComplete="off"
+            required
+            title="Введите email, например: temp@gmail.com"
+            value={this.state.userName}
+            ref={this.getInputNameRef}
+            onChange={this.onChangeNameHandle} 
+          />
+        </label>
+
+        <label>
+          <span>Пароль</span>
+          <input 
+            type="password"
+            className="add-new-user__form_input_text"
+            placeholder="не менее 6 символов" 
+            name="password"
+            autoComplete="off"
+            title="Введите пароль, не менее 3 символов"
+            value={this.state.userPassword}
+            ref={this.getInputPasswordRef}
+            onChange={this.onChangePasswordHandle} 
+          />
+        </label>
+
+        <label>
+          <span>Адрес доставки</span>
+          <input 
+            type="text"
+            className="add-new-user__form_input_text"
+            placeholder="полный адрес с почтовым индексом" 
+            name="address" 
+          />
+        </label>
+
+        <label>
+          <span>Телефон</span>
+          <input 
+            type="phone" 
+            className="add-new-user__form_input_text" 
+            placeholder="в формате +7(ххх)ххх-хх-хх" 
+            name="phone"
+          />
+        </label>
+
+        <button 
+          className="add-new-user__form_button"
+          type="submit"
+          onClick={this.onSubmitButtonClick}
+        >
+          Создать аккаунт
+        </button>
+      </form>
+    );       
+  }
 }
+
+/* eslint-disable react/require-default-props */
+AddNewUser.propTypes = {
+  createNewUser: PropTypes.func.isRequired,
+  authorized: PropTypes.bool.isRequired,
+  role: PropTypes.string.isRequired
+};
+
+function mapStateToProps(state) {
+  return {
+    authorized: state.authentications.authorized,
+    role:  state.authentications.role
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+      createNewUser: ( name, email, password, address, phone, role = "user") => {
+                          dispatch( actionCreateNewUser( name, email, password, address, phone, role ));
+                      }
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddNewUser);

@@ -1,10 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
+import PropTypes from "prop-types";
 
 import "./Login.scss";
 
-import { actionGetAuthentication, actionSetAuthenticationError, actionRefreshAccessToken } from "../../actions/actions";
+import { actionGetAuthentication, actionSetAuthenticationError } from "../../actions/actions";
 
 
 class Login extends React.Component {
@@ -49,7 +50,7 @@ class Login extends React.Component {
         this._refInputPassword = ref;
     }
 
-    onSubmitButtonClick = (e) => {
+    onSubmitButtonClick = () => {
        // use onClick button event, set custom validity BEFORE!!! event submit because chrome bug
         if(this.state.userName.search(/^\S+@/i) === -1) {
             this._refInputName.setCustomValidity("email должен содержать символ \"@\"");
@@ -77,8 +78,8 @@ class Login extends React.Component {
         e.preventDefault();
     }
 
-    onClickNewUserHandle = (e) => {
-        //his.props.initLoadToken();
+    onClickNewUserHandle = () => {
+        this.props.history.push("/login/new");
     } 
     
     render() {
@@ -87,7 +88,10 @@ class Login extends React.Component {
             return <Redirect to="/cabinet" />;
 
         return (
-          <form className="login__form" onSubmit={this.onSubmitHandle}>
+          <form 
+            className="login__form"
+            onSubmit={this.onSubmitHandle}
+          >
             {/*<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/150px-HTML5_logo_and_wordmark.svg.png" width="70px" />*/}
             <p>Авторизируйтесь:</p>
             <input
@@ -113,24 +117,45 @@ class Login extends React.Component {
               onChange={this.onChangePasswordHandle} 
             /> 
     
-            <p className="login__form_p_deny">{this.props.message}</p>
+            <p className="login__form_deny">{this.props.message}</p>
 
-            <button className="login__form_button" onClick={this.onSubmitButtonClick} type="submit">Вход</button>
+            <button
+              className="login__form_button"
+              onClick={this.onSubmitButtonClick}
+              type="submit"
+            >
+              Вход
+            </button>
 
             <div className="login__div-break-line">
               <h5>еще не зарегистрированы?</h5>
             </div>
 
-            <button className="login__form_button" type="button" onClick={this.props.tempRefreshToken}>Создать аккаунт</button>
+            <button
+              className="login__form_button"
+              type="button"
+              onClick={this.onClickNewUserHandle}
+            >
+              Создать аккаунт
+            </button>
 
           </form>  
         );       
     }
 }
 
+/* eslint-disable react/require-default-props */
+Login.propTypes = {
+    message: PropTypes.string,
+    authorized: PropTypes.bool,
+    authentication: PropTypes.func.isRequired,
+    clearResposeError: PropTypes.func.isRequired,
+    history: PropTypes.instanceOf(Object),
+
+};
+
 function mapStateToProps(state) {
     return { 
-        responseError: state.authentications.responseError,
         message: state.authentications.message,
         authorized: state.authentications.authorized
     };
@@ -143,11 +168,7 @@ function mapDispatchToProps(dispatch) {
                         },
         clearResposeError: () => {
                             dispatch( actionSetAuthenticationError("") );
-                        },
-        tempRefreshToken: () => {
-                            dispatch( actionRefreshAccessToken());
                         }
-
     };
 }
 

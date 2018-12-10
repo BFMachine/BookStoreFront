@@ -37,7 +37,7 @@ class Bookcase extends React.Component {
           title="Спящие красавицы" 
           author="Frank Miller"  
           description="Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla "
-          price="5.65"
+          price={5.65}
           rank="one"
           category="2"
           cover="images/file-1543589493775.jpg"
@@ -46,16 +46,16 @@ class Bookcase extends React.Component {
           title="Часовая битва" 
           author="Frank Miller"  
           description="Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla "
-          price="5.65"
+          price={5.65}
           rank="two"
           category="2"
           cover="images/file-1543589451407.jpg"
         />
         <BookCard 
-          title="ООчень длииинnnnnnnnnnnниое названне" 
+          title="ООчень длииинnnnnnnnnниое названне" 
           author="dsfdsf sdfdfasdf"  
           description="Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla "
-          price="5.65"
+          price={15.65}
           rank="three"
           category="2"
           cover="images/file-1543589387542.jpg"

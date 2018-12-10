@@ -20,10 +20,10 @@ $font-color-light: #888;
     border: 1px solid $border-color;
     border-radius: 0.25rem;
     background: white;
-}
 
-.login__form > p {
+    p {
     font-size: 1.5rem;
+    }
 }
 
 .login__form_input_name {
@@ -34,7 +34,6 @@ $font-color-light: #888;
     padding: 10px;
     background-color: white;
     font-family: inherit;
-    //font-size: 1.25rem;
 }
 
 .login__form_input_password {
@@ -45,21 +44,17 @@ $font-color-light: #888;
     border-bottom-right-radius: .25rem;
     padding: 10px;
     background-color: white;
-    //font-size: 1.25rem;
     margin-bottom: 5px;
 }
 
-p.login__form_p_deny {
+p.login__form_deny {
     width: 290px;
     height: 14px;
-    //position: absolute;
     top: 50px;
     margin: 0 auto;
     padding: 0;
-    //padding-top: 3px;
     font-size: 1rem;
     padding-bottom: 5px;
-    
     color: $font-color-light;
 }
 
@@ -69,7 +64,6 @@ p.login__form_p_deny {
     border-radius: .25rem;
     padding: 8px;
     background-color: $button-color;
-    //font-size: 1.25rem;
     color: white;
 }
 
@@ -84,18 +78,18 @@ p.login__form_p_deny {
         text-align: center;
         position: relative;
         line-height: 0;
-}
-
-.login__div-break-line h5 {
-    line-height: 1;
-    font-size: 1rem;
-    color: $font-color-light;
-    font-weight: 400;
-    z-index: 2;
-    position: relative;
-    display: inline-block;
-    background-color: #fff;
-    padding: 0 8px 0 7px;
+        
+        h5 {
+            line-height: 1;
+            font-size: 1rem;
+            color: $font-color-light;
+            font-weight: 400;
+            z-index: 2;
+            position: relative;
+            display: inline-block;
+            background-color: #fff;
+            padding: 0 8px 0 7px;
+        }
 }
 
 .login__div-break-line::after {
@@ -110,8 +104,6 @@ p.login__form_p_deny {
     margin-top: -1px;
     z-index: 1;
 }
-
-
 
 
 

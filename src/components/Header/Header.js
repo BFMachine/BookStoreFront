@@ -67,7 +67,7 @@ class Header extends React.Component {
   }
 
   render() {
-    const { name, authorized, logoutUser } = this.props;
+    const { name, authorized, logoutUser, role } = this.props;
     return (
       <div className="Header__div-wrapper">
         <div className="Header__div-top-wrapper">
@@ -112,6 +112,7 @@ class Header extends React.Component {
                 menuVisible={this.state.menuVisible} 
                 authorized={authorized}
                 logoutUser={logoutUser}
+                role={role}
               />}
             </div>
 
@@ -147,7 +148,8 @@ class Header extends React.Component {
 Header.propTypes = {
   name: PropTypes.string,
   logoutUser: PropTypes.func.isRequired,
-  authorized: PropTypes.bool.isRequired
+  authorized: PropTypes.bool.isRequired,
+  role: PropTypes.string
 };
 Header.defaultProps = {
   name: ""
@@ -156,7 +158,8 @@ Header.defaultProps = {
 function mapStateToProps(state) {
     return { 
         name: state.authentications.email,
-        authorized: state.authentications.authorized
+        authorized: state.authentications.authorized,
+        role: state.authentications.role
     };
 }
 

@@ -112,7 +112,7 @@ BookCard.propTypes = {
   author: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   price: PropTypes.number,
-  rank: PropTypes.string.isRequired,
+  rank: PropTypes.string,
   cover: PropTypes.string,
 };
 

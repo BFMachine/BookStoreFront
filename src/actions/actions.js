@@ -15,6 +15,7 @@ export const LOGOUT_USER = "LOGOUT_USER";
 export const GET_CART = "GET_CART";
 export const GET_FAVORITE = "GET_FAVORITE";
 export const GET_BOOKS = "GET_BOOKS";
+export const CREATE_NEW_USER = "CREATE_NEW_USER";
 
 
 export function actionSetTokens(tokens) {
@@ -124,9 +125,20 @@ export function actionSetBooks(books) {
     };
 }
 
-export function actionGetBooks(books) {
+export function actionGetBooks() {
     return {
         type: GET_BOOKS
     };
 }
 
+export function actionCreateNewUser(name, email, password, address, phone, role = "user") {
+    return {
+        type: CREATE_NEW_USER,
+        name,
+        email,
+        password,
+        address,
+        phone,
+        role
+    };
+}

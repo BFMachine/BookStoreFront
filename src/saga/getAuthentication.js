@@ -1,7 +1,9 @@
 import * as jwt from "jsonwebtoken";
 
 import { put, call } from "redux-saga/effects";
-import { actionSetTokens, actionSetAuthenticationError, actionSetAuthUser } from "../actions/actions";
+import { actionSetTokens, actionSetAuthenticationError, actionSetAuthUser,
+    actionSetCart, actionSetFavorite } from "../actions/actions";
+    
 import config from "../config";
 
 export default function* getAuthentication({ email, password }) {
@@ -38,6 +40,9 @@ export default function* getAuthentication({ email, password }) {
         
         const decToken = jwt.decode(tokens.accessToken, {complete: false});
         yield put(actionSetAuthUser(true, decToken.id, decToken.email, decToken.role, resJson.full_name, resJson.address, resJson.phone));
+        yield put(actionSetCart([]));
+        yield put(actionSetFavorite([]));
+
 
     } catch (error) {
         

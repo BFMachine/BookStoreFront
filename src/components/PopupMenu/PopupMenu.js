@@ -25,6 +25,7 @@ const StyledLink = styled(Link)`
   display: block;
   text-decoration: none;
   padding: 5px 20px;
+  text-align: center;
   
   :first-child {
     padding-top: 15px;
@@ -37,7 +38,6 @@ const StyledLink = styled(Link)`
 const ArrowUp = styled.div`
   position: absolute;
   top: -10px;
-  //width: 20px;
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -78,9 +78,20 @@ class PopupMenu extends React.Component {
             <StyledLink to='/orders' onClick={this.onClickMenuItem}>
               Заказы 
             </StyledLink>
-            <StyledLink to='/login/new' onClick={this.onClickMenuItem}>
-              Новый 
-            </StyledLink>
+
+            { !this.props.authorized && (             
+              <StyledLink to='/login/new' onClick={this.onClickMenuItem}>
+                Новый 
+              </StyledLink>
+              )
+            }
+
+            { this.props.authorized && this.props.role === "admin" && (             
+              <StyledLink to='/login/new' onClick={this.onClickMenuItem}>
+                Новый админ
+              </StyledLink>
+              )
+            }
 
             {this.props.authorized ? 
               (
@@ -109,6 +120,7 @@ PopupMenu.propTypes = {
   mouseLeave: PropTypes.func.isRequired,
   menuVisible: PropTypes.bool.isRequired,
   logoutUser: PropTypes.func.isRequired,
+  role: PropTypes.string.isRequired
 };
 
 export default PopupMenu;
