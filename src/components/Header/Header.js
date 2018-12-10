@@ -85,8 +85,8 @@ class Header extends React.Component {
         </div>
         <div className="Header__div-middle">
 
-          <div className="Header__div-logo" />
-          
+          <Link className="Header__div-logo" to='/' />  
+
           <div className="Header__div-search-bar">
             <input type="text" maxLength="255" autoComplete="off" placeholder="Выбирайте..." />
             <button type="submit" className="Header__div-search-button">

@@ -12,6 +12,7 @@ import Orders from "../Orders/Orders";
 import InfoPage from "../InfoPage/InfoPage";
 import Cart from "../Cart/Cart";
 import Favorite from "../Favorite/Favorite";
+import Bookcase from "../Bookcase/Bookcase";
 
 
 /* eslint-disable */
@@ -26,6 +27,8 @@ class App extends Component {
         <div className="App__div-content-wrapper">
 
           <Switch>
+            
+            <Route exact path="/" component={Bookcase}/>
             <Route exact path="/login" component={Login}/>
             <Route path="/login/new" component={AddNewUser}/>
             <PrivateRoute path="/cabinet" component={Cabinet} />

@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 
 import { SET_TOKENS, SET_AUTHENTICATION_ERROR, SET_AUTH_USER, SET_ORDERS,
-  SET_CART, SET_FAVORITE 
+  SET_CART, SET_FAVORITE, SET_BOOKS 
 } from "../actions/actions";
 
 function tokens(state = { accessToken: "", refreshToken: "" }, action) {
@@ -84,10 +84,22 @@ function favorite(state = [], action) {
   }
 }
 
+function books(state = [], action) {
+
+  switch(action.type) {
+    case SET_BOOKS:
+      return [...action.books];
+  
+    default:
+        return state;  
+  }
+}
+
 export default combineReducers({
     tokens,
     authentications,
     orders,
     cart,
-    favorite
+    favorite,
+    books
 });
