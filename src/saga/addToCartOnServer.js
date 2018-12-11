@@ -6,10 +6,11 @@ import { actionSetAuthUser, actionSetAuthenticationError, actionSetTokens,
 
 import config from "../config";
 
-export default function* createNewUser({address, email, name, password, phone, role }) {
+export default function* addToCartOnServer({book}) {
 
-  debugger; // check role
+  debugger;
   
+  /*
   try{
     const answer = yield call(fetch, config.SERVER + "users", {
       method: "post",
@@ -55,4 +56,5 @@ export default function* createNewUser({address, email, name, password, phone, r
       }
       yield put(actionSetAuthenticationError(error.message));
   }
+  */
 }

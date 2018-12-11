@@ -63,7 +63,8 @@ $color: #FEC71C;
 
     .Header__div-logo {
         width: 160px;
-        height: 80px;
+        min-width: 85px;
+        height: 85px;
         background-size: contain;
         background-position: center 5px;
         background-repeat: no-repeat;

@@ -11,6 +11,7 @@ const CardWrap = styled.div`
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    cursor: pointer;
 `;
 
 const ImgContainer = styled.div `
@@ -86,11 +87,16 @@ function ranking (rank) {
 }
 
 
-function BookCard ({ title, author, price, rank, cover }) {
+function BookCard ({ id, title, author, price, rank, cover, bookClick }) {
+  
   let path = config.SERVER + cover;
-   
+  
+  function testClick() { /// уточнить!!!
+    bookClick(id);
+  }
+  
     return (
-      <CardWrap>
+      <CardWrap onClick={testClick}>
         <ImgContainer>
           <Img src={path} alt="Обложка книги" title={title} />
         </ImgContainer>
@@ -109,11 +115,13 @@ function BookCard ({ title, author, price, rank, cover }) {
 
 /* eslint-disable react/require-default-props */
 BookCard.propTypes = {
+  id: PropTypes.number.isRequired,
   author: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   price: PropTypes.number,
   rank: PropTypes.string,
   cover: PropTypes.string,
+  bookClick: PropTypes.func.isRequired
 };
 
 export default BookCard;

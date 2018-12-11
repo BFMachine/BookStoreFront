@@ -13,10 +13,10 @@ import InfoPage from "../InfoPage/InfoPage";
 import Cart from "../Cart/Cart";
 import Favorite from "../Favorite/Favorite";
 import Bookcase from "../Bookcase/Bookcase";
+import Book from "../Book/Book";
 
 
 /* eslint-disable */
-
 class App extends Component {
   render() {
     return (
@@ -31,6 +31,7 @@ class App extends Component {
             <Route exact path="/" component={Bookcase}/>
             <Route exact path="/login" component={Login}/>
             <Route path="/login/new" component={AddNewUser}/>
+            <Route path="/books/:id" component={Book}/>
             <PrivateRoute path="/cabinet" component={Cabinet} />
             <PrivateRoute path="/orders" component={Orders} />
             <PrivateRoute path="/cart" component={Cart} />

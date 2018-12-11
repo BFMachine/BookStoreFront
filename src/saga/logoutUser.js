@@ -1,6 +1,6 @@
 import { put } from "redux-saga/effects";
 
-import { actionSetTokens, actionSetAuthUser } from "../actions/actions";
+import { actionSetTokens, actionSetAuthUser, actionSetCart, actionSetFavorite } from "../actions/actions";
 
 export default function* logoutUser() {
 
@@ -11,5 +11,7 @@ export default function* logoutUser() {
     refreshToken: ""
   }));
 
-  yield put(actionSetAuthUser(false));
+  yield put(actionSetAuthUser(false)); 
+  yield put(actionSetCart([]));
+  yield put(actionSetFavorite([]));
 }

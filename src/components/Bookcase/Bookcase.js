@@ -1,9 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-//import moment from "moment";
-//import PropTypes from "prop-types";
-//import "moment/locale/ru";
+import PropTypes from "prop-types";
 
 import BookCard from "../BookCard/BookCard";
 import { actionGetBooks } from "../../actions/actions";
@@ -17,23 +15,21 @@ const CaseWrapper = styled.div`
 
 `;
 
-
 class Bookcase extends React.Component {
-  constructor() {
-    super();
-    this.state = {};
-  }
 
   componentDidMount() {
     this.props.getBooks();
   }
 
-  render() {
-    //const { email, full_name, address, phone } = this.props.auth;
+  bookClickHandler = id => {
+    this.props.history.push("/books/" + id);
+  }
 
+  render() {
     return (
       <CaseWrapper>
         <BookCard 
+          id={1}
           title="Спящие красавицы" 
           author="Frank Miller"  
           description="Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla "
@@ -41,8 +37,10 @@ class Bookcase extends React.Component {
           rank="one"
           category="2"
           cover="images/file-1543589493775.jpg"
+          bookClick={this.bookClickHandler}
         />
         <BookCard 
+          id={2}
           title="Часовая битва" 
           author="Frank Miller"  
           description="Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla "
@@ -50,8 +48,10 @@ class Bookcase extends React.Component {
           rank="two"
           category="2"
           cover="images/file-1543589451407.jpg"
+          bookClick={this.bookClickHandler}
         />
         <BookCard 
+          id={3}
           title="ООчень длииинnnnnnnnnниое названне" 
           author="dsfdsf sdfdfasdf"  
           description="Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla "
@@ -59,17 +59,19 @@ class Bookcase extends React.Component {
           rank="three"
           category="2"
           cover="images/file-1543589387542.jpg"
+          bookClick={this.bookClickHandler}
         />
-
 
         {this.props.books.map((item) => (
           <BookCard 
+            id={item.id}
             key={item.id}
             title={item.title}
             author={item.author}
             price={item.price}
             rank={item.rank}
             cover={item.Files.filter(item => item.type === "cover" )[0].name}
+            bookClick={this.bookClickHandler}
           />
         ))}
 
@@ -79,8 +81,8 @@ class Bookcase extends React.Component {
 }
 
 /* eslint-disable react/require-default-props */
-/*Cart.propTypes = {
-  cart: PropTypes.arrayOf(PropTypes.shape({
+Bookcase.propTypes = {
+  books: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     author: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
@@ -89,15 +91,9 @@ class Bookcase extends React.Component {
     price: PropTypes.number,
     rank: PropTypes.string,
   })), 
-  auth: PropTypes.shape({
-    email: PropTypes.string,
-    full_name: PropTypes.string,
-    address: PropTypes.string,
-    phone: PropTypes.string
-  }),
-  getCart: PropTypes.func.isRequired,
-};*/
-
+  history: PropTypes.instanceOf(Object),
+  getBooks: PropTypes.func.isRequired,
+};
 
 function mapStateToProps(state) {
   return {

@@ -1,7 +1,7 @@
 import { put } from "redux-saga/effects";
 
 import isExpTokenValid from "../modules/isExpTokenValid";
-import { actionSetTokens, actionRefreshAccessToken } from "../actions/actions";
+import { actionSetTokens, actionRefreshAccessToken, actionGetBooks } from "../actions/actions";
 
 export default function* initialLoadToken() {
 
@@ -14,6 +14,9 @@ export default function* initialLoadToken() {
         refreshToken
     }));
 
-    if(refreshToken !== "")
+    if(refreshToken !== "") {
         yield put(actionRefreshAccessToken());
+    }
+
+    yield put(actionGetBooks());
 }

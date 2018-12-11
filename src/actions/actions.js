@@ -3,6 +3,7 @@ export const SET_AUTHENTICATION_ERROR = "SET_AUTHENTICATION_ERROR";
 export const SET_AUTH_USER = "SET_AUTH_USER";
 export const SET_ORDERS = "SET_ORDERS";
 export const SET_CART = "SET_CART";
+export const ADD_TO_CART = "ADD_TO_CART";
 export const SET_FAVORITE = "SET_FAVORITE";
 export const SET_BOOKS = "SET_BOOKS";
 
@@ -16,6 +17,7 @@ export const GET_CART = "GET_CART";
 export const GET_FAVORITE = "GET_FAVORITE";
 export const GET_BOOKS = "GET_BOOKS";
 export const CREATE_NEW_USER = "CREATE_NEW_USER";
+export const ADD_TO_CART_ON_SERVER = "ADD_TO_CART_ON_SERVER";
 
 
 export function actionSetTokens(tokens) {
@@ -96,6 +98,20 @@ export function actionSetCart(cart) {
     return {
         type: SET_CART,
         cart
+    };
+}
+
+export function actionAddToCart(book) {
+    return {
+        type: ADD_TO_CART,
+        book
+    };
+}
+
+export function actionAddToCartOnServer(book) {
+    return {
+        type: ADD_TO_CART_ON_SERVER,
+        book
     };
 }
 
