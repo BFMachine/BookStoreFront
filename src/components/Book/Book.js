@@ -1,10 +1,13 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import Covers from "./Covers/Covers";
-import { actionGetBooks, actionAddToCart, actionAddToCartOnServer } from "../../actions/actions";
+import { actionGetBooks, actionAddToCart, actionAddToCartOnServer,
+  actionDeleteFromCart, actionDeleteFromCartOnServer, actionAddToFavorite,
+  actionAddToFavoriteOnServer, actionDeleteFromFavorite, actionDeleteFromFavoriteOnServer
+} from "../../actions/actions";
 
 const BookWrap = styled.div`
     //min-width: 140px;
@@ -51,13 +54,47 @@ const ToolPanel = styled.div`
   border-bottom: 1px solid #ececec;
 `;
 
+const grow = keyframes`
+  from {
+    width: 14px; 
+    height: 12px;
+    background-size: 14px 12px;
+    left: 0;
+    top: 0;
+  }
+  to {
+    width: 50px;
+    height: 50px;
+    background-size: 50px 50px;
+    left: -17px;
+    top: -19px;
+  }
+`;
+
+const complexMixin = css`
+  animation: ${grow} 200ms linear;
+`;
+
 const FavoriteIcon = styled.div`
   margin-left: 16px;
-  width:14px;
-  height:12px;
-  top:2px;
-  background-image:url("data:image/svg+xml,%3Csvg id='Layer_1' xmlns='http%3A//www.w3.org/2000/svg' viewBox='-9 11 14 12'%3E%3Cstyle%3E.st0%7Bfill:%23999999;%7D%3C/style%3E%3Cpath class='st0' d='M-7.4 14.9c0-1.7 1.2-2.4 2.2-2.4 1.7 0 3.2 2.3 3.2 2.3s1.6-2.3 3.3-2.3c1 0 2.2.6 2.2 2.4 0 2.1-2.3 4.8-5.4 6.5-3.2-1.7-5.5-4.5-5.5-6.5zM1.3 11c-1.9 0-2.6.8-3.3 1.7-.7-.9-1.4-1.7-3.3-1.7-1.8 0-3.7 1.3-3.7 3.9 0 3 3.3 6.4 7 8.1 3.7-1.7 7-5.1 7-8.1C5 12.3 3.1 11 1.3 11z'/%3E%3C/svg%3E");
+  width: 14px;
+  height: 12px;
+  top: 2px;
   cursor: pointer;
+  position: relative;
+
+  background-image: ${props => ( props.inFavorite ? 
+    `url("data:image/svg+xml,%3Csvg id='Layer_1' xmlns='http%3A//www.w3.org/2000/svg' viewBox='-9 11 14 12'%3E%3Cstyle%3E.st0%7Bfill:%23cd0000;%7D%3C/style%3E%3Cpath class='st0' d='M-7.4 14.9c0-1.7 1.2-2.4 2.2-2.4 1.7 0 3.2 2.3 3.2 2.3s1.6-2.3 3.3-2.3c1 0 2.2.6 2.2 2.4 0 2.1-2.3 4.8-5.4 6.5-3.2-1.7-5.5-4.5-5.5-6.5zM1.3 11c-1.9 0-2.6.8-3.3 1.7-.7-.9-1.4-1.7-3.3-1.7-1.8 0-3.7 1.3-3.7 3.9 0 3 3.3 6.4 7 8.1 3.7-1.7 7-5.1 7-8.1C5 12.3 3.1 11 1.3 11z'/%3E%3C/svg%3E");` :
+    `url("data:image/svg+xml,%3Csvg id='Layer_1' xmlns='http%3A//www.w3.org/2000/svg' viewBox='-9 11 14 12'%3E%3Cstyle%3E.st0%7Bfill:%23999999;%7D%3C/style%3E%3Cpath class='st0' d='M-7.4 14.9c0-1.7 1.2-2.4 2.2-2.4 1.7 0 3.2 2.3 3.2 2.3s1.6-2.3 3.3-2.3c1 0 2.2.6 2.2 2.4 0 2.1-2.3 4.8-5.4 6.5-3.2-1.7-5.5-4.5-5.5-6.5zM1.3 11c-1.9 0-2.6.8-3.3 1.7-.7-.9-1.4-1.7-3.3-1.7-1.8 0-3.7 1.3-3.7 3.9 0 3 3.3 6.4 7 8.1 3.7-1.7 7-5.1 7-8.1C5 12.3 3.1 11 1.3 11z'/%3E%3C/svg%3E");`
+  )}
+ 
+  :after {
+    ${props => (props.showAnimation ? complexMixin : "")}
+    content: "";
+    display: block;
+    position: absolute;
+    background-image: url("data:image/svg+xml,%3Csvg id='Layer_1' xmlns='http%3A//www.w3.org/2000/svg' viewBox='-9 11 14 12'%3E%3Cstyle%3E.st0%7Bfill:%23cd0000;%7D%3C/style%3E%3Cpath class='st0' d='M-7.4 14.9c0-1.7 1.2-2.4 2.2-2.4 1.7 0 3.2 2.3 3.2 2.3s1.6-2.3 3.3-2.3c1 0 2.2.6 2.2 2.4 0 2.1-2.3 4.8-5.4 6.5-3.2-1.7-5.5-4.5-5.5-6.5zM1.3 11c-1.9 0-2.6.8-3.3 1.7-.7-.9-1.4-1.7-3.3-1.7-1.8 0-3.7 1.3-3.7 3.9 0 3 3.3 6.4 7 8.1 3.7-1.7 7-5.1 7-8.1C5 12.3 3.1 11 1.3 11z'/%3E%3C/svg%3E");
+  }
 `;
 
 const ContentColumn = styled.div`
@@ -166,10 +203,13 @@ function ranking (rank) {
 class Book extends React.Component {
   constructor(props){
     super(props);
+
     this.state = {
-      book: props.books.filter( item => item.id === parseInt(props.match.params.id))[0]
+      book: props.books.filter( item => item.id === parseInt(props.match.params.id))[0],
+      inCart: (props.cart.filter( item => item.id === parseInt(props.match.params.id)).length > 0),
+      inFavorite: (props.favorite.filter( item => item.id === parseInt(props.match.params.id)).length > 0),
+      showAnimation: false
     };
-    console.log("constructor");
   }
 
   componentDidMount() {
@@ -178,28 +218,52 @@ class Book extends React.Component {
     }
   }
 
-  static getDerivedStateFromProps(props, state) {
-    if(!state.book) {
-      return ({
-        book: props.books.filter( item => item.id === parseInt(props.match.params.id))[0]
-      });
-    }
-    return null;
+  // refactor with reselect!!! without state
+  static getDerivedStateFromProps(props, /*state*/) {
+
+    return ({
+      book: props.books.filter( item => item.id === parseInt(props.match.params.id))[0],
+      inCart: (props.cart.filter( item => item.id === parseInt(props.match.params.id)).length > 0),
+      inFavorite: (props.favorite.filter( item => item.id === parseInt(props.match.params.id)).length > 0)
+    });
   }
 
-  buttonAddCartHandler = () => {
-    this.props.addToCart(this.state.book);
+  buttonAddDelCartHandler = () => {
+
+    if(this.state.inCart) {
+      this.props.delteFromCart(this.state.book);
+
+    } else {
+      this.props.addToCart(this.state.book);
+    }
   }
+
+  onClickFavoriteHandler = () =>  {
+
+    if(this.state.inFavorite) {
+      this.props.delteFromFavorite(this.state.book);
+
+    } else {
+      this.setState({
+        showAnimation: true
+      });
+
+      setTimeout(()=>{
+        let self = this;
+        self.setState({
+          showAnimation: false
+        });
+      }, 500);
+
+      this.props.addToFavorite(this.state.book);
+    }
+  }
+
 
   render() {
     
-    /// how to fix it?
     if(!this.state.book) {
-      return (
-        <div>
-          Book not found!!!?
-        </div>
-      );
+      return null;
     }
 
     return (
@@ -208,7 +272,7 @@ class Book extends React.Component {
         
         <Covers 
           title={this.state.book.title}
-          img_array={this.state.book.Files.filter(item => item.type === "cover") /*BAD PRACTICE! reselect */} 
+          img_array={this.state.book.Files.filter(item => item.type === "cover") /*BAD PRACTICE! reselect? */} 
         />
 
         <BaseInfo>
@@ -220,7 +284,12 @@ class Book extends React.Component {
                 <StarsMask rank={this.state.book.rank} />  
               </StarsGray>
               <span>1 отзыв</span>
-              <FavoriteIcon />
+              <FavoriteIcon 
+                onClick={this.onClickFavoriteHandler}
+                inFavorite={this.state.inFavorite}
+                showAnimation={this.state.showAnimation}
+              />
+
             </ToolPanel>
           </Panel>
       
@@ -231,8 +300,8 @@ class Book extends React.Component {
                 {this.state.book.price} 
                 &nbsp;руб
               </Price>
-              <SaleButton onClick={this.buttonAddCartHandler}>
-                Добавить в корзину
+              <SaleButton onClick={this.buttonAddDelCartHandler}>
+                {this.state.inCart ? "Удалить из корзины" : "Добавить в корзину"}
               </SaleButton>
             </SaleBlock>
           </ContentColumn>
@@ -258,18 +327,29 @@ Book.propTypes = {
       type: PropTypes.string.isRequired,
     }))
   })),
+  cart: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired
+  })),
+  favorite: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired
+  })),
   match: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string.isRequired
     })
   }),
   getBooks: PropTypes.func.isRequired,
-  addToCart: PropTypes.func.isRequired
+  addToCart: PropTypes.func.isRequired,
+  delteFromCart: PropTypes.func.isRequired,
+  addToFavorite: PropTypes.func.isRequired,
+  delteFromFavorite: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-      books: state.books
+      books: state.books,
+      cart: state.cart,
+      favorite: state.favorite
   };
 }
 
@@ -279,9 +359,25 @@ function mapDispatchToProps(dispatch) {
           dispatch(actionGetBooks());
       },
       addToCart: (book) => {
-        console.log("addCart " + book.title);
+        console.log("add to cart " + book.title);
         dispatch(actionAddToCart(book)); //// if authorized call server method else local debug!
         dispatch(actionAddToCartOnServer(book));
+      },
+      delteFromCart: (book) => {
+        console.log("delete from cart " + book.title);
+        dispatch(actionDeleteFromCart(book)); //// if authorized call server method else local debug!
+        dispatch(actionDeleteFromCartOnServer(book));
+      },
+
+      addToFavorite: (book) => {
+        console.log("add to Favorite " + book.title);
+        dispatch(actionAddToFavorite(book)); //// if authorized call server method else local debug!
+        dispatch(actionAddToFavoriteOnServer(book));
+      },
+      delteFromFavorite: (book) => {
+        console.log("delete from Favorite " + book.title);
+        dispatch(actionDeleteFromFavorite(book)); //// if authorized call server method else local debug!
+        dispatch(actionDeleteFromFavoriteOnServer(book));
       }
   };
 }

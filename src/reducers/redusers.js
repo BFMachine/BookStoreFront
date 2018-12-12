@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 
 import { SET_TOKENS, SET_AUTHENTICATION_ERROR, SET_AUTH_USER, SET_ORDERS,
-  SET_CART, ADD_TO_CART, SET_FAVORITE, SET_BOOKS 
+  SET_CART, ADD_TO_CART, SET_FAVORITE, SET_BOOKS, DELETE_FROM_CART, ADD_TO_FAVORITE, DELETE_FROM_FAVORITE 
 } from "../actions/actions";
 
 function tokens(state = { accessToken: "", refreshToken: "" }, action) {
@@ -73,6 +73,11 @@ function cart(state = [], action) {
         action.book
       ];
 
+    case DELETE_FROM_CART:
+      return [
+        ...state.filter(item => action.book.id !== item.id)
+      ];  
+
     default:
         return state;  
   }
@@ -83,7 +88,17 @@ function favorite(state = [], action) {
   switch(action.type) {
     case SET_FAVORITE:
       return [...action.favorite];
-  
+
+    case ADD_TO_FAVORITE:
+      return [...state,
+        action.book
+      ];
+
+    case DELETE_FROM_FAVORITE:
+      return [
+        ...state.filter(item => action.book.id !== item.id)
+      ];  
+
     default:
         return state;  
   }

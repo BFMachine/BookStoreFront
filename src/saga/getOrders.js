@@ -12,7 +12,7 @@ export default function* getOrders() {
     let auth = yield select(getAuthentications);
 
     try{
-        const answer = yield call(fetch, config.SERVER + "users/orders/" + auth.id, {
+        const answer = yield call(fetch, config.SERVER + "orders/" + auth.id, {
             method: "get",
             headers: {
                 "Accept": "application/json",

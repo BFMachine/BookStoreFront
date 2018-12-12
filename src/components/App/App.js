@@ -14,6 +14,7 @@ import Cart from "../Cart/Cart";
 import Favorite from "../Favorite/Favorite";
 import Bookcase from "../Bookcase/Bookcase";
 import Book from "../Book/Book";
+import BookEdit from "../BookEdit/BookEdit";
 
 
 /* eslint-disable */
@@ -36,6 +37,7 @@ class App extends Component {
             <PrivateRoute path="/orders" component={Orders} />
             <PrivateRoute path="/cart" component={Cart} />
             <PrivateRoute path="/favorite" component={Favorite} />
+            <PrivateRoute path="/bookedit" component={BookEdit} adminOnly={true} />
 
             <PrivateRoute path="/logout" 
               render={(props) => (

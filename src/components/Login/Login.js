@@ -151,7 +151,6 @@ Login.propTypes = {
     authentication: PropTypes.func.isRequired,
     clearResposeError: PropTypes.func.isRequired,
     history: PropTypes.instanceOf(Object),
-
 };
 
 function mapStateToProps(state) {

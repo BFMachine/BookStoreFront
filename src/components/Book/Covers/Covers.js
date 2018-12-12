@@ -65,7 +65,7 @@ class Covers extends React.Component {
                 alt="обложка"
                 title="нажмите, чтобы увеличить" 
                                
-                onClick={()=>this.onClickSmallPic(index) /*BAD PRACTICE!  */}
+                onClick={()=>this.onClickSmallPic(index) /*BAD!!!  */} 
 
               />
             </ImgToolbarContainer>

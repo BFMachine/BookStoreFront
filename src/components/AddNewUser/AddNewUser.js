@@ -82,6 +82,7 @@ class AddNewUser extends React.Component {
       (this.props.authorized && this.props.role === "admin") ? "admin" : "user"
     );
 
+    this.props.history.push("/cabinet");
     e.preventDefault();
   }
 
@@ -130,7 +131,7 @@ class AddNewUser extends React.Component {
           <input 
             type="password"
             className="add-new-user__form_input_text"
-            placeholder="не менее 6 символов" 
+            placeholder="не менее 3 символов" 
             name="password"
             autoComplete="off"
             title="Введите пароль, не менее 3 символов"
@@ -176,7 +177,8 @@ class AddNewUser extends React.Component {
 AddNewUser.propTypes = {
   createNewUser: PropTypes.func.isRequired,
   authorized: PropTypes.bool.isRequired,
-  role: PropTypes.string.isRequired
+  role: PropTypes.string.isRequired,
+  history: PropTypes.instanceOf(Object)
 };
 
 function mapStateToProps(state) {

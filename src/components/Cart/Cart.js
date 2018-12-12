@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
-import { actionGetCart } from "../../actions/actions";
+import { actionGetCart, actionDeleteAllCartOnServer } from "../../actions/actions";
 import BookCard from "../BookCard/BookCard";
 
 const colorLine = "#c9d3d8";
@@ -16,7 +16,7 @@ const HeaderOwner = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  align-item: flex-start;
+  align-items: center;
   border-bottom: 1px solid ${colorLine};
 `;
 
@@ -38,10 +38,35 @@ const CaseWrapper = styled.div`
   justify-content: flex-start;
 `;
 
+const Button = styled.button`
+  width: 150px;
+  height: 38px;
+  border: 1px solid #0083ca;
+  border-radius: .25rem;
+  padding: 8px;
+  background-color: #0083ca;
+  color: white;
+
+  :active {
+    background: darker($button-color, 7%); 
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.5);    
+  }
+  
+  :disabled {
+    background: #dddddd;
+    border-color: #dddddd;
+  }
+`;
+
+
 class Cart extends React.Component {
 
   componentDidMount() {
     this.props.getCart();
+  }
+
+  bookClickHandler = id => {
+    this.props.history.push("/books/" + id);
   }
 
   render() {
@@ -52,17 +77,25 @@ class Cart extends React.Component {
         <HeaderOwner>
           <TitleMain>Корзина</TitleMain>
           <IserInfo>{full_name}</IserInfo>
+          <Button 
+            onClick={this.props.clearCart}
+            disabled={this.props.cart.length < 1 ? true : false }
+          >
+            Очистить корзину
+          </Button>
         </HeaderOwner>
 
         <CaseWrapper>    
           {this.props.cart.map((item) => (
             <BookCard 
               key={item.id}
+              id={item.id}
               title={item.title}
               author={item.author}
               price={item.price}
               rank={item.rank}
               cover={item.Files.filter(item => item.type === "cover" )[0].name}
+              bookClick={this.bookClickHandler}
             />
           ))}
         </CaseWrapper>
@@ -89,8 +122,9 @@ Cart.propTypes = {
     full_name: PropTypes.string,
   }),
   getCart: PropTypes.func.isRequired,
+  clearCart: PropTypes.func.isRequired,
+  history: PropTypes.instanceOf(Object),
 };
-
 
 function mapStateToProps(state) {
   return {
@@ -102,7 +136,10 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
       getCart: () => {
-          dispatch(actionGetCart());
+        dispatch(actionGetCart());
+      },
+      clearCart: () => {
+        dispatch(actionDeleteAllCartOnServer());
       }
   };
 }

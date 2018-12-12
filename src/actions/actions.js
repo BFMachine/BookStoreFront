@@ -4,7 +4,12 @@ export const SET_AUTH_USER = "SET_AUTH_USER";
 export const SET_ORDERS = "SET_ORDERS";
 export const SET_CART = "SET_CART";
 export const ADD_TO_CART = "ADD_TO_CART";
+export const DELETE_FROM_CART = "DELETE_FROM_CART";
 export const SET_FAVORITE = "SET_FAVORITE";
+
+export const ADD_TO_FAVORITE = "ADD_TO_FAVORITE";
+export const DELETE_FROM_FAVORITE = "DELETE_FROM_FAVORITE";
+
 export const SET_BOOKS = "SET_BOOKS";
 
 // for saga 
@@ -18,7 +23,12 @@ export const GET_FAVORITE = "GET_FAVORITE";
 export const GET_BOOKS = "GET_BOOKS";
 export const CREATE_NEW_USER = "CREATE_NEW_USER";
 export const ADD_TO_CART_ON_SERVER = "ADD_TO_CART_ON_SERVER";
+export const DELETE_FROM_CART_ON_SERVER = "DELETE_FROM_CART_ON_SERVER";
+export const DELETE_ALL_CART_ON_SERVER = "DELETE_ALL_CART_ON_SERVER";
 
+export const ADD_TO_FAVORITE_ON_SERVER = "ADD_TO_FAVORITE_ON_SERVER";
+export const DELETE_FROM_FAVORITE_ON_SERVER = "DELETE_FROM_FAVORITE_ON_SERVER";
+export const DELETE_ALL_FAVORITE_ON_SERVER = "DELETE_ALL_FAVORITE_ON_SERVER";
 
 export function actionSetTokens(tokens) {
     return {
@@ -115,12 +125,71 @@ export function actionAddToCartOnServer(book) {
     };
 }
 
+export function actionDeleteFromCart(book) {
+    return {
+        type: DELETE_FROM_CART,
+        book
+    };
+}
+
+export function actionDeleteFromCartOnServer(book) {
+    return {
+        type: DELETE_FROM_CART_ON_SERVER,
+        book
+    };
+}
+
+export function actionDeleteAllCartOnServer() {
+    return {
+        type: DELETE_ALL_CART_ON_SERVER
+    };
+}
+
 export function actionSetFavorite(favorite) {
     return {
         type: SET_FAVORITE,
         favorite
     };
 }
+
+export function actionAddToFavorite(book) {
+    return {
+        type: ADD_TO_FAVORITE,
+        book
+    };
+}
+
+export function actionAddToFavoriteOnServer(book) {
+    return {
+        type: ADD_TO_FAVORITE_ON_SERVER,
+        book
+    };
+}
+
+export function actionDeleteFromFavorite(book) {
+    return {
+        type: DELETE_FROM_FAVORITE,
+        book
+    };
+}
+
+export function actionDeleteFromFavoriteOnServer(book) {
+    return {
+        type: DELETE_FROM_FAVORITE_ON_SERVER,
+        book
+    };
+}
+
+export function actionDeleteAllFavoriteOnServer() {
+    return {
+        type: DELETE_ALL_FAVORITE_ON_SERVER
+    };
+}
+
+
+
+
+
 
 export function actionGetFavorite() {
     return {

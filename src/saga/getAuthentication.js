@@ -45,7 +45,7 @@ export default function* getAuthentication({ email, password }) {
         yield put(actionGetCart());
         
         yield put(actionSetFavorite([]));
-        yield put(actionGetFavorite());
+        yield put(actionGetFavorite()); 
 
     } catch (error) {
         

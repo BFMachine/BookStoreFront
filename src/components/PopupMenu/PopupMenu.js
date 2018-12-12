@@ -25,7 +25,8 @@ const StyledLink = styled(Link)`
   display: block;
   text-decoration: none;
   padding: 5px 20px;
-  text-align: center;
+  text-align: left;
+  white-space: nowrap;
   
   :first-child {
     padding-top: 15px;
@@ -92,6 +93,14 @@ class PopupMenu extends React.Component {
               </StyledLink>
               )
             }
+            
+            { this.props.authorized && this.props.role === "admin" && (             
+              <StyledLink to='/bookedit' onClick={this.onClickMenuItem}>
+                Новая книга
+              </StyledLink>
+                )
+            }
+
 
             {this.props.authorized ? 
               (

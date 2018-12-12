@@ -1,7 +1,8 @@
 import * as jwt from "jsonwebtoken";
 
 import { put, call, select } from "redux-saga/effects";
-import { actionSetTokens, actionSetAuthUser, actionSetAuthenticationError } from "../actions/actions";
+import { actionSetTokens, actionSetAuthUser, actionSetAuthenticationError, actionSetCart,
+    actionGetCart, actionSetFavorite, actionGetFavorite } from "../actions/actions";
 import config from "../config";
 
 const getTokens = state => state.tokens;
@@ -49,6 +50,13 @@ export default function* refreshAccessToken() {
 
         const { id, email, role } = jwt.decode(newTokens.accessToken, {complete: false});
         yield put(actionSetAuthUser(true, id, email, role, resJson.full_name, resJson.address, resJson.phone));
+
+        yield put(actionSetCart([])); 
+        yield put(actionGetCart());
+        
+        yield put(actionSetFavorite([]));
+        yield put(actionGetFavorite()); 
+
 
     } catch (error) {
 

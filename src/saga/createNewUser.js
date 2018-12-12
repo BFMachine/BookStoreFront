@@ -2,14 +2,12 @@ import { put, call } from "redux-saga/effects";
 import * as jwt from "jsonwebtoken";
 
 import { actionSetAuthUser, actionSetAuthenticationError, actionSetTokens, 
-    actionSetCart, actionSetFavorite } from "../actions/actions";
+    actionSetCart, actionSetFavorite, actionSetOrders } from "../actions/actions";
 
 import config from "../config";
 
 export default function* createNewUser({address, email, name, password, phone, role }) {
 
-  debugger; // check role
-  
   try{
     const answer = yield call(fetch, config.SERVER + "users", {
       method: "post",
@@ -45,6 +43,7 @@ export default function* createNewUser({address, email, name, password, phone, r
     yield put(actionSetAuthUser(true, decToken.id, decToken.email, decToken.role, resJson.full_name, resJson.address, resJson.phone));
     yield put(actionSetCart([]));
     yield put(actionSetFavorite([]));
+    yield put(actionSetOrders([]));
 
   } catch (error) {
       

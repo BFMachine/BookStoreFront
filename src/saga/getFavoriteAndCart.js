@@ -12,7 +12,7 @@ export function* getCart() {
     let auth = yield select(getAuthentications);
 
     try{
-        const answer = yield call(fetch, config.SERVER + "users/orders/cart/" + auth.id, {
+        const answer = yield call(fetch, config.SERVER + "orders/cart/" + auth.id, {
             method: "get",
             headers: {
                 "Accept": "application/json",
@@ -22,6 +22,9 @@ export function* getCart() {
         });
 
         if(!answer.ok) {
+            if (answer.status === 404 || answer.status === 401){
+                yield put(actionSetCart([]));
+            }
             throw new Error(`status: ${answer.status} ${answer.statusText}`);
         }
 
@@ -62,7 +65,7 @@ export function* getFavorite() {
   let auth = yield select(getAuthentications);
 
   try{
-        const answer = yield call(fetch, config.SERVER + "users/orders/favorite/" + auth.id, {
+        const answer = yield call(fetch, config.SERVER + "orders/favorite/" + auth.id, {
             method: "get",
              headers: {
                 "Accept": "application/json",
@@ -72,6 +75,9 @@ export function* getFavorite() {
         });
 
         if(!answer.ok) {
+            if (answer.status === 404 || answer.status === 401){
+                yield put(actionSetFavorite([]));
+            }
             throw new Error(`status: ${answer.status} ${answer.statusText}`);
         }
 

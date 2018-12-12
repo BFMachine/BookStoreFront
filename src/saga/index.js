@@ -1,7 +1,9 @@
 import { takeLatest, takeEvery } from "redux-saga/effects";
 import { INITIAL_LOAD_TOKEN, GET_AUTHENTICATION, REFRESH_ACCESS_TOKEN, 
     GET_ORDERS, LOGOUT_USER, GET_CART, GET_FAVORITE, GET_BOOKS,
-    CREATE_NEW_USER, ADD_TO_CART_ON_SERVER
+    CREATE_NEW_USER, ADD_TO_CART_ON_SERVER, DELETE_FROM_CART_ON_SERVER,
+    DELETE_ALL_CART_ON_SERVER, ADD_TO_FAVORITE_ON_SERVER, DELETE_FROM_FAVORITE_ON_SERVER,
+    DELETE_ALL_FAVORITE_ON_SERVER
 } from "../actions/actions";
 
 import initialLoadToken from "./initialLoadToken";
@@ -12,7 +14,11 @@ import logoutUser from "./logoutUser";
 import {getCart, getFavorite} from "./getFavoriteAndCart";
 import getBooks from "./getBooks";
 import createNewUser from "./createNewUser";
-import addToCartOnServer from "./addToCartOnServer";
+import { addToCartOnServer, deleteFromCartOnServer, deleteAllCartOnServer 
+} from "./addDelCartOnServer";
+
+import { addToFavoriteOnServer, deleteFromFavoriteOnServer, deleteAllFavoriteOnServer 
+} from "./addDelFavoriteOnServer";
 
 export default function* saga() {
     yield takeLatest(INITIAL_LOAD_TOKEN, initialLoadToken);
@@ -25,4 +31,9 @@ export default function* saga() {
     yield takeEvery(GET_BOOKS, getBooks);
     yield takeEvery(CREATE_NEW_USER, createNewUser);
     yield takeEvery(ADD_TO_CART_ON_SERVER, addToCartOnServer);
+    yield takeEvery(DELETE_FROM_CART_ON_SERVER, deleteFromCartOnServer);
+    yield takeEvery(DELETE_ALL_CART_ON_SERVER, deleteAllCartOnServer);
+    yield takeEvery(ADD_TO_FAVORITE_ON_SERVER, addToFavoriteOnServer);
+    yield takeEvery(DELETE_FROM_FAVORITE_ON_SERVER, deleteFromFavoriteOnServer);
+    yield takeEvery(DELETE_ALL_FAVORITE_ON_SERVER, deleteAllFavoriteOnServer);
 }
