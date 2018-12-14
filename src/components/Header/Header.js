@@ -145,6 +145,7 @@ class Header extends React.Component {
   }
 }
 
+/* eslint-disable react/require-default-props */
 Header.propTypes = {
   name: PropTypes.string,
   logoutUser: PropTypes.func.isRequired,

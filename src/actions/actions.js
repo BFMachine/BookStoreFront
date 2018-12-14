@@ -2,6 +2,7 @@ export const SET_TOKENS = "SET_TOKENS";
 export const SET_AUTHENTICATION_ERROR = "SET_AUTHENTICATION_ERROR";
 export const SET_AUTH_USER = "SET_AUTH_USER";
 export const SET_ORDERS = "SET_ORDERS";
+export const SET_COMMENTS = "SET_COMMENTS";
 export const SET_CART = "SET_CART";
 export const ADD_TO_CART = "ADD_TO_CART";
 export const DELETE_FROM_CART = "DELETE_FROM_CART";
@@ -21,14 +22,16 @@ export const LOGOUT_USER = "LOGOUT_USER";
 export const GET_CART = "GET_CART";
 export const GET_FAVORITE = "GET_FAVORITE";
 export const GET_BOOKS = "GET_BOOKS";
+export const GET_BOOK_COMMENTS = "GET_BOOK_COMMENTS";
 export const CREATE_NEW_USER = "CREATE_NEW_USER";
 export const ADD_TO_CART_ON_SERVER = "ADD_TO_CART_ON_SERVER";
 export const DELETE_FROM_CART_ON_SERVER = "DELETE_FROM_CART_ON_SERVER";
 export const DELETE_ALL_CART_ON_SERVER = "DELETE_ALL_CART_ON_SERVER";
-
 export const ADD_TO_FAVORITE_ON_SERVER = "ADD_TO_FAVORITE_ON_SERVER";
 export const DELETE_FROM_FAVORITE_ON_SERVER = "DELETE_FROM_FAVORITE_ON_SERVER";
 export const DELETE_ALL_FAVORITE_ON_SERVER = "DELETE_ALL_FAVORITE_ON_SERVER";
+export const CREATE_NEW_BOOK = "CREATE_NEW_BOOK";
+export const CREATE_NEW_COMMENT = "CREATE_NEW_COMMENT";
 
 export function actionSetTokens(tokens) {
     return {
@@ -88,6 +91,13 @@ export function actionSetAuthUser(
 export function actionSetOrders(payload) {
     return {
         type: SET_ORDERS,
+        payload
+    };
+}
+
+export function actionSetComments(payload) {
+    return {
+        type: SET_COMMENTS,
         payload
     };
 }
@@ -216,6 +226,13 @@ export function actionGetBooks() {
     };
 }
 
+export function actionGetBookComments(id) {
+    return {
+        type: GET_BOOK_COMMENTS,
+        id
+    };
+}
+
 export function actionCreateNewUser(name, email, password, address, phone, role = "user") {
     return {
         type: CREATE_NEW_USER,
@@ -225,5 +242,26 @@ export function actionCreateNewUser(name, email, password, address, phone, role 
         address,
         phone,
         role
+    };
+}
+
+export function actionCreateNewBook(title, author, description, price, rank, category, coverFile, fragmentFile) {
+    return {
+        type: CREATE_NEW_BOOK,
+        title,
+        author,
+        description,
+        price,
+        rank,
+        category,
+        coverFile,
+        fragmentFile
+    };
+}
+
+export function actionCreateNewComment(comment) {
+    return {
+        type: CREATE_NEW_COMMENT,
+        comment
     };
 }

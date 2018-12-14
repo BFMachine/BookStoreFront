@@ -19,8 +19,7 @@ export default function* getBooks() {
             throw new Error(`status: ${answer.status} ${answer.statusText}`);
         }
 
-        const responseBody = yield answer.json();
-        const books = JSON.parse(responseBody);
+        const { books } = yield answer.json();
 
         // check if no any cover
         const defaultCover = {

@@ -4,20 +4,34 @@ import PropTypes from "prop-types";
 
 import "./Bookedit.scss";
 
-import { actionCreateNewUser } from "../../actions/actions";
+import { actionCreateNewBook } from "../../actions/actions";
 
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/label-has-for */
 
 class BookEdit extends React.Component {
-  constructor(){
-    super();
-  } 
+  
+  onSubmitHandle = (e) => {
+
+    this.props.createNewBook(
+      e.target["title"].value,
+      e.target["author"].value,
+      e.target["description"].value,
+      e.target["price"].value, 
+      e.target["rank"].value, 
+      e.target["category"].value, 
+      e.target["cover-file"].files, 
+      e.target["fragment-file"].files
+    );
+          
+    e.preventDefault();
+    this.props.history.push("/");
+  }
 
   render() {
     return (
       <form 
-        className="add-new-user__form" 
+        className="book-edit__form" 
         onSubmit={this.onSubmitHandle}
       >
         <p>
@@ -28,8 +42,8 @@ class BookEdit extends React.Component {
           <span>Наименование</span>
           <input  
             type="text"
-            className="add-new-user__form_input_text"
-            placeholder="введите наименование" 
+            className="book-edit__form_input_text"
+            placeholder="введите наименование произведения" 
             name="title"
             autoComplete="off"
             required
@@ -40,7 +54,7 @@ class BookEdit extends React.Component {
           <span>Автор</span>
           <input 
             type="text"
-            className="add-new-user__form_input_text"
+            className="book-edit__form_input_text"
             placeholder="введите автора произведения" 
             name="author"
             autoComplete="off"
@@ -53,7 +67,7 @@ class BookEdit extends React.Component {
           <textarea 
             rows="10" 
             cols="45" 
-            className="add-new-user__form_input_text"
+            className="book-edit__form_input_text"
             placeholder="описание книги" 
             name="description"
             autoComplete="off"
@@ -62,63 +76,75 @@ class BookEdit extends React.Component {
         </label>
 
         <div className="book-edit__form-input-wraper">
-          <label className="add-new-user__form-third">
+          <label className="book-edit__form-third">
             <span>Цена</span>
             <input 
               type="number"
-              className="add-new-user__form_input_text"
-              placeholder="цена издания в рублях" 
+              min="1"
+              className="book-edit__form_input_text"
+              placeholder="цена в рублях" 
               name="price" 
+              required
             />
           </label>
 
-          <label className="add-new-user__form-third">
+          <label className="book-edit__form-third">
             <span>Рейтинг</span>
-            <input 
-              type="text" 
-              className="add-new-user__form_input_text" 
-              placeholder="в формате +7(ххх)ххх-хх-хх" 
+            <select 
+              className="book-edit__form_input_text" 
               name="rank"
-            />
+              defaultValue="five"
+            >
+              <option value="one">1</option>
+              <option value="two">2</option>
+              <option value="three">3</option>
+              <option value="four">4</option>
+              <option value="five">5</option>
+            </select>
+
           </label>
           
-          <label className="add-new-user__form-third">
+          <label className="book-edit__form-third">
             <span>Жанр</span>
-            <input 
-              type="text" 
-              className="add-new-user__form_input_text" 
-              placeholder="в формате +7(ххх)ххх-хх-хх" 
+            <select 
+              className="book-edit__form_input_text" 
               name="category"
-            />
+              defaultValue="1"
+            >
+              <option value="1">Классика</option>
+              <option value="2">Фэнтэзи</option>
+              <option value="3">Приключения</option>
+              <option value="4">Детектив</option>
+              <option value="5">Фантастика</option>
+              <option value="6">Научная литература</option>
+              <option value="7">Детская</option>
+            </select>
+
           </label>
         </div>
 
         <label>
-            <span>Файл обложки</span>
-            <input 
-              type="file" 
-              className="add-new-user__form_input_text" 
-              placeholder="в формате +7(ххх)ххх-хх-хх" 
-              name="category"
-            />
+          <span>Файлы обложки</span>
+          <input 
+            type="file" 
+            className="book-edit__form_input_text" 
+            name="cover-file"
+            multiple
+          />
         </label>
 
         <label>
-            <span>Файл фрагмента</span>
-            <input 
-              type="file" 
-              className="add-new-user__form_input_text" 
-              placeholder="в формате +7(ххх)ххх-хх-хх" 
-              name="category"
-            />
+          <span>Файл фрагмента</span>
+          <input 
+            type="file" 
+            className="book-edit__form_input_text" 
+            name="fragment-file"
+          />
         </label>
-
-          
         
         <button 
-          className="add-new-user__form_button"
+          className="book-edit__form_button"
           type="submit"
-          onClick={this.onSubmitButtonClick}
         >
           Сохранить изменения
         </button>
@@ -128,27 +154,17 @@ class BookEdit extends React.Component {
 }
 
 /* eslint-disable react/require-default-props */
-/*
 BookEdit.propTypes = {
-  createNewUser: PropTypes.func.isRequired,
-  authorized: PropTypes.bool.isRequired,
-  role: PropTypes.string.isRequired,
-  history: PropTypes.instanceOf(Object)
+    createNewBook: PropTypes.func.isRequired,
+    history: PropTypes.instanceOf(Object)
 };
-*/
-function mapStateToProps(state) {
-  return {
-    authorized: state.authentications.authorized,
-    role:  state.authentications.role
-  };
-}
-/*
+
 function mapDispatchToProps(dispatch) {
   return {
-      createNewUser: ( name, email, password, address, phone, role = "user") => {
-                          dispatch( actionCreateNewUser( name, email, password, address, phone, role ));
-                      }
+    createNewBook: (title, author, description, price, rank, category, coverFile, fragmentFile) => {
+      dispatch( actionCreateNewBook(title, author, description, price, rank, category, coverFile, fragmentFile));
+    }
   };
 }
-*/
-export default connect(mapStateToProps, null)(BookEdit);
+
+export default connect(null, mapDispatchToProps)(BookEdit);

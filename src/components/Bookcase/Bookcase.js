@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { createSelector } from "reselect";
 
 import BookCard from "../BookCard/BookCard";
 import { actionGetBooks } from "../../actions/actions";
@@ -14,6 +15,19 @@ const CaseWrapper = styled.div`
   justify-content: flex-start;
 
 `;
+
+const getCoversToBook = createSelector(
+  [state => state.books],
+  (books) => {
+
+    if(!books) {
+      return null;
+    }
+
+    return books.map((item)=>(item.Files.filter(itemFile => itemFile.type === "cover")[0].name));
+  }
+);
+
 
 class Bookcase extends React.Component {
 
@@ -28,41 +42,7 @@ class Bookcase extends React.Component {
   render() {
     return (
       <CaseWrapper>
-        <BookCard 
-          id={1}
-          title="Спящие красавицы" 
-          author="Frank Miller"  
-          description="Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla "
-          price={5.65}
-          rank="one"
-          category="2"
-          cover="images/file-1543589493775.jpg"
-          bookClick={this.bookClickHandler}
-        />
-        <BookCard 
-          id={2}
-          title="Часовая битва" 
-          author="Frank Miller"  
-          description="Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla "
-          price={5.65}
-          rank="two"
-          category="2"
-          cover="images/file-1543589451407.jpg"
-          bookClick={this.bookClickHandler}
-        />
-        <BookCard 
-          id={3}
-          title="ООчень длииинnnnnnnnnниое названне" 
-          author="dsfdsf sdfdfasdf"  
-          description="Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla Bla-bla-bla "
-          price={15.65}
-          rank="three"
-          category="2"
-          cover="images/file-1543589387542.jpg"
-          bookClick={this.bookClickHandler}
-        />
-
-        {this.props.books.map((item) => (
+        {this.props.books.map((item, index) => (
           <BookCard 
             id={item.id}
             key={item.id}
@@ -70,7 +50,10 @@ class Bookcase extends React.Component {
             author={item.author}
             price={item.price}
             rank={item.rank}
-            cover={item.Files.filter(item => item.type === "cover" )[0].name}
+
+            //cover={item.Files.filter(item => item.type === "cover" )[0].name}
+            cover={this.props.covers[index]}
+
             bookClick={this.bookClickHandler}
           />
         ))}
@@ -93,11 +76,13 @@ Bookcase.propTypes = {
   })), 
   history: PropTypes.instanceOf(Object),
   getBooks: PropTypes.func.isRequired,
+  covers: PropTypes.arrayOf(PropTypes.string)
 };
 
 function mapStateToProps(state) {
   return {
-      books: state.books
+      books: state.books,
+      covers: getCoversToBook(state)
   };
 }
 

@@ -2,12 +2,20 @@ import React from "react";
 import styled, { keyframes, css } from "styled-components";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { createSelector } from "reselect";
+import moment from "moment";
 
 import Covers from "./Covers/Covers";
 import { actionGetBooks, actionAddToCart, actionAddToCartOnServer,
   actionDeleteFromCart, actionDeleteFromCartOnServer, actionAddToFavorite,
-  actionAddToFavoriteOnServer, actionDeleteFromFavorite, actionDeleteFromFavoriteOnServer
+  actionAddToFavoriteOnServer, actionDeleteFromFavorite, actionDeleteFromFavoriteOnServer,
+  actionGetBookComments
 } from "../../actions/actions";
+import InputComments from "./InputComment/InputComment";
+
+
+const MainWrap = styled.div`
+`;
 
 const BookWrap = styled.div`
     //min-width: 140px;
@@ -75,6 +83,31 @@ const complexMixin = css`
   animation: ${grow} 200ms linear;
 `;
 
+const arrow_up = keyframes`
+  from {
+    transform: rotate(-135deg);    
+    top: 7px;
+  }
+  to {
+    transform: rotate(45deg);
+    top: 0px;
+  }
+`;
+const arrow_up_mix = css`
+  animation: ${arrow_up} 100ms linear;
+`;
+
+const arrow_down = keyframes`
+  from {
+    transform: rotate(45deg);    
+    top: 0px;
+  }
+  to {
+    transform: rotate(-135deg);
+    top: 7px;
+  }
+`;
+
 const FavoriteIcon = styled.div`
   margin-left: 16px;
   width: 14px;
@@ -137,7 +170,7 @@ const Price = styled.div`
 const SaleButton = styled.div`
   height: 63px;
   line-height: 63px;
-  background: #0f77b0;
+  background: #0083ca;
   width: 100%;
   text-align: center;
   box-sizing: border-box;
@@ -180,7 +213,6 @@ const StarsMask = styled.div`
   width: 82px;
   width: ${props => ranking(props.rank)}
 `;
-
 /*(props.rank * 82 / 5) + "px"*/
 function ranking (rank) {
   switch(rank) {
@@ -199,49 +231,161 @@ function ranking (rank) {
   }
 }
 
+const Comments = styled.div`
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  //align-items: stretch;
+  //border: 1px dashed pink;
+`;
+
+const CommentsHeader = styled.div`
+  font-size: 25px;
+  padding: 14px 35px 14px 20px;
+  display: flex;
+  flex-direction: row;
+  //border: 1px dashed pink;
+`;
+
+const colorLine = "#0083ca";
+
+const ArrowUp = styled.div`
+  width: 10px;
+  height: 10px;
+  position: relative;
+  top: 7px;
+  margin: 0 10px; //auto
+  border: solid ${colorLine};;
+  border-width: 0 3px 3px 0;
+  animation: ${arrow_down} 100ms linear;
+  transform: rotate(-135deg);
+
+`;  
+
+const ArrowDown = styled.div`
+  width: 10px;
+  height: 10px;
+  position: relative;
+  top: 0px;
+  margin: 0 10px; //auto
+  border: solid ${props => (props.no_comments ? "#cccccc" : colorLine)};
+  ${props => (props.animationArrow ? arrow_up_mix : "")}
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+`;  
+
+
+const CommentContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-left: 50px;
+  margin-bottom: 10px;
+
+  p {
+    margin: 0 30px;
+  }
+`;
+
+const CommentHeader = styled.div`
+  width: 17%;
+`;
+
+const CommentContentAuthor = styled.div`
+  margin-bottom: 8px;
+  color: #256aa3;
+  line-height: 19px;
+  //font-size: 14px;
+  overflow-wrap: break-word;
+`;
+
+const CommentContentDate = styled.div`
+  margin-bottom: 12px;
+  color: #999;
+  line-height: 19px;
+  font-size: 14px;
+`;
+
+const NewComment = styled.div`
+  //margin-bottom: 12px;
+  color: #999;
+  margin-left: 50px;
+  //line-height: 19px;
+  //font-size: 14px;
+`;
+
+const getBooks = (state) => state.books;
+const getCart = (state) => state.cart;
+const getFavorite = (state) => state.favorite;
+
+const getId = (_, props) => props.match.params.id;
+
+const getSelectedBook = createSelector(
+  [getBooks, getId],
+  (books, id) => {
+    return books.filter(item => item.id === parseInt(id))[0];
+  }
+);
+
+const isInCartBook = createSelector(
+  [getCart, getId],
+  (cart, id) => {
+    return ( cart.filter( item => item.id === parseInt(id)).length > 0 );
+  }
+);
+
+const isInFavoriteBook = createSelector(
+  [getFavorite, getId],
+  (favorite, id) => {
+    return ( favorite.filter( item => item.id === parseInt(id)).length > 0 );
+  }
+);
+
+const getCoversToBook = createSelector(
+  [getSelectedBook],
+  (book) => {
+    if(!book) {
+      return null;
+    }
+    return book.Files.filter(item => item.type === "cover");
+  }
+);
+
 
 class Book extends React.Component {
   constructor(props){
     super(props);
 
     this.state = {
-      book: props.books.filter( item => item.id === parseInt(props.match.params.id))[0],
-      inCart: (props.cart.filter( item => item.id === parseInt(props.match.params.id)).length > 0),
-      inFavorite: (props.favorite.filter( item => item.id === parseInt(props.match.params.id)).length > 0),
-      showAnimation: false
+      showAnimation: false,
+      showComments: false,
+      animationArrow: false,
+      showInputComment: false
     };
   }
 
   componentDidMount() {
-    if(!this.state.book){
+
+    if(!this.props.book){
       this.props.getBooks();
-    }
-  }
+    } 
 
-  // refactor with reselect!!! without state
-  static getDerivedStateFromProps(props, /*state*/) {
-
-    return ({
-      book: props.books.filter( item => item.id === parseInt(props.match.params.id))[0],
-      inCart: (props.cart.filter( item => item.id === parseInt(props.match.params.id)).length > 0),
-      inFavorite: (props.favorite.filter( item => item.id === parseInt(props.match.params.id)).length > 0)
-    });
+    this.props.getBook(this.props.match.params.id);
   }
 
   buttonAddDelCartHandler = () => {
 
-    if(this.state.inCart) {
-      this.props.delteFromCart(this.state.book);
+    if(this.props.inCart) {
+      this.props.delteFromCart(this.props.book);
 
     } else {
-      this.props.addToCart(this.state.book);
+      this.props.addToCart(this.props.book);
     }
   }
 
   onClickFavoriteHandler = () =>  {
 
-    if(this.state.inFavorite) {
-      this.props.delteFromFavorite(this.state.book);
+    if(this.props.inFavorite) {
+      this.props.delteFromFavorite(this.props.book);
 
     } else {
       this.setState({
@@ -255,65 +399,141 @@ class Book extends React.Component {
         });
       }, 500);
 
-      this.props.addToFavorite(this.state.book);
+      this.props.addToFavorite(this.props.book);
     }
   }
 
+  onClickCommentsHandler = () => {
+    
+    if(!this.props.comments.length) {
+      return; 
+    }
 
+    this.setState({
+      animationArrow: true
+    });
+
+    this.setState((state) => {
+      return {
+        showComments: !state.showComments
+      };
+    });
+  }
+
+  onClickNewCommentHandler = () => {
+    this.setState({
+      showInputComment: true
+    });
+  }
+
+  onAddComment = (comment) => {
+    this.props.sendComment(comment);
+    this.setState({
+      showInputComment: false
+    });
+  }
+
+  
   render() {
     
-    if(!this.state.book) {
+    if(!this.props.book) {
       return null;
     }
 
     return (
+      <MainWrap>
+        <BookWrap>
+          
+          <Covers 
+            title={this.props.book.title}
+            img_array={this.props.covers} 
+          />
 
-      <BookWrap>
+          <BaseInfo>
+          
+            <Panel>
+              <h1>{this.props.book.title}</h1>
+              <ToolPanel>
+                <StarsGray>
+                  <StarsMask rank={this.props.book.rank} />  
+                </StarsGray>
+                <span>1 отзыв</span>
+                <FavoriteIcon 
+                  onClick={this.onClickFavoriteHandler}
+                  inFavorite={this.props.inFavorite}
+                  showAnimation={this.state.showAnimation}
+                />
+
+              </ToolPanel>
+            </Panel>
         
-        <Covers 
-          title={this.state.book.title}
-          img_array={this.state.book.Files.filter(item => item.type === "cover") /*BAD PRACTICE! reselect? */} 
-        />
+            <ContentColumn>
+              <Author>{this.props.book.author}</Author>
+              <SaleBlock>
+                <Price>
+                  {this.props.book.price} 
+                  &nbsp;руб
+                </Price>
+                <SaleButton onClick={this.buttonAddDelCartHandler}>
+                  {this.props.inCart ? "Удалить из корзины" : "Добавить в корзину"}
+                </SaleButton>
+              </SaleBlock>
+            </ContentColumn>
+          </BaseInfo>
+        </BookWrap>
 
-        <BaseInfo>
         
-          <Panel>
-            <h1>{this.state.book.title}</h1>
-            <ToolPanel>
-              <StarsGray>
-                <StarsMask rank={this.state.book.rank} />  
-              </StarsGray>
-              <span>1 отзыв</span>
-              <FavoriteIcon 
-                onClick={this.onClickFavoriteHandler}
-                inFavorite={this.state.inFavorite}
-                showAnimation={this.state.showAnimation}
-              />
+        <Comments>
+          
+          <CommentsHeader onClick={this.onClickCommentsHandler}>
+            Отзывы
+            {this.state.showComments ? 
+              <ArrowUp /> : 
+              (
+                <ArrowDown 
+                  no_comments={this.props.comments.length === 0} 
+                  animationArrow={this.state.animationArrow}
+                />
+              )
+            }
+          </CommentsHeader>
 
-            </ToolPanel>
-          </Panel>
-      
-          <ContentColumn>
-            <Author>{this.state.book.author}</Author>
-            <SaleBlock>
-              <Price>
-                {this.state.book.price} 
-                &nbsp;руб
-              </Price>
-              <SaleButton onClick={this.buttonAddDelCartHandler}>
-                {this.state.inCart ? "Удалить из корзины" : "Добавить в корзину"}
-              </SaleButton>
-            </SaleBlock>
-          </ContentColumn>
-        </BaseInfo>
-      </BookWrap>
+          {this.state.showComments && this.props.comments.map(item => (
+            <CommentContainer key={item.id}>
+              <CommentHeader>
+                <CommentContentAuthor>
+                  {item.commenter_name}
+                </CommentContentAuthor>
+                <CommentContentDate>
+                  {moment(item.created_at).locale("ru").format("DD.MM.YYYY")}
+                </CommentContentDate>
+              </CommentHeader>
+              <p>{item.content}</p>  
+            </CommentContainer>
+            ))}
+
+          <NewComment onClick={this.onClickNewCommentHandler}>
+            {this.state.showInputComment? 
+              (
+                <InputComments
+                  user_name={this.props.auth.full_name}
+                  send_comment={this.onAddComment}
+                /> 
+              ) :
+              "Оставьте свой комментарий..."
+            }
+          </NewComment>
+
+        </Comments>
+
+      </MainWrap>
     );    
   }
 }
 
 /* eslint-disable react/require-default-props */
 Book.propTypes = {
-  books: PropTypes.arrayOf(PropTypes.shape({
+  book: PropTypes.shape({
     id: PropTypes.number.isRequired,
     author: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
@@ -326,30 +546,46 @@ Book.propTypes = {
       name: PropTypes.string.isRequired,
       type: PropTypes.string.isRequired,
     }))
+  }),
+  inCart: PropTypes.bool.isRequired,
+  inFavorite: PropTypes.bool.isRequired,
+  covers: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired
   })),
-  cart: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired
-  })),
-  favorite: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired
-  })),
-  match: PropTypes.shape({
+  match : PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string.isRequired
     })
   }),
+  comments: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    content: PropTypes.string.isRequired,
+    commenter_name: PropTypes.string.isRequired,
+    created_at: PropTypes.string.isRequired
+  })),
+  auth: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    full_name: PropTypes.string
+  }),
   getBooks: PropTypes.func.isRequired,
+  getBook: PropTypes.func.isRequired,
+  sendComment: PropTypes.func.isRequired,
   addToCart: PropTypes.func.isRequired,
   delteFromCart: PropTypes.func.isRequired,
   addToFavorite: PropTypes.func.isRequired,
   delteFromFavorite: PropTypes.func.isRequired
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, props) {
   return {
-      books: state.books,
-      cart: state.cart,
-      favorite: state.favorite
+      book: getSelectedBook(state, props),
+      inCart: isInCartBook(state, props),
+      inFavorite: isInFavoriteBook(state, props),
+      covers: getCoversToBook(state, props),
+      comments: state.comments,
+      auth: state.authentications
   };
 }
 
@@ -358,11 +594,26 @@ function mapDispatchToProps(dispatch) {
       getBooks: () => {
           dispatch(actionGetBooks());
       },
+
+      getBook: (id) => {
+        dispatch(actionGetBookComments(id));
+      },
+
+      sendComment: (comment) => {
+        console.log(comment);
+
+        
+
+
+
+      },
+
       addToCart: (book) => {
         console.log("add to cart " + book.title);
         dispatch(actionAddToCart(book)); //// if authorized call server method else local debug!
         dispatch(actionAddToCartOnServer(book));
       },
+
       delteFromCart: (book) => {
         console.log("delete from cart " + book.title);
         dispatch(actionDeleteFromCart(book)); //// if authorized call server method else local debug!
@@ -374,6 +625,7 @@ function mapDispatchToProps(dispatch) {
         dispatch(actionAddToFavorite(book)); //// if authorized call server method else local debug!
         dispatch(actionAddToFavoriteOnServer(book));
       },
+
       delteFromFavorite: (book) => {
         console.log("delete from Favorite " + book.title);
         dispatch(actionDeleteFromFavorite(book)); //// if authorized call server method else local debug!

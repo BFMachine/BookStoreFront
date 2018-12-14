@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import config from "../../../config";
 
 const MainContainer = styled.div `
-  height: 500px;
+  height: 430px;
   widht: 300px;
   display: flex;
   justify-content: start;
@@ -21,6 +21,7 @@ const ToolBar = styled.div`
 const ImgToolbarContainer = styled.div `
   height: 37px;
   cursor: pointer;
+  margin-bottom: 3px;
 `;
 
 const ImgContainer = styled.div `
@@ -64,8 +65,8 @@ class Covers extends React.Component {
                 src={config.SERVER + item.name}
                 alt="обложка"
                 title="нажмите, чтобы увеличить" 
-                               
-                onClick={()=>this.onClickSmallPic(index) /*BAD!!!  */} 
+                         
+                onClick={()=>this.onClickSmallPic(index) /*BAD */} 
 
               />
             </ImgToolbarContainer>
