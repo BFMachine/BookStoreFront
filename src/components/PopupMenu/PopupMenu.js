@@ -3,16 +3,14 @@ import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
-const colorLine = "#0083ca";//"#c9d3d8";
+const colorLine = "#0083ca";
 
 const Substrate = styled.div`
   position: absolute;
   top: 35px;
   width: 130px;
-  left: -39px;
+  left: -43px;
   z-index: 3;
-  //border: 1px dashed gray;
-  //background-color: rgba(255,255,255,.8);
 `;
 const MainWin = styled.div`
   margin: 10px;
@@ -35,19 +33,25 @@ const StyledLink = styled(Link)`
   :last-child {
     padding-bottom: 15px;
   }
+
+  :checked {
+    color:  ${colorLine};
+  }
 `;
 const ArrowUp = styled.div`
   position: absolute;
-  top: -10px;
+  top: 5px;
   left: 0;
   right: 0;
+  width: 10px;
+  height: 10px;
   margin: 0 auto;
-
-  width: 0; 
-  height: 0; 
-  border: 10px solid transparent;
-  border-bottom-color: ${colorLine};
+  border: solid ${colorLine};;
+  border-width: 0 1px 1px 0;
+  transform: rotate(-135deg);
+  background-color: white;
 `;  
+
 
 class PopupMenu extends React.Component {
  
@@ -100,7 +104,6 @@ class PopupMenu extends React.Component {
               </StyledLink>
                 )
             }
-
 
             {this.props.authorized ? 
               (

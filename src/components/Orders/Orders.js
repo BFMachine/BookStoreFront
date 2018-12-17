@@ -70,8 +70,8 @@ class Orders extends React.Component {
 
         <TitleMain>Ваши заказы</TitleMain>
         <HLine />
-        <TitleMiddle>{this.props.orders.full_name}</TitleMiddle>
-        <TitleThird>{this.props.orders.email}</TitleThird>
+        <TitleMiddle>{this.props.auth.full_name}</TitleMiddle>
+        <TitleThird>{this.props.auth.email}</TitleThird>
         <HLine />
         <Table>
           <tbody>
@@ -82,7 +82,7 @@ class Orders extends React.Component {
               <Th>Статус</Th>
               <Th>Дата оплаты</Th>
             </tr>
-            {this.props.orders.Orders && this.props.orders.Orders.map((item, i) => {
+            {this.props.orders.length > 0 && this.props.orders.map((item, i) => {
                 return (
                   <tr key={item.id}> 
                     <Td>{i + 1}</Td>
@@ -105,23 +105,25 @@ class Orders extends React.Component {
 
 /* eslint-disable react/require-default-props */
 Orders.propTypes = {
-    orders: PropTypes.shape({
+    orders: PropTypes.arrayOf(PropTypes.shape({
+        created_at: PropTypes.string.isRequired,
+        pay_date: PropTypes.string,
+        status:PropTypes.string.isRequired,
+        total_cost: PropTypes.number
+    })),
+    getOrders: PropTypes.func.isRequired,
+    auth: PropTypes.shape({
         full_name: PropTypes.string,
-        email: PropTypes.string,
-        Orders: PropTypes.arrayOf(PropTypes.shape({
-            created_at: PropTypes.string.isRequired,
-            pay_date: PropTypes.string,
-            status:PropTypes.string.isRequired,
-            total_cost: PropTypes.number
-        }))
-    }),
-    getOrders: PropTypes.func.isRequired
+        email: PropTypes.string
+      }),
+    
 };
 /* eslint-enable react/require-default-props */
 
 function mapStateToProps(state) {
     return {
         orders: state.orders,
+        auth: state.authentications
     };
 }
 

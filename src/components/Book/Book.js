@@ -9,12 +9,15 @@ import Covers from "./Covers/Covers";
 import { actionGetBooks, actionAddToCart, actionAddToCartOnServer,
   actionDeleteFromCart, actionDeleteFromCartOnServer, actionAddToFavorite,
   actionAddToFavoriteOnServer, actionDeleteFromFavorite, actionDeleteFromFavoriteOnServer,
-  actionGetBookComments
+  actionGetBookComments, actionCreateNewComment
 } from "../../actions/actions";
 import InputComments from "./InputComment/InputComment";
 
 
+const colorLine = "#0083ca";
+
 const MainWrap = styled.div`
+  padding-bottom: 20px;
 `;
 
 const BookWrap = styled.div`
@@ -93,6 +96,7 @@ const arrow_up = keyframes`
     top: 0px;
   }
 `;
+
 const arrow_up_mix = css`
   animation: ${arrow_up} 100ms linear;
 `;
@@ -195,12 +199,20 @@ const SaleButton = styled.div`
 
 const Author = styled.div`
   word-wrap: break-word;
+  white-space: pre-wrap;
   font-size: 1.25rem;
-  line-height: 1.75rem;
+  line-height: 1.5rem;
+
+  span {
+    margin-top: 0.5rem;
+    display: block;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: normal;
+  }
 `;
 
 const StarsGray = styled.div`
-  //position: relative;
   vertical-align: middle;
   background: 0 0 url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMid' viewBox='0 0 15 15'%3E%3Cpath class='st0' fill='%23c8c8ce' d='M7.5 0l2.3 4.9 5.2.8-3.7 3.8.9 5.4-4.6-2.6L2.9 15l.9-5.4L0 5.7l5.2-.8L7.5 0z'/%3E%3C/svg%3E") no-repeat,17px 0 url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMid' viewBox='0 0 15 15'%3E%3Cpath class='st0' fill='%23c8c8ce' d='M7.5 0l2.3 4.9 5.2.8-3.7 3.8.9 5.4-4.6-2.6L2.9 15l.9-5.4L0 5.7l5.2-.8L7.5 0z'/%3E%3C/svg%3E") no-repeat,34px 0 url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMid' viewBox='0 0 15 15'%3E%3Cpath class='st0' fill='%23c8c8ce' d='M7.5 0l2.3 4.9 5.2.8-3.7 3.8.9 5.4-4.6-2.6L2.9 15l.9-5.4L0 5.7l5.2-.8L7.5 0z'/%3E%3C/svg%3E") no-repeat,51px 0 url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMid' viewBox='0 0 15 15'%3E%3Cpath class='st0' fill='%23c8c8ce' d='M7.5 0l2.3 4.9 5.2.8-3.7 3.8.9 5.4-4.6-2.6L2.9 15l.9-5.4L0 5.7l5.2-.8L7.5 0z'/%3E%3C/svg%3E") no-repeat,68px 0 url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMid' viewBox='0 0 15 15'%3E%3Cpath class='st0' fill='%23c8c8ce' d='M7.5 0l2.3 4.9 5.2.8-3.7 3.8.9 5.4-4.6-2.6L2.9 15l.9-5.4L0 5.7l5.2-.8L7.5 0z'/%3E%3C/svg%3E") no-repeat;
   height: 15px;
@@ -235,8 +247,6 @@ const Comments = styled.div`
   padding: 10px;
   display: flex;
   flex-direction: column;
-  //align-items: stretch;
-  //border: 1px dashed pink;
 `;
 
 const CommentsHeader = styled.div`
@@ -244,10 +254,7 @@ const CommentsHeader = styled.div`
   padding: 14px 35px 14px 20px;
   display: flex;
   flex-direction: row;
-  //border: 1px dashed pink;
 `;
-
-const colorLine = "#0083ca";
 
 const ArrowUp = styled.div`
   width: 10px;
@@ -259,7 +266,6 @@ const ArrowUp = styled.div`
   border-width: 0 3px 3px 0;
   animation: ${arrow_down} 100ms linear;
   transform: rotate(-135deg);
-
 `;  
 
 const ArrowDown = styled.div`
@@ -274,7 +280,6 @@ const ArrowDown = styled.div`
   transform: rotate(45deg);
 `;  
 
-
 const CommentContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -283,6 +288,8 @@ const CommentContainer = styled.div`
 
   p {
     margin: 0 30px;
+    display: block;
+    width: 92%;
   }
 `;
 
@@ -294,7 +301,6 @@ const CommentContentAuthor = styled.div`
   margin-bottom: 8px;
   color: #256aa3;
   line-height: 19px;
-  //font-size: 14px;
   overflow-wrap: break-word;
 `;
 
@@ -306,11 +312,8 @@ const CommentContentDate = styled.div`
 `;
 
 const NewComment = styled.div`
-  //margin-bottom: 12px;
   color: #999;
   margin-left: 50px;
-  //line-height: 19px;
-  //font-size: 14px;
 `;
 
 const getBooks = (state) => state.books;
@@ -369,7 +372,7 @@ class Book extends React.Component {
       this.props.getBooks();
     } 
 
-    this.props.getBook(this.props.match.params.id);
+    this.props.getBookComment(this.props.match.params.id);
   }
 
   buttonAddDelCartHandler = () => {
@@ -402,7 +405,7 @@ class Book extends React.Component {
       this.props.addToFavorite(this.props.book);
     }
   }
-
+ 
   onClickCommentsHandler = () => {
     
     if(!this.props.comments.length) {
@@ -418,22 +421,87 @@ class Book extends React.Component {
         showComments: !state.showComments
       };
     });
+
+    if(this._CommentsHeader) {
+      setTimeout(() => {
+        console.log("exp");
+        this._CommentsHeader.scrollIntoView(true);
+      }, 50);
+    }
   }
 
+  getCommentsRef = (node) => {
+    this._CommentsHeader = node;
+  }
+  
   onClickNewCommentHandler = () => {
     this.setState({
       showInputComment: true
     });
   }
 
-  onAddComment = (comment) => {
-    this.props.sendComment(comment);
+  onAddComment = (commenter, content) => {
+
+    this.props.sendComment(this.props.book.id, commenter, content);
+
     this.setState({
       showInputComment: false
     });
+
+    this.setState({
+      showComments: true
+    });
   }
 
+  getCommentCountString = (count) => {
+    
+    let returnString = " отзывов";
+    let lastNumber = count % 10;
+    
+    if(lastNumber === 0) {
+      returnString = "отзывов";
+    } else if (lastNumber === 1) {
+      returnString = " отзыв";
+    } else if(lastNumber < 5) {
+      returnString = " отзыва";
+    } 
+
+    //special case
+    if(count % 100 === 11 || count % 100 === 12 || count % 100 === 13 || count % 100 === 14) {
+      returnString = "отзывов";
+    }
+
+    if(count === 0) {
+      returnString = "нет отзывов";
+    } else {
+      returnString = count + " " + returnString;
+    }
+
+    return returnString;
+  }
   
+  getCategory = (category) => {
+    switch(category) {
+      case 1 : 
+        return "Классика";
+      case 2 : 
+        return "Фэнтэзи";
+      case 3 : 
+        return "Приключения";
+      case 4 : 
+        return "Детектив";
+      case 5 : 
+        return "Фантастика";
+      case 6 : 
+        return "Научная литература";
+      case 7 : 
+        return "Детская литература";
+      default : 
+        return "";
+    }
+  }
+
+
   render() {
     
     if(!this.props.book) {
@@ -457,7 +525,9 @@ class Book extends React.Component {
                 <StarsGray>
                   <StarsMask rank={this.props.book.rank} />  
                 </StarsGray>
-                <span>1 отзыв</span>
+                <span onClick={this.onClickCommentsHandler}>
+                  {this.getCommentCountString(this.props.comments.length)}                  
+                </span>
                 <FavoriteIcon 
                   onClick={this.onClickFavoriteHandler}
                   inFavorite={this.props.inFavorite}
@@ -468,7 +538,13 @@ class Book extends React.Component {
             </Panel>
         
             <ContentColumn>
-              <Author>{this.props.book.author}</Author>
+              <Author>
+                {this.props.book.author}
+                <span>
+                  {this.getCategory(this.props.book.category)}
+                </span>
+              </Author>
+              
               <SaleBlock>
                 <Price>
                   {this.props.book.price} 
@@ -481,9 +557,8 @@ class Book extends React.Component {
             </ContentColumn>
           </BaseInfo>
         </BookWrap>
-
         
-        <Comments>
+        <Comments ref={this.getCommentsRef}>
           
           <CommentsHeader onClick={this.onClickCommentsHandler}>
             Отзывы
@@ -514,18 +589,19 @@ class Book extends React.Component {
 
           <NewComment onClick={this.onClickNewCommentHandler}>
             {this.state.showInputComment? 
-              (
-                <InputComments
-                  user_name={this.props.auth.full_name}
-                  send_comment={this.onAddComment}
-                /> 
-              ) :
+
+              this.props.auth && this.props.auth.authorized ?   
+                (
+                  <InputComments
+                    user_name={this.props.auth.full_name}
+                    send_comment={this.onAddComment}
+                  /> 
+                ) : 
+                "Только зарегистрированные пользователи могут оставлять комментарии" :
               "Оставьте свой комментарий..."
             }
           </NewComment>
-
         </Comments>
-
       </MainWrap>
     );    
   }
@@ -566,11 +642,12 @@ Book.propTypes = {
     created_at: PropTypes.string.isRequired
   })),
   auth: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    full_name: PropTypes.string
+    id: PropTypes.number,
+    full_name: PropTypes.string,
+    authorized: PropTypes.bool
   }),
   getBooks: PropTypes.func.isRequired,
-  getBook: PropTypes.func.isRequired,
+  getBookComment: PropTypes.func.isRequired,
   sendComment: PropTypes.func.isRequired,
   addToCart: PropTypes.func.isRequired,
   delteFromCart: PropTypes.func.isRequired,
@@ -595,39 +672,30 @@ function mapDispatchToProps(dispatch) {
           dispatch(actionGetBooks());
       },
 
-      getBook: (id) => {
+      getBookComment: (id) => {
         dispatch(actionGetBookComments(id));
       },
 
-      sendComment: (comment) => {
-        console.log(comment);
-
-        
-
-
-
+      sendComment: (book_id, commenter_name, content) => {
+        dispatch(actionCreateNewComment(book_id, commenter_name, content));
       },
 
       addToCart: (book) => {
-        console.log("add to cart " + book.title);
         dispatch(actionAddToCart(book)); //// if authorized call server method else local debug!
-        dispatch(actionAddToCartOnServer(book));
+        dispatch(actionAddToCartOnServer([book.id]));
       },
 
       delteFromCart: (book) => {
-        console.log("delete from cart " + book.title);
         dispatch(actionDeleteFromCart(book)); //// if authorized call server method else local debug!
         dispatch(actionDeleteFromCartOnServer(book));
       },
 
       addToFavorite: (book) => {
-        console.log("add to Favorite " + book.title);
         dispatch(actionAddToFavorite(book)); //// if authorized call server method else local debug!
-        dispatch(actionAddToFavoriteOnServer(book));
+        dispatch(actionAddToFavoriteOnServer([book.id]));
       },
 
       delteFromFavorite: (book) => {
-        console.log("delete from Favorite " + book.title);
         dispatch(actionDeleteFromFavorite(book)); //// if authorized call server method else local debug!
         dispatch(actionDeleteFromFavoriteOnServer(book));
       }

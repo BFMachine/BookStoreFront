@@ -4,10 +4,22 @@ import { actionGetCart } from "../actions/actions";
 import config from "../config";
 
 const getTokens = state => state.tokens;
-    
-export function* addToCartOnServer({book}) {
+const getAuthentications = state => state.authentications;
+const getCart = state => state.cart;
+
+
+export function* addToCartOnServer(books) {
 
   let tokens = yield select(getTokens);
+  let auth = yield select(getAuthentications);
+  let cart = yield select(getCart);
+
+  // if not authorized and store in localStorage
+  if(auth.authorized === false) {
+    localStorage.setItem("Cart", JSON.stringify(cart));
+    yield put(actionGetCart());
+    return;
+  }
 
   try{
     const answer = yield call(fetch, config.SERVER + "carts", {
@@ -17,7 +29,7 @@ export function* addToCartOnServer({book}) {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + tokens.accessToken
       },
-      body: JSON.stringify({ id: book.id })
+      body: JSON.stringify({id : [ ...books.book ] })
     });
 
     if(!answer.ok) {
@@ -35,6 +47,15 @@ export function* addToCartOnServer({book}) {
 export function* deleteFromCartOnServer({book}) {
 
   let tokens = yield select(getTokens);
+  let auth = yield select(getAuthentications);
+  let cart = yield select(getCart);
+
+  // if not authorized and store in localStorage
+  if(auth.authorized === false) {
+    localStorage.setItem("Cart", JSON.stringify(cart));
+    yield put(actionGetCart());
+    return;
+  }
   
   try{
     const answer = yield call(fetch, config.SERVER + "carts/" + book.id, {
@@ -60,6 +81,14 @@ export function* deleteFromCartOnServer({book}) {
 export function* deleteAllCartOnServer() {
 
   let tokens = yield select(getTokens);
+  let auth = yield select(getAuthentications);
+
+  // if not authorized and store in localStorage
+  if(auth.authorized === false) {
+    localStorage.removeItem("Cart");
+    yield put(actionGetCart());
+    return;
+  }
   
   try{
     const answer = yield call(fetch, config.SERVER + "carts/", {

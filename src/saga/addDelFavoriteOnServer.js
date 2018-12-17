@@ -4,10 +4,22 @@ import { actionGetFavorite } from "../actions/actions";
 import config from "../config";
 
 const getTokens = state => state.tokens;
-    
-export function* addToFavoriteOnServer({book}) {
+const getAuthentications = state => state.authentications;
+const getFavorite = state => state.favorite;
+
+
+export function* addToFavoriteOnServer(books) {
 
   let tokens = yield select(getTokens);
+  let auth = yield select(getAuthentications);
+  let favorite = yield select(getFavorite);
+
+  // if not authorized and store in localStorage
+  if(auth.authorized === false) {
+    localStorage.setItem("Favorite", JSON.stringify(favorite));
+    yield put(actionGetFavorite());
+    return;
+  }
 
   try{
     const answer = yield call(fetch, config.SERVER + "favorites", {
@@ -17,7 +29,7 @@ export function* addToFavoriteOnServer({book}) {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + tokens.accessToken
       },
-      body: JSON.stringify({ id: book.id })
+      body: JSON.stringify({id : [ ...books.book ] })
     });
 
     if(!answer.ok) {
@@ -35,6 +47,15 @@ export function* addToFavoriteOnServer({book}) {
 export function* deleteFromFavoriteOnServer({book}) {
 
   let tokens = yield select(getTokens);
+  let auth = yield select(getAuthentications);
+  let favorite = yield select(getFavorite);
+
+  // if not authorized and store in localStorage
+  if(auth.authorized === false) {
+    localStorage.setItem("Favorite", JSON.stringify(favorite));
+    yield put(actionGetFavorite());
+    return;
+  }
   
   try{
     const answer = yield call(fetch, config.SERVER + "favorites/" + book.id, {
@@ -60,6 +81,14 @@ export function* deleteFromFavoriteOnServer({book}) {
 export function* deleteAllFavoriteOnServer() {
 
   let tokens = yield select(getTokens);
+  let auth = yield select(getAuthentications);
+  
+  // if not authorized and store in localStorage
+  if(auth.authorized === false) {
+    localStorage.removeItem("Favorite");
+    yield put(actionGetFavorite());
+    return;
+  }
   
   try{
     const answer = yield call(fetch, config.SERVER + "favorites/", {

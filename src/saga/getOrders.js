@@ -26,8 +26,9 @@ export default function* getOrders() {
         }
 
         const responseBody = yield answer.json();
-        const userOrders = JSON.parse(responseBody);
-        yield put(actionSetOrders(userOrders));
+        const orders = responseBody;//responseBody.filter(item => item.status !== "cart" && item.status !== "favorite");
+
+        yield put(actionSetOrders(orders));
 
     } catch (error) {
         console.log(`server response error ${error}`);

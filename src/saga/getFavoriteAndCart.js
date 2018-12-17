@@ -11,6 +11,16 @@ export function* getCart() {
     let tokens = yield select(getTokens);
     let auth = yield select(getAuthentications);
 
+    // if not authorized and store in localStorage
+    if(auth.authorized === false) {
+        
+        let localCard = localStorage.getItem("Cart");
+        if(localCard) {
+            yield put(actionSetCart(JSON.parse(localCard)));       
+        }
+        return;
+    }
+
     try{
         const answer = yield call(fetch, config.SERVER + "orders/cart/" + auth.id, {
             method: "get",
@@ -28,9 +38,8 @@ export function* getCart() {
             throw new Error(`status: ${answer.status} ${answer.statusText}`);
         }
 
-        const responseBody = yield answer.json();
-        const userOrdersDetailed = JSON.parse(responseBody);
-
+        const userOrdersDetailed = yield answer.json();
+        
         // check if no any cover
         const defaultCover = {
             id: 0,
@@ -41,8 +50,8 @@ export function* getCart() {
         userOrdersDetailed.forEach((item) => {
             let foundCover = false;
 
-            item.Files.forEach((item) => {
-                if(item.type === "cover") {
+            item.Files.forEach((file) => {
+                if(file.type === "cover") {
                     foundCover = true;
                 }
             });
@@ -59,10 +68,22 @@ export function* getCart() {
     }
 }
 
+
 export function* getFavorite() {
 
   let tokens = yield select(getTokens);
   let auth = yield select(getAuthentications);
+  
+  // if not authorized and store in localStorage
+  if(auth.authorized === false) {
+        
+    let localFavorite = localStorage.getItem("Favorite");
+    if(localFavorite) {
+      yield put(actionSetFavorite(JSON.parse(localFavorite)));       
+    }
+    return;
+  }
+
 
   try{
         const answer = yield call(fetch, config.SERVER + "orders/favorite/" + auth.id, {
@@ -81,8 +102,7 @@ export function* getFavorite() {
             throw new Error(`status: ${answer.status} ${answer.statusText}`);
         }
 
-        const responseBody = yield answer.json();
-        const userOrdersDetailed = JSON.parse(responseBody);
+        const userOrdersDetailed = yield answer.json();
 
             // check if no any cover
         const defaultCover = {

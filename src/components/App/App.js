@@ -33,12 +33,12 @@ class App extends Component {
             <Route exact path="/login" component={Login}/>
             <Route path="/login/new" component={AddNewUser}/>
             <Route path="/books/:id" component={Book}/>
+            <Route path="/cart" component={Cart} />
+            <Route path="/favorite" component={Favorite} />
+            
             <PrivateRoute path="/cabinet" component={Cabinet} />
             <PrivateRoute path="/orders" component={Orders} />
-            <PrivateRoute path="/cart" component={Cart} />
-            <PrivateRoute path="/favorite" component={Favorite} />
             <PrivateRoute path="/bookedit" component={BookEdit} adminOnly={true} />
-
             <PrivateRoute path="/logout" 
               render={(props) => (
                 <InfoPage {...props} message="Вы вышли из системы" />

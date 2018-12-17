@@ -3,6 +3,7 @@ import { actionSetBooks } from "../actions/actions";
 
 import config from "../config";
 
+
 export default function* getBooks() {
 
     try{
@@ -11,7 +12,6 @@ export default function* getBooks() {
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                //"Authorization": "Bearer " + tokens.accessToken
             }
         });
 

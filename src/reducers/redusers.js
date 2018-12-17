@@ -52,11 +52,11 @@ function authentications(state = initialAuthState, action) {
     }
 }
 
-function orders(state = { orders: null }, action) {
+function orders(state = [], action) {
 
   switch(action.type) {
     case SET_ORDERS:
-      return {...action.payload};
+      return [...action.payload];
   
     default:
         return state;  
@@ -82,7 +82,7 @@ function cart(state = [], action) {
       return [...action.cart];
 
     case ADD_TO_CART:
-      return [...state,
+      return [...state, 
         action.book
       ];
 

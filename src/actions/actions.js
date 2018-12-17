@@ -196,11 +196,6 @@ export function actionDeleteAllFavoriteOnServer() {
     };
 }
 
-
-
-
-
-
 export function actionGetFavorite() {
     return {
         type: GET_FAVORITE
@@ -259,9 +254,11 @@ export function actionCreateNewBook(title, author, description, price, rank, cat
     };
 }
 
-export function actionCreateNewComment(comment) {
+export function actionCreateNewComment(book_id, commenter_name, content) {
     return {
         type: CREATE_NEW_COMMENT,
-        comment
+        book_id,
+        commenter_name,
+        content
     };
 }

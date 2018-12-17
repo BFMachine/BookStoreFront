@@ -2,8 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { createSelector } from "reselect";
 
-import { actionGetFavorite, actionDeleteAllFavoriteOnServer } from "../../actions/actions";
+import { actionGetFavorite, actionSetFavorite, actionDeleteAllFavoriteOnServer } from "../../actions/actions";
 import BookCard from "../BookCard/BookCard";
 
 const colorLine = "#c9d3d8";
@@ -58,6 +59,17 @@ const Button = styled.button`
   }
 `;
 
+const getCoversToBook = createSelector(
+  [state => state.favorite],
+  (book) => {
+    if(!book) {
+      return null;
+    }
+    
+    return book.map((item)=>(item.Files.filter(itemFile => itemFile.type === "cover")[0].name));
+  }
+);
+
 
 class Favorite extends React.Component {
 
@@ -79,14 +91,14 @@ class Favorite extends React.Component {
           <IserInfo>{full_name}</IserInfo>
           <Button 
             onClick={this.props.clearFavorite}
-            disabled={this.props.favorite.length < 1 ? true : false }
+            disabled={this.props.favorite.length < 1 ? true : false}
           >
             Очистить избранное
           </Button>
         </HeaderOwner>
 
         <CaseWrapper>    
-          {this.props.favorite.map((item) => (
+          {this.props.favorite.map((item, index) => (
             <BookCard 
               key={item.id}
               id={item.id}
@@ -94,7 +106,8 @@ class Favorite extends React.Component {
               author={item.author}
               price={item.price}
               rank={item.rank}
-              cover={item.Files.filter(item => item.type === "cover" )[0].name}
+              //cover={item.Files.filter(item => item.type === "cover" )[0].name}
+              cover={this.props.covers[index]}
               bookClick={this.bookClickHandler}
             />
           ))}
@@ -124,12 +137,14 @@ Favorite.propTypes = {
   getFavorite: PropTypes.func.isRequired,
   clearFavorite: PropTypes.func.isRequired,
   history: PropTypes.instanceOf(Object),
+  covers: PropTypes.arrayOf(PropTypes.string)
 };
 
 function mapStateToProps(state) {
   return {
       favorite: state.favorite,
-      auth: state.authentications
+      auth: state.authentications,
+      covers: getCoversToBook(state)
   };
 }
 
@@ -139,6 +154,7 @@ function mapDispatchToProps(dispatch) {
           dispatch(actionGetFavorite());
       },
       clearFavorite: () => {
+        dispatch(actionSetFavorite([]));
         dispatch(actionDeleteAllFavoriteOnServer());
       }
   };

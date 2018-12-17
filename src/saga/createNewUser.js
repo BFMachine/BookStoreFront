@@ -1,10 +1,15 @@
-import { put, call } from "redux-saga/effects";
+import { put, call, select } from "redux-saga/effects";
 import * as jwt from "jsonwebtoken";
 
 import { actionSetAuthUser, actionSetAuthenticationError, actionSetTokens, 
-    actionSetCart, actionSetFavorite, actionSetOrders } from "../actions/actions";
+  actionAddToFavoriteOnServer, actionSetOrders, actionAddToCartOnServer 
+  } from "../actions/actions";
 
 import config from "../config";
+
+const getCart = state => state.cart;
+const getFavorite = state => state.favorite;
+
 
 export default function* createNewUser({address, email, name, password, phone, role }) {
 
@@ -41,8 +46,26 @@ export default function* createNewUser({address, email, name, password, phone, r
     
     const decToken = jwt.decode(tokens.accessToken, {complete: false});
     yield put(actionSetAuthUser(true, decToken.id, decToken.email, decToken.role, resJson.full_name, resJson.address, resJson.phone));
-    yield put(actionSetCart([]));
-    yield put(actionSetFavorite([]));
+
+
+    //save favorite and cart on server
+    //let auth = yield select(getAuthentications);
+    let cart = yield select(getCart);
+    
+    if(cart.length > 0) {
+      yield put(actionAddToCartOnServer(cart.map(item => item.id)));
+      yield localStorage.removeItem("Cart");
+    }
+    
+    let favorite = yield select(getFavorite);
+
+    if(favorite.length > 0) {
+      yield put(actionAddToFavoriteOnServer(favorite.map(item => item.id)));
+      yield localStorage.removeItem("Favorite");
+    }
+
+    //yield put(actionSetCart([]));
+    //yield put(actionSetFavorite([]));
     yield put(actionSetOrders([]));
 
   } catch (error) {

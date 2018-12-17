@@ -53,11 +53,21 @@ const CommentButton = styled.button`
 class InputComments extends React.Component {
 
   onSubmitHandler = (e) => {
-    this.props.send_comment({
-      commenter: e.target["name"].value === "" ? this.props.user_name : e.target["name"].value,
-      content: e.target["content"].value
-    });
+    this.props.send_comment(
+      e.target["name"].value === "" ? this.props.user_name : e.target["name"].value,
+      e.target["content"].value
+    );
     e.preventDefault();
+  }
+  
+  componentDidMount = () => {
+    if(this._CommentsInput) {
+      this._CommentsInput.focus();
+    }
+  }
+
+  getRef = (node) => {
+    this._CommentsInput = node;
   }
 
   render() {
@@ -72,6 +82,7 @@ class InputComments extends React.Component {
           type="text"
           placeholder="введите свой комментарий"
           name="content" 
+          ref={this.getRef}
         />
         <CommentButton 
           type="submit"

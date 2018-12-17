@@ -19,6 +19,7 @@ import { addToCartOnServer, deleteFromCartOnServer, deleteAllCartOnServer
 import { addToFavoriteOnServer, deleteFromFavoriteOnServer, deleteAllFavoriteOnServer 
 } from "./addDelFavoriteOnServer";
 import createNewBook from "./createNewBook";
+import createNewComment from "./createNewComment";
 
 
 export default function* saga() {
@@ -39,5 +40,5 @@ export default function* saga() {
     yield takeEvery(DELETE_FROM_FAVORITE_ON_SERVER, deleteFromFavoriteOnServer);
     yield takeEvery(DELETE_ALL_FAVORITE_ON_SERVER, deleteAllFavoriteOnServer);
     yield takeEvery(CREATE_NEW_BOOK, createNewBook);
-    yield takeEvery(CREATE_NEW_COMMENT, );
+    yield takeEvery(CREATE_NEW_COMMENT, createNewComment);
  }

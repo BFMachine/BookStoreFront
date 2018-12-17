@@ -23,7 +23,6 @@ const getCoversToBook = createSelector(
     if(!books) {
       return null;
     }
-
     return books.map((item)=>(item.Files.filter(itemFile => itemFile.type === "cover")[0].name));
   }
 );

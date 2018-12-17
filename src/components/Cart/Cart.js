@@ -2,8 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { createSelector } from "reselect";
 
-import { actionGetCart, actionDeleteAllCartOnServer } from "../../actions/actions";
+import { actionGetCart, actionSetCart, actionDeleteAllCartOnServer } from "../../actions/actions";
 import BookCard from "../BookCard/BookCard";
 
 const colorLine = "#c9d3d8";
@@ -58,6 +59,17 @@ const Button = styled.button`
   }
 `;
 
+const getCoversToBook = createSelector(
+  [state => state.cart],
+  (book) => {
+    if(!book) {
+      return null;
+    }
+    
+    return book.map((item)=>(item.Files.filter(itemFile => itemFile.type === "cover")[0].name));
+  }
+);
+
 
 class Cart extends React.Component {
 
@@ -79,14 +91,14 @@ class Cart extends React.Component {
           <IserInfo>{full_name}</IserInfo>
           <Button 
             onClick={this.props.clearCart}
-            disabled={this.props.cart.length < 1 ? true : false }
+            disabled={this.props.cart.length < 1 ? true : false}
           >
             Очистить корзину
           </Button>
         </HeaderOwner>
 
         <CaseWrapper>    
-          {this.props.cart.map((item) => (
+          {this.props.cart.map((item, index) => (
             <BookCard 
               key={item.id}
               id={item.id}
@@ -94,7 +106,8 @@ class Cart extends React.Component {
               author={item.author}
               price={item.price}
               rank={item.rank}
-              cover={item.Files.filter(item => item.type === "cover" )[0].name}
+              //cover={item.Files.filter(item => item.type === "cover" )[0].name}
+              cover={this.props.covers[index]}
               bookClick={this.bookClickHandler}
             />
           ))}
@@ -124,12 +137,14 @@ Cart.propTypes = {
   getCart: PropTypes.func.isRequired,
   clearCart: PropTypes.func.isRequired,
   history: PropTypes.instanceOf(Object),
+  covers: PropTypes.arrayOf(PropTypes.string)
 };
 
 function mapStateToProps(state) {
   return {
       cart: state.cart,
-      auth: state.authentications
+      auth: state.authentications,
+      covers: getCoversToBook(state)
   };
 }
 
@@ -139,6 +154,7 @@ function mapDispatchToProps(dispatch) {
         dispatch(actionGetCart());
       },
       clearCart: () => {
+        dispatch(actionSetCart([]));
         dispatch(actionDeleteAllCartOnServer());
       }
   };
