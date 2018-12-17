@@ -12,7 +12,7 @@ import { actionGetBooks, actionAddToCart, actionAddToCartOnServer,
   actionGetBookComments, actionCreateNewComment
 } from "../../actions/actions";
 import InputComments from "./InputComment/InputComment";
-
+import config from "../../config";
 
 const colorLine = "#0083ca";
 
@@ -63,6 +63,12 @@ const ToolPanel = styled.div`
   align-items: center;
   padding-bottom: 10px;
   border-bottom: 1px solid #ececec;
+
+  span {
+    :hover {
+      text-decoration: underline;
+    }
+  }
 `;
 
 const grow = keyframes`
@@ -70,20 +76,20 @@ const grow = keyframes`
     width: 14px; 
     height: 12px;
     background-size: 14px 12px;
-    left: 0;
-    top: 0;
+    left: 2px;
+    top: 5px;
   }
   to {
     width: 50px;
     height: 50px;
     background-size: 50px 50px;
-    left: -17px;
+    left: -15px;
     top: -19px;
   }
 `;
 
 const complexMixin = css`
-  animation: ${grow} 200ms linear;
+  animation: ${grow} 150ms linear;
 `;
 
 const arrow_up = keyframes`
@@ -114,11 +120,13 @@ const arrow_down = keyframes`
 
 const FavoriteIcon = styled.div`
   margin-left: 16px;
-  width: 14px;
   height: 12px;
-  top: 2px;
   cursor: pointer;
   position: relative;
+  background-repeat: no-repeat;
+  background-size: 14px 12px;
+  background-position: 3px 50%;
+  padding: 5px 5px 5px 25px;
 
   background-image: ${props => ( props.inFavorite ? 
     `url("data:image/svg+xml,%3Csvg id='Layer_1' xmlns='http%3A//www.w3.org/2000/svg' viewBox='-9 11 14 12'%3E%3Cstyle%3E.st0%7Bfill:%23cd0000;%7D%3C/style%3E%3Cpath class='st0' d='M-7.4 14.9c0-1.7 1.2-2.4 2.2-2.4 1.7 0 3.2 2.3 3.2 2.3s1.6-2.3 3.3-2.3c1 0 2.2.6 2.2 2.4 0 2.1-2.3 4.8-5.4 6.5-3.2-1.7-5.5-4.5-5.5-6.5zM1.3 11c-1.9 0-2.6.8-3.3 1.7-.7-.9-1.4-1.7-3.3-1.7-1.8 0-3.7 1.3-3.7 3.9 0 3 3.3 6.4 7 8.1 3.7-1.7 7-5.1 7-8.1C5 12.3 3.1 11 1.3 11z'/%3E%3C/svg%3E");` :
@@ -131,6 +139,10 @@ const FavoriteIcon = styled.div`
     display: block;
     position: absolute;
     background-image: url("data:image/svg+xml,%3Csvg id='Layer_1' xmlns='http%3A//www.w3.org/2000/svg' viewBox='-9 11 14 12'%3E%3Cstyle%3E.st0%7Bfill:%23cd0000;%7D%3C/style%3E%3Cpath class='st0' d='M-7.4 14.9c0-1.7 1.2-2.4 2.2-2.4 1.7 0 3.2 2.3 3.2 2.3s1.6-2.3 3.3-2.3c1 0 2.2.6 2.2 2.4 0 2.1-2.3 4.8-5.4 6.5-3.2-1.7-5.5-4.5-5.5-6.5zM1.3 11c-1.9 0-2.6.8-3.3 1.7-.7-.9-1.4-1.7-3.3-1.7-1.8 0-3.7 1.3-3.7 3.9 0 3 3.3 6.4 7 8.1 3.7-1.7 7-5.1 7-8.1C5 12.3 3.1 11 1.3 11z'/%3E%3C/svg%3E");
+  }
+
+  :hover {
+    background-color: #e5f6ff;;
   }
 `;
 
@@ -243,6 +255,19 @@ function ranking (rank) {
   }
 }
 
+const ReadFragment = styled.div`
+  margin-top: 0.5rem;
+  display: block;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: normal;
+  cursor: pointer;
+  color: #256aa1;
+  :hover {
+    text-decoration: underline;
+  }
+`;
+
 const Comments = styled.div`
   padding: 10px;
   display: flex;
@@ -316,6 +341,7 @@ const NewComment = styled.div`
   margin-left: 50px;
 `;
 
+
 const getBooks = (state) => state.books;
 const getCart = (state) => state.cart;
 const getFavorite = (state) => state.favorite;
@@ -350,6 +376,16 @@ const getCoversToBook = createSelector(
       return null;
     }
     return book.Files.filter(item => item.type === "cover");
+  }
+);
+
+const getFileToBook = createSelector(
+  [getSelectedBook],
+  (book) => {
+    if(!book) {
+      return null;
+    }
+    return book.Files.filter(item => item.type === "text");
   }
 );
 
@@ -424,7 +460,6 @@ class Book extends React.Component {
 
     if(this._CommentsHeader) {
       setTimeout(() => {
-        console.log("exp");
         this._CommentsHeader.scrollIntoView(true);
       }, 50);
     }
@@ -502,6 +537,16 @@ class Book extends React.Component {
   }
 
 
+  onReadFileClickHandler = () => {
+    let fileName = this.props.files[0].name;
+    if(!fileName) {
+      return;
+    }
+
+    window.open(config.SERVER + fileName);
+  }
+
+
   render() {
     
     if(!this.props.book) {
@@ -532,7 +577,9 @@ class Book extends React.Component {
                   onClick={this.onClickFavoriteHandler}
                   inFavorite={this.props.inFavorite}
                   showAnimation={this.state.showAnimation}
-                />
+                >
+                  в избранное
+                </FavoriteIcon>
 
               </ToolPanel>
             </Panel>
@@ -543,6 +590,12 @@ class Book extends React.Component {
                 <span>
                   {this.getCategory(this.props.book.category)}
                 </span>
+                {this.props.files.length > 0 && 
+                (
+                  <ReadFragment onClick={this.onReadFileClickHandler}>
+                    читать отрывок...
+                  </ReadFragment>
+                )}
               </Author>
               
               <SaleBlock>
@@ -630,6 +683,11 @@ Book.propTypes = {
     name: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired
   })),
+  files: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired
+  })),
   match : PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string.isRequired
@@ -661,6 +719,7 @@ function mapStateToProps(state, props) {
       inCart: isInCartBook(state, props),
       inFavorite: isInFavoriteBook(state, props),
       covers: getCoversToBook(state, props),
+      files: getFileToBook(state, props),
       comments: state.comments,
       auth: state.authentications
   };
