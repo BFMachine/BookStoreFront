@@ -2,7 +2,8 @@ import { combineReducers } from "redux";
 
 import { SET_TOKENS, SET_AUTHENTICATION_ERROR, SET_AUTH_USER, SET_ORDERS,
   SET_CART, ADD_TO_CART, SET_FAVORITE, SET_BOOKS, DELETE_FROM_CART, ADD_TO_FAVORITE, 
-  DELETE_FROM_FAVORITE , SET_COMMENTS, SET_FILTER_CATEGORY, SET_FILTER_RANK
+  DELETE_FROM_FAVORITE , SET_COMMENTS, SET_FILTER_CATEGORY, SET_FILTER_RANK,
+  SET_FILTER_AUTHOR, SET_AUTHORS, SET_PAGE_TOTAL, SET_PAGE_SIZE, SET_PAGE_CURRENT
 } from "../actions/actions";
 
 function tokens(state = { accessToken: "", refreshToken: "" }, action) {
@@ -128,9 +129,21 @@ function books(state = [], action) {
   }
 }
 
+function authors(state = [], action) {
+
+  switch(action.type) {
+    case SET_AUTHORS:
+      return [...action.authors];
+  
+    default:
+        return state;  
+  }
+}
+
 function filter(state = {
   category: 0,
-  rank: "0"
+  rank: "0",
+  author: ""
 }, action) {
 
   switch(action.type) {
@@ -143,12 +156,44 @@ function filter(state = {
       return {...state,
         rank: action.filter_params
       };
+
+    case SET_FILTER_AUTHOR:
+      return {...state,
+        author: action.filter_params
+      };
   
     default:
         return state;  
   }
 }
 
+
+function pages(state = {
+  pages: 1,
+  page: 1,
+  size: 5
+}, action) {
+
+  switch(action.type) {
+    case SET_PAGE_TOTAL:
+      return {...state,
+        pages: action.pages
+      };
+
+    case SET_PAGE_SIZE:
+      return {...state,
+        size: action.size
+      };
+
+    case SET_PAGE_CURRENT:
+      return {...state,
+        page: action.page
+      };
+  
+    default:
+        return state;  
+  }
+}
 
 
 export default combineReducers({
@@ -159,5 +204,7 @@ export default combineReducers({
     cart,
     favorite,
     books,
-    filter
+    authors,
+    filter,
+    pages
 });

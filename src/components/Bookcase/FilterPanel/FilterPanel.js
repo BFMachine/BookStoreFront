@@ -2,20 +2,21 @@ import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import { actionSetFilterCategory, actionSetFilterRank } from "../../../actions/actions";
+import { actionSetFilterCategory, actionSetFilterRank, actionSetFilterAuthor,  actionGetBooks
+} from "../../../actions/actions";
 import "./FilterPanel.scss";
+import SelectAuthor from "./SelectAuthor/SelectAuthor";
 
 
-/* eslint-disable react/require-default-props */
-FilterPanel.propTypes = {
-  selectedCategory: PropTypes.number,
-  selectedRank: PropTypes.string,
-  setFilterCategory: PropTypes.func.isRequired,
-  setFilterRank: PropTypes.func.isRequired
-};
-
-
-function FilterPanel({setFilterCategory, selectedCategory, setFilterRank, selectedRank}) {
+function FilterPanel({
+  setFilterCategory, 
+  selectedCategory, 
+  setFilterRank, 
+  selectedRank,
+  setFilterAuthor,
+  filterAuthor,
+  allAuthor
+}) {
 
   return (
     <form className="filter-panel___form">
@@ -48,17 +49,32 @@ function FilterPanel({setFilterCategory, selectedCategory, setFilterRank, select
         <option value="five">5</option>
       </select>
 
-
+      <SelectAuthor 
+        authors={allAuthor}
+        filter={filterAuthor}
+        set_filer_author={setFilterAuthor}
+      />
     </form>
   );
-
 }
 
+/* eslint-disable react/require-default-props */
+FilterPanel.propTypes = {
+  selectedCategory: PropTypes.number,
+  selectedRank: PropTypes.string,
+  filterAuthor: PropTypes.string,
+  setFilterCategory: PropTypes.func.isRequired,
+  setFilterRank: PropTypes.func.isRequired,
+  setFilterAuthor: PropTypes.func.isRequired,
+  allAuthor: PropTypes.arrayOf(PropTypes.string)
+};
 
 const mapStateToProps = (state) => {
   return {
     selectedCategory: state.filter.category,
-    selectedRank: state.filter.rank
+    selectedRank: state.filter.rank,
+    allAuthor: state.authors,
+    filterAuthor: state.filter.author
   };
 };
 
@@ -68,11 +84,19 @@ const mapDispatchToProps = (dispatch) => {
     setFilterCategory: (e) => {
       const filter = +e.target.options[e.target.selectedIndex].value;
       dispatch( actionSetFilterCategory(filter) );
+      dispatch(actionGetBooks());
     },
 
     setFilterRank: (e) => {
       const filter = e.target.options[e.target.selectedIndex].value;
       dispatch( actionSetFilterRank(filter) );
+      dispatch(actionGetBooks());
+    },
+
+    setFilterAuthor: (e) => {
+      const filter = e.target.options[e.target.selectedIndex].value;
+      dispatch( actionSetFilterAuthor(filter) );
+      dispatch(actionGetBooks());
     }
   };
 };

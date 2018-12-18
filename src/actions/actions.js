@@ -10,9 +10,13 @@ export const SET_FAVORITE = "SET_FAVORITE";
 export const ADD_TO_FAVORITE = "ADD_TO_FAVORITE";
 export const DELETE_FROM_FAVORITE = "DELETE_FROM_FAVORITE";
 export const SET_BOOKS = "SET_BOOKS";
+export const SET_AUTHORS = "SET_AUTHORS";
 export const SET_FILTER_CATEGORY = "SET_FILTER_CATEGORY";
 export const SET_FILTER_RANK = "SET_FILTER_RANK";
-
+export const SET_FILTER_AUTHOR = "SET_FILTER_AUTHOR";
+export const SET_PAGE_TOTAL = "SET_PAGE_TOTAL";
+export const SET_PAGE_SIZE = "SET_PAGE_SIZE";
+export const SET_PAGE_CURRENT = "SET_PAGE_CURRENT";
 
 // for saga 
 export const INITIAL_LOAD_TOKEN = "INITIAL_LOAD_TOKEN";
@@ -23,6 +27,7 @@ export const LOGOUT_USER = "LOGOUT_USER";
 export const GET_CART = "GET_CART";
 export const GET_FAVORITE = "GET_FAVORITE";
 export const GET_BOOKS = "GET_BOOKS";
+export const GET_AUTHORS = "GET_AUTHORS";
 export const GET_BOOK_COMMENTS = "GET_BOOK_COMMENTS";
 export const CREATE_NEW_USER = "CREATE_NEW_USER";
 export const ADD_TO_CART_ON_SERVER = "ADD_TO_CART_ON_SERVER";
@@ -216,9 +221,22 @@ export function actionSetBooks(books) {
     };
 }
 
+export function actionSetAuthors(authors) {
+    return {
+        type: SET_AUTHORS,
+        authors
+    };
+}
+
 export function actionGetBooks() {
     return {
         type: GET_BOOKS
+    };
+}
+
+export function actionGetAuthors() {
+    return {
+        type: GET_AUTHORS
     };
 }
 
@@ -278,4 +296,30 @@ export function actionSetFilterRank(filter_params) {
     };
 }
 
+export function actionSetFilterAuthor(filter_params) {
+    return {
+        type: SET_FILTER_AUTHOR,
+        filter_params
+    };
+}
 
+export function actionSetPageTotal(pages) {
+    return {
+        type: SET_PAGE_TOTAL,
+        pages
+    };
+}
+
+export function actionSetPageSize(size) {
+    return {
+        type: SET_PAGE_SIZE,
+        size
+    };
+}
+
+export function actionSetPageCurrent(page) {
+    return {
+        type: SET_PAGE_CURRENT,
+        page
+    };
+}

@@ -3,7 +3,8 @@ import { INITIAL_LOAD_TOKEN, GET_AUTHENTICATION, REFRESH_ACCESS_TOKEN,
     GET_ORDERS, LOGOUT_USER, GET_CART, GET_FAVORITE, GET_BOOKS,
     CREATE_NEW_USER, ADD_TO_CART_ON_SERVER, DELETE_FROM_CART_ON_SERVER,
     DELETE_ALL_CART_ON_SERVER, ADD_TO_FAVORITE_ON_SERVER, DELETE_FROM_FAVORITE_ON_SERVER,
-    DELETE_ALL_FAVORITE_ON_SERVER, CREATE_NEW_BOOK, GET_BOOK_COMMENTS, CREATE_NEW_COMMENT
+    DELETE_ALL_FAVORITE_ON_SERVER, CREATE_NEW_BOOK, GET_BOOK_COMMENTS, CREATE_NEW_COMMENT,
+    GET_AUTHORS
 } from "../actions/actions";
 import initialLoadToken from "./initialLoadToken";
 import getAuthentication from "./getAuthentication";
@@ -12,6 +13,7 @@ import getOrders from "./getOrders";
 import logoutUser from "./logoutUser";
 import {getCart, getFavorite} from "./getFavoriteAndCart";
 import getBooks from "./getBooks";
+import getAuthors from "./getAuthors";
 import getBookComments from "./getBookComments";
 import createNewUser from "./createNewUser";
 import { addToCartOnServer, deleteFromCartOnServer, deleteAllCartOnServer 
@@ -31,6 +33,7 @@ export default function* saga() {
     yield takeEvery(GET_FAVORITE, getFavorite);
     yield takeEvery(GET_CART, getCart);
     yield takeEvery(GET_BOOKS, getBooks);
+    yield takeEvery(GET_AUTHORS, getAuthors);
     yield takeEvery(GET_BOOK_COMMENTS, getBookComments);
     yield takeEvery(CREATE_NEW_USER, createNewUser);
     yield takeEvery(ADD_TO_CART_ON_SERVER, addToCartOnServer);
