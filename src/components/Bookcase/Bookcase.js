@@ -5,19 +5,62 @@ import PropTypes from "prop-types";
 import { createSelector } from "reselect";
 
 import BookCard from "../BookCard/BookCard";
+import FilterPanel from "./FilterPanel/FilterPanel";
 import { actionGetBooks } from "../../actions/actions";
 
-const CaseWrapper = styled.div`
+const MainWrapper = styled.div`
   padding: 16px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const CaseWrapper = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
-
 `;
 
+const getFilteredBookByCategory = createSelector(
+  [
+    state => state.books,
+    state => state.filter.category
+  ],
+  (books, category) => {
+    if(!books) {
+      return null;
+    }
+
+    if(category) {
+      return books.filter(item => item.category === category);
+
+    } else {
+      return [...books];
+    }
+  }
+);
+
+const getFilteredBookByRank = createSelector(
+  [
+    getFilteredBookByCategory,
+    state => state.filter.rank
+  ],
+  (books, rank) => {
+    if(!books) {
+      return null;
+    }
+
+    if(rank !== "0") {
+      return books.filter(item => item.rank === rank);
+
+    } else {
+      return [...books];
+    }
+  }
+);
+
 const getCoversToBook = createSelector(
-  [state => state.books],
+  [getFilteredBookByRank],
   (books) => {
 
     if(!books) {
@@ -28,8 +71,9 @@ const getCoversToBook = createSelector(
 );
 
 
-class Bookcase extends React.Component {
 
+class Bookcase extends React.Component {
+  
   componentDidMount() {
     this.props.getBooks();
   }
@@ -40,24 +84,29 @@ class Bookcase extends React.Component {
 
   render() {
     return (
-      <CaseWrapper>
-        {this.props.books.map((item, index) => (
-          <BookCard 
-            id={item.id}
-            key={item.id}
-            title={item.title}
-            author={item.author}
-            price={item.price}
-            rank={item.rank}
+      <MainWrapper>
+        <FilterPanel />
 
-            //cover={item.Files.filter(item => item.type === "cover" )[0].name}
-            cover={this.props.covers[index]}
 
-            bookClick={this.bookClickHandler}
-          />
-        ))}
+        <CaseWrapper>
+          {this.props.books.map((item, index) => (
+            <BookCard 
+              id={item.id}
+              key={item.id}
+              title={item.title}
+              author={item.author}
+              price={item.price}
+              rank={item.rank}
 
-      </CaseWrapper>
+              //cover={item.Files.filter(item => item.type === "cover" )[0].name}
+              cover={this.props.covers[index]}
+
+              bookClick={this.bookClickHandler}
+            />
+          ))}
+
+        </CaseWrapper>
+      </MainWrapper>
     );    
   }
 }
@@ -80,8 +129,9 @@ Bookcase.propTypes = {
 
 function mapStateToProps(state) {
   return {
-      books: state.books,
-      covers: getCoversToBook(state)
+      //books: state.books,
+      covers: getCoversToBook(state),
+      books: getFilteredBookByRank(state)
   };
 }
 

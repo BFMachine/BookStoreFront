@@ -178,7 +178,9 @@ AddNewUser.propTypes = {
   createNewUser: PropTypes.func.isRequired,
   authorized: PropTypes.bool.isRequired,
   role: PropTypes.string.isRequired,
-  history: PropTypes.instanceOf(Object)
+  history:PropTypes.shape({
+    push: PropTypes.func.isRequired
+  })
 };
 
 function mapStateToProps(state) {

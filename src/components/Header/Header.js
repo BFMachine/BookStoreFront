@@ -4,17 +4,19 @@ import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
 
 import PopupMenu from "../PopupMenu/PopupMenu";
-import { actionLogoutUser } from "../../actions/actions";
+import { actionLogoutUser, actionSetFilterCategory } from "../../actions/actions";
 import "./Header.scss";
 
 class Header extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       menuTimer: 0,
       menuVisible: false
     };
+
+    this.setCategoryFilter(0);
   }
 
   onClickPopupMenuHandler = () => {
@@ -64,6 +66,14 @@ class Header extends React.Component {
       this.setState({
         menuVisible: false
     });
+  }
+
+  setCategoryFilter = (filter) => {
+    this.props.setFilter(filter);
+
+//    if(this.props.history) {
+//      this.props.history.push("/");
+//    }
   }
 
   render() {
@@ -132,13 +142,14 @@ class Header extends React.Component {
 
         </div>
         <div className="Header__div-bottom">
-          <a href="#p1">Классика</a>
-          <a href="#p1">Фэнтэзи</a>
-          <a href="#p1">Приключения</a>
-          <a href="#p1">Детектив</a>
-          <a href="#p1">Фантастика</a>
-          <a href="#p1">Научная литература</a>
-          <a href="#p1">Детская</a>
+          <span onClick={()=>this.setCategoryFilter(0)}>Все</span>
+          <span onClick={()=>this.setCategoryFilter(1)}>Классика</span>
+          <span onClick={()=>this.setCategoryFilter(2)}>Фэнтэзи</span>
+          <span onClick={()=>this.setCategoryFilter(3)}>Приключения</span>
+          <span onClick={()=>this.setCategoryFilter(4)}>Детектив</span>
+          <span onClick={()=>this.setCategoryFilter(5)}>Фантастика</span>
+          <span onClick={()=>this.setCategoryFilter(6)}>Научная литература</span>
+          <span onClick={()=>this.setCategoryFilter(7)}>Детская</span>
         </div>
       </div>
     );
@@ -150,7 +161,11 @@ Header.propTypes = {
   name: PropTypes.string,
   logoutUser: PropTypes.func.isRequired,
   authorized: PropTypes.bool.isRequired,
-  role: PropTypes.string
+  role: PropTypes.string,
+  setFilter: PropTypes.func.isRequired,
+  history:PropTypes.shape({
+    push: PropTypes.func.isRequired
+  })
 };
 Header.defaultProps = {
   name: ""
@@ -167,8 +182,12 @@ function mapStateToProps(state) {
 let mapDipatchToProps = (dispatch) => {
   return {
     logoutUser: () => {
-      dispatch(actionLogoutUser());
+      dispatch( actionLogoutUser() );
+    },
+    setFilter: (filter) => {
+      dispatch( actionSetFilterCategory(filter) );
     }
+
   };
 };
 

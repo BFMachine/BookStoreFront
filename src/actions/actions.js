@@ -7,11 +7,12 @@ export const SET_CART = "SET_CART";
 export const ADD_TO_CART = "ADD_TO_CART";
 export const DELETE_FROM_CART = "DELETE_FROM_CART";
 export const SET_FAVORITE = "SET_FAVORITE";
-
 export const ADD_TO_FAVORITE = "ADD_TO_FAVORITE";
 export const DELETE_FROM_FAVORITE = "DELETE_FROM_FAVORITE";
-
 export const SET_BOOKS = "SET_BOOKS";
+export const SET_FILTER_CATEGORY = "SET_FILTER_CATEGORY";
+export const SET_FILTER_RANK = "SET_FILTER_RANK";
+
 
 // for saga 
 export const INITIAL_LOAD_TOKEN = "INITIAL_LOAD_TOKEN";
@@ -262,3 +263,19 @@ export function actionCreateNewComment(book_id, commenter_name, content) {
         content
     };
 }
+
+export function actionSetFilterCategory(filter_params) {
+    return {
+        type: SET_FILTER_CATEGORY,
+        filter_params
+    };
+}
+
+export function actionSetFilterRank(filter_params) {
+    return {
+        type: SET_FILTER_RANK,
+        filter_params
+    };
+}
+
+

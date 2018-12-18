@@ -210,18 +210,23 @@ $color: #FEC71C;
     align-items: center;
     padding: 0 18px;
 
-    a {
+    span {
         display: inline-flex;
         line-height: 38px;
-        //flex-grow: 1;
         text-align: right;
         padding-left: 28px;
         white-space: nowrap;
         text-overflow: ellipsis;
-        //flex-shrink: 0;
-        text-decoration: none;
         color: $font-color-header-footer;
+        cursor: pointer;
+        user-select: none;
     }
+
+    span:hover {
+        color:#ff8400;
+    }    
+
+    
 }
 
 .Header__div-wrapper {

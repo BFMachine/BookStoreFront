@@ -136,7 +136,9 @@ Cart.propTypes = {
   }),
   getCart: PropTypes.func.isRequired,
   clearCart: PropTypes.func.isRequired,
-  history: PropTypes.instanceOf(Object),
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired
+  }),
   covers: PropTypes.arrayOf(PropTypes.string)
 };
 

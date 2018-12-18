@@ -2,7 +2,7 @@ import { combineReducers } from "redux";
 
 import { SET_TOKENS, SET_AUTHENTICATION_ERROR, SET_AUTH_USER, SET_ORDERS,
   SET_CART, ADD_TO_CART, SET_FAVORITE, SET_BOOKS, DELETE_FROM_CART, ADD_TO_FAVORITE, 
-  DELETE_FROM_FAVORITE , SET_COMMENTS
+  DELETE_FROM_FAVORITE , SET_COMMENTS, SET_FILTER_CATEGORY, SET_FILTER_RANK
 } from "../actions/actions";
 
 function tokens(state = { accessToken: "", refreshToken: "" }, action) {
@@ -128,6 +128,29 @@ function books(state = [], action) {
   }
 }
 
+function filter(state = {
+  category: 0,
+  rank: "0"
+}, action) {
+
+  switch(action.type) {
+    case SET_FILTER_CATEGORY:
+      return {...state,
+        category: action.filter_params
+      };
+
+    case SET_FILTER_RANK:
+      return {...state,
+        rank: action.filter_params
+      };
+  
+    default:
+        return state;  
+  }
+}
+
+
+
 export default combineReducers({
     tokens,
     authentications,
@@ -135,5 +158,6 @@ export default combineReducers({
     comments,
     cart,
     favorite,
-    books
+    books,
+    filter
 });
