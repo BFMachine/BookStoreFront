@@ -2,65 +2,100 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import styled, {css} from "styled-components";
+
 import { actionSetPageCurrent, actionGetBooks } from "../../../actions/actions";
 
+
+const borderColor = "#ddd";
+const selectedColor = "#337ab7";
+const pagesInPagigation = 5;
+
+const DummyTool = styled.div`
+  margin: 0 auto;
+  height: 33px;
+  width: 33px;
+`;
+
+const ToolWrap = styled.div`
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+`;
 
 const ToolPagination = styled.ul`
   display: block;
   padding-left: 0;
-  margin: 20px auto;
-  border-radius: 4px;
-  box-sizing: border-box;
+  //margin: 0 auto;
   text-align: center;
+  list-style-type: none;
+  white-space : nowrap;
 `;
 
 const selectedPage = css`
-  background-color: #337ab7;
-  border-color: #337ab7;
+  background-color: ${selectedColor};
+  border-color: ${selectedColor};
+  color: white;
+`;
+
+const disabledPage = css`
+  background-color: white;
+  color: #777;
+  cursor: default;
 `;
 
 const ToolPageButton = styled.li`
-  display: inline;
+  display: inline-block;
+  //margin-bottom: -3px;
 
   span {
     position: relative;
     float: left;
     padding: 6px 12px;
     margin-left: -1px;
-    line-height: 1.42857143;
-    color: #337ab7;
+    line-height: 1.4rem;
+    color: ${selectedColor};
     background-color: #fff;
-    border: 1px solid #ddd;
+    border: 1px solid ${borderColor};
     cursor: pointer;
+    user-select: none;
+    ${props => (props.selected ? selectedPage: "")}
+    ${props => (props.disabled ? disabledPage: "")}
+
+    :hover {
+      background-color: ${props => (props.disabled ? "": borderColor)};
+    }
   }
-
-  ${props => (props.selected ? selectedPage: "")}
-
 `;
 
 
-
 class Pagination extends React.Component {
-  constructor() {
-    super();
-    this.state = {};
-  }
-
 
   onClickPageHandler = (page) => {
-    console.log(page);
-    this.props.setCurrentPage(page);
 
+    if(page === "prev") {
+      page = this.props.page - 1;
+    }
+
+    if(page === "next") {
+      page = this.props.page + 1;
+    }
+
+    if(page < 1 || page > this.props.pages) {
+      return;
+    }
+
+    this.props.setCurrentPage(page);
   }
 
-  getPagesMarkup = () => {
+  getPagesMarkup = (startPage, endPage) => {
     let out = [];
 
-    for(let i = 1; i <= this.props.pages; i++) {
+    for(let i = startPage; i <= endPage; i++) {
       out.push(
         <ToolPageButton 
           key={i} 
-          selected={this.props.page === i ? true : false}
+          selected={this.props.page === i}
         >
           <span onClick={()=>this.onClickPageHandler(i)}>
             {i}
@@ -70,52 +105,68 @@ class Pagination extends React.Component {
     }
 
     return out;
-
   }
-    
-  
 
   render() {
-    const {page, pages, size} = this.props;
+    const {page, pages} = this.props;
+    
+    let startPage = 1;
+    let endPage = pages;
 
+    if(pages > pagesInPagigation) {
+      const halfPage = Math.ceil(pagesInPagigation / 2);
+      
+      if(page <= halfPage) {
+        endPage = startPage + pagesInPagigation - 1;
+
+      } else if (page > pages - halfPage) {
+        startPage = endPage - pagesInPagigation + 1;
+
+      } else {
+        startPage = page - halfPage + 1;
+        endPage = startPage + pagesInPagigation - 1;
+      }
+    }
+    
     return (
-        <ToolPagination>
-          <ToolPageButton>
-            <span onClick={()=>this.onClickPageHandler(1)}>
-              Первая
-            </span>
-          </ToolPageButton>
-          <ToolPageButton>
-            <span onClick={()=>this.onClickPageHandler(-1)}>
-              Предыдущая
-            </span>
-          </ToolPageButton>
-          
-          {this.getPagesMarkup()}
+      <DummyTool>
+        <ToolWrap>
+          <ToolPagination>
+            <ToolPageButton disabled={page === 1}>
+              <span onClick={()=>this.onClickPageHandler(1)}>
+                Первая
+              </span>
+            </ToolPageButton>
+            <ToolPageButton disabled={page === 1}>
+              <span onClick={()=>this.onClickPageHandler("prev")}>
+                Предыдущая
+              </span>
+            </ToolPageButton>
+            
+            {this.getPagesMarkup(startPage, endPage)}
 
-          <ToolPageButton>
-            <span onClick={()=>this.onClickPageHandler(-1)}>
-              Следующая
-            </span>
-          </ToolPageButton>
-          <ToolPageButton>
-            <span onClick={()=>this.onClickPageHandler(this.props.pages)}>
-              Последняя
-            </span>
-          </ToolPageButton>
-
-
-        </ToolPagination>
+            <ToolPageButton disabled={page === pages}>
+              <span onClick={()=>this.onClickPageHandler("next")}>
+                Следующая
+              </span>
+            </ToolPageButton>
+            <ToolPageButton disabled={page === pages}>
+              <span onClick={()=>this.onClickPageHandler(pages)}>
+                Последняя
+                {/*pages*/}
+              </span>
+            </ToolPageButton>
+          </ToolPagination>
+        </ToolWrap>
+      </DummyTool>  
     );
   }
-
 }
 
 /* eslint-disable react/require-default-props */
 Pagination.propTypes = {
   page: PropTypes.number.isRequired,
   pages: PropTypes.number.isRequired,
-  size: PropTypes.number.isRequired,
   setCurrentPage: PropTypes.func.isRequired
 };
 

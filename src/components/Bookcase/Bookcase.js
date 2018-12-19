@@ -58,16 +58,13 @@ class Bookcase extends React.Component {
               author={item.author}
               price={item.price}
               rank={item.rank}
-              //cover={item.Files.filter(item => item.type === "cover" )[0].name}
               cover={this.props.covers[index]}
               bookClick={this.bookClickHandler}
             />
           ))}
-
         </CaseWrapper>
 
         <Pagination />
-
       </MainWrapper>
     );    
   }
@@ -87,18 +84,12 @@ Bookcase.propTypes = {
   history: PropTypes.instanceOf(Object),
   getBooks: PropTypes.func.isRequired,
   covers: PropTypes.arrayOf(PropTypes.string),
-  /*filter: PropTypes.shape({
-    category: PropTypes.number.isRequired,
-    rank: PropTypes.string.isRequired,
-    author: PropTypes.string.isRequired
-  })*/
 };
 
 function mapStateToProps(state) {
   return {
       books: state.books,
       covers: getCoversToBook(state),
-      //filter: state.filter
   };
 }
 

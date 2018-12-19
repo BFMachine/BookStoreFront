@@ -10,10 +10,13 @@ export const SET_FAVORITE = "SET_FAVORITE";
 export const ADD_TO_FAVORITE = "ADD_TO_FAVORITE";
 export const DELETE_FROM_FAVORITE = "DELETE_FROM_FAVORITE";
 export const SET_BOOKS = "SET_BOOKS";
+export const ADD_BOOK_TO_CAСH = "ADD_BOOK_TO_CAСH";
 export const SET_AUTHORS = "SET_AUTHORS";
 export const SET_FILTER_CATEGORY = "SET_FILTER_CATEGORY";
 export const SET_FILTER_RANK = "SET_FILTER_RANK";
 export const SET_FILTER_AUTHOR = "SET_FILTER_AUTHOR";
+export const SET_FILTER_SORT = "SET_FILTER_SORT";
+export const SET_FILTER_SORT_DIRECTION = "SET_FILTER_SORT_DIRECTION";
 export const SET_PAGE_TOTAL = "SET_PAGE_TOTAL";
 export const SET_PAGE_SIZE = "SET_PAGE_SIZE";
 export const SET_PAGE_CURRENT = "SET_PAGE_CURRENT";
@@ -27,6 +30,7 @@ export const LOGOUT_USER = "LOGOUT_USER";
 export const GET_CART = "GET_CART";
 export const GET_FAVORITE = "GET_FAVORITE";
 export const GET_BOOKS = "GET_BOOKS";
+export const GET_BOOK = "GET_BOOK";
 export const GET_AUTHORS = "GET_AUTHORS";
 export const GET_BOOK_COMMENTS = "GET_BOOK_COMMENTS";
 export const CREATE_NEW_USER = "CREATE_NEW_USER";
@@ -221,6 +225,13 @@ export function actionSetBooks(books) {
     };
 }
 
+export function actionAddBookToCash(book) {
+    return {
+        type: ADD_BOOK_TO_CAСH,
+        book
+    };
+}
+
 export function actionSetAuthors(authors) {
     return {
         type: SET_AUTHORS,
@@ -231,6 +242,13 @@ export function actionSetAuthors(authors) {
 export function actionGetBooks() {
     return {
         type: GET_BOOKS
+    };
+}
+
+export function actionGetBook(book_id) {
+    return {
+        type: GET_BOOK,
+        book_id
     };
 }
 
@@ -300,6 +318,20 @@ export function actionSetFilterAuthor(filter_params) {
     return {
         type: SET_FILTER_AUTHOR,
         filter_params
+    };
+}
+
+export function actionSetFilterSort(sort) {
+    return {
+        type: SET_FILTER_SORT,
+        sort,
+    };
+}
+
+export function actionSetFilterSortDirection(direction) {
+    return {
+        type: SET_FILTER_SORT_DIRECTION,
+        direction
     };
 }
 

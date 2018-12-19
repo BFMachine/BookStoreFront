@@ -9,7 +9,7 @@ const getPages = state => state.pages;
 
 export default function* getBooks() {
 
-    let params = yield select(getFilter);
+    let params = {...yield select(getFilter)};
     let pages = yield select(getPages);
 
     if(params.category === 0) {
@@ -21,7 +21,10 @@ export default function* getBooks() {
     if(params.author === "") {
         delete params.author;
     }
-
+    if(params.sort === "" || params.sort === "none") {
+        delete params.sort;
+        delete params.direction;
+    } 
     params.page_number = pages.page;
     params.page_size = pages.size; 
 

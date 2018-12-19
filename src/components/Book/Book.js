@@ -6,10 +6,10 @@ import { createSelector } from "reselect";
 import moment from "moment";
 
 import Covers from "./Covers/Covers";
-import { actionGetBooks, actionAddToCart, actionAddToCartOnServer,
+import { actionAddToCart, actionAddToCartOnServer,
   actionDeleteFromCart, actionDeleteFromCartOnServer, actionAddToFavorite,
   actionAddToFavoriteOnServer, actionDeleteFromFavorite, actionDeleteFromFavoriteOnServer,
-  actionGetBookComments, actionCreateNewComment
+  actionGetBookComments, actionCreateNewComment, actionAddBookToCash, actionGetBook
 } from "../../actions/actions";
 import InputComments from "./InputComment/InputComment";
 import config from "../../config";
@@ -343,29 +343,36 @@ const NewComment = styled.div`
 
 
 const getBooks = (state) => state.books;
+const getCach = (state) => state.cach;
 const getCart = (state) => state.cart;
 const getFavorite = (state) => state.favorite;
 
 const getId = (_, props) => props.match.params.id;
 
 const getSelectedBook = createSelector(
-  [getBooks, getId],
-  (books, id) => {
-    return books.filter(item => item.id === parseInt(id))[0];
+  [getBooks, getCach, getId],
+  (books, cach, id) => {
+    let book = books.find(item => item.id === parseInt(id));
+    
+    if(book) {
+      return book;
+    }
+
+    return cach.find(item => item.id === parseInt(id));
   }
 );
 
 const isInCartBook = createSelector(
   [getCart, getId],
   (cart, id) => {
-    return ( cart.filter( item => item.id === parseInt(id)).length > 0 );
+    return ( cart.find( item => item.id === parseInt(id)) !== undefined );
   }
 );
 
 const isInFavoriteBook = createSelector(
   [getFavorite, getId],
   (favorite, id) => {
-    return ( favorite.filter( item => item.id === parseInt(id)).length > 0 );
+    return ( favorite.find( item => item.id === parseInt(id)) !== undefined );
   }
 );
 
@@ -405,10 +412,11 @@ class Book extends React.Component {
   componentDidMount() {
 
     if(!this.props.book){
-      this.props.getBooks();
-    } 
+      this.props.getBook(this.props.match.params.id);
 
-    this.props.getBookComment(this.props.match.params.id);
+    } else {
+      this.props.getBookComment(this.props.match.params.id);
+    }
   }
 
   buttonAddDelCartHandler = () => {
@@ -704,7 +712,7 @@ Book.propTypes = {
     full_name: PropTypes.string,
     authorized: PropTypes.bool
   }),
-  getBooks: PropTypes.func.isRequired,
+  getBook: PropTypes.func.isRequired,
   getBookComment: PropTypes.func.isRequired,
   sendComment: PropTypes.func.isRequired,
   addToCart: PropTypes.func.isRequired,
@@ -727,10 +735,10 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-      getBooks: () => {
-          dispatch(actionGetBooks());
+      getBook: (book) => {
+        dispatch(actionGetBook(book));
       },
-
+      
       getBookComment: (id) => {
         dispatch(actionGetBookComments(id));
       },
@@ -741,6 +749,7 @@ function mapDispatchToProps(dispatch) {
 
       addToCart: (book) => {
         dispatch(actionAddToCart(book)); //// if authorized call server method else local debug!
+        dispatch(actionAddBookToCash(book));
         dispatch(actionAddToCartOnServer([book.id]));
       },
 
@@ -751,6 +760,7 @@ function mapDispatchToProps(dispatch) {
 
       addToFavorite: (book) => {
         dispatch(actionAddToFavorite(book)); //// if authorized call server method else local debug!
+        dispatch(actionAddBookToCash(book));
         dispatch(actionAddToFavoriteOnServer([book.id]));
       },
 
