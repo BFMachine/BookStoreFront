@@ -1,5 +1,5 @@
 import { put, call, select } from "redux-saga/effects";
-import { actionSetBooks, actionSetPageTotal } from "../actions/actions";
+import { actionSetBooks, actionSetPageTotal, CATEGORY_ALL, RANK_ALL, SORT_BY_ALL } from "../actions/actions";
 
 import config from "../config";
 
@@ -12,21 +12,24 @@ export default function* getBooks() {
     let params = {...yield select(getFilter)};
     let pages = yield select(getPages);
 
-    if(params.category === 0) {
+    if(params.category === CATEGORY_ALL) {
         delete params.category;
     }
-    if(params.rank === "0") {
+    if(params.rank === RANK_ALL) {
         delete params.rank;
     }
     if(params.author === "") {
         delete params.author;
     }
-    if(params.sort === "" || params.sort === "none") {
+    if(params.sort === SORT_BY_ALL) {
         delete params.sort;
         delete params.direction;
     } 
+
+    if(pages.size > 1) {
+        params.page_size = pages.size;
+    } 
     params.page_number = pages.page;
-    params.page_size = pages.size; 
 
     let query = Object.keys(params)
         .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))

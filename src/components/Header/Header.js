@@ -4,7 +4,10 @@ import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
 
 import PopupMenu from "../PopupMenu/PopupMenu";
-import { actionLogoutUser, actionSetFilterCategory } from "../../actions/actions";
+import { actionLogoutUser, actionSetFilterCategory, actionSetPageCurrent, CATEGORY_ALL, 
+  CATEGORY_CLASSIC, CATEGORY_FANTASY, CATEGORY_ADVENTURE, CATEGORY_DETECTIVE,
+  CATEGORY_FICTION, CATEGORY_SCIENTIFIC, CATEGORY_CHILDREN, actionGetBooks
+ } from "../../actions/actions";
 import "./Header.scss";
 
 class Header extends React.Component {
@@ -15,8 +18,6 @@ class Header extends React.Component {
       menuTimer: 0,
       menuVisible: false
     };
-
-    this.setCategoryFilter(0);
   }
 
   onClickPopupMenuHandler = () => {
@@ -70,10 +71,6 @@ class Header extends React.Component {
 
   setCategoryFilter = (filter) => {
     this.props.setFilter(filter);
-
-//    if(this.props.history) {
-//      this.props.history.push("/");
-//    }
   }
 
   render() {
@@ -141,15 +138,15 @@ class Header extends React.Component {
           </div>
 
         </div>
-        <div className="Header__div-bottom">
-          <span onClick={()=>this.setCategoryFilter(0)}>Все</span>
-          <span onClick={()=>this.setCategoryFilter(1)}>Классика</span>
-          <span onClick={()=>this.setCategoryFilter(2)}>Фэнтэзи</span>
-          <span onClick={()=>this.setCategoryFilter(3)}>Приключения</span>
-          <span onClick={()=>this.setCategoryFilter(4)}>Детектив</span>
-          <span onClick={()=>this.setCategoryFilter(5)}>Фантастика</span>
-          <span onClick={()=>this.setCategoryFilter(6)}>Научная литература</span>
-          <span onClick={()=>this.setCategoryFilter(7)}>Детская</span>
+        <div className="Header__div-bottom"> 
+          <span onClick={()=>this.setCategoryFilter(CATEGORY_ALL)}>Все</span>
+          <span onClick={()=>this.setCategoryFilter(CATEGORY_CLASSIC)}>Классика</span>
+          <span onClick={()=>this.setCategoryFilter(CATEGORY_FANTASY)}>Фэнтэзи</span>
+          <span onClick={()=>this.setCategoryFilter(CATEGORY_ADVENTURE)}>Приключения</span>
+          <span onClick={()=>this.setCategoryFilter(CATEGORY_DETECTIVE)}>Детектив</span>
+          <span onClick={()=>this.setCategoryFilter(CATEGORY_FICTION)}>Фантастика</span>
+          <span onClick={()=>this.setCategoryFilter(CATEGORY_SCIENTIFIC)}>Научная литература</span>
+          <span onClick={()=>this.setCategoryFilter(CATEGORY_CHILDREN)}>Детская</span>
         </div>
       </div>
     );
@@ -182,10 +179,12 @@ function mapStateToProps(state) {
 let mapDipatchToProps = (dispatch) => {
   return {
     logoutUser: () => {
-      dispatch( actionLogoutUser() );
+      dispatch(actionLogoutUser());
     },
     setFilter: (filter) => {
-      dispatch( actionSetFilterCategory(filter) );
+      dispatch(actionSetFilterCategory(filter));
+      dispatch(actionSetPageCurrent(1));
+      dispatch(actionGetBooks());
     }
 
   };

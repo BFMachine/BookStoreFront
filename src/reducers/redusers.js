@@ -4,7 +4,8 @@ import { SET_TOKENS, SET_AUTHENTICATION_ERROR, SET_AUTH_USER, SET_ORDERS,
   SET_CART, ADD_TO_CART, SET_FAVORITE, SET_BOOKS, DELETE_FROM_CART, ADD_TO_FAVORITE, 
   DELETE_FROM_FAVORITE , SET_COMMENTS, SET_FILTER_CATEGORY, SET_FILTER_RANK,
   SET_FILTER_AUTHOR, SET_AUTHORS, SET_PAGE_TOTAL, SET_PAGE_SIZE, SET_PAGE_CURRENT,
-  SET_FILTER_SORT, SET_FILTER_SORT_DIRECTION, ADD_BOOK_TO_CAСH
+  SET_FILTER_SORT, SET_FILTER_SORT_DIRECTION, ADD_BOOK_TO_CAСH, CATEGORY_ALL,
+  RANK_ALL, SORT_BY_ALL,
 } from "../actions/actions";
 
 function tokens(state = { accessToken: "", refreshToken: "" }, action) {
@@ -142,10 +143,10 @@ function authors(state = [], action) {
 }
 
 function filter(state = {
-  category: 0,
-  rank: "0",
+  category: CATEGORY_ALL,
+  rank: RANK_ALL,
   author: "",
-  sort: "none",
+  sort: SORT_BY_ALL,
   direction: "ASC"
 }, action) {
 

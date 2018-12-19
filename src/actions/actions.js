@@ -43,6 +43,29 @@ export const DELETE_ALL_FAVORITE_ON_SERVER = "DELETE_ALL_FAVORITE_ON_SERVER";
 export const CREATE_NEW_BOOK = "CREATE_NEW_BOOK";
 export const CREATE_NEW_COMMENT = "CREATE_NEW_COMMENT";
 
+// const
+export const CATEGORY_ALL = "0";
+export const CATEGORY_CLASSIC = "1";
+export const CATEGORY_FANTASY = "2";
+export const CATEGORY_ADVENTURE = "3";
+export const CATEGORY_DETECTIVE = "4";
+export const CATEGORY_FICTION = "5";
+export const CATEGORY_SCIENTIFIC = "6";
+export const CATEGORY_CHILDREN = "7";
+
+export const RANK_ALL = "";
+export const RANK_1 = "one";
+export const RANK_2 = "two";
+export const RANK_3 = "three";
+export const RANK_4 = "four";
+export const RANK_5 = "five";
+
+export const SORT_BY_ALL = "";
+export const SORT_BY_PRICE = "price";
+export const SORT_BY_RANK = "rank";
+export const SORT_BY_AUTHOR = "author";
+
+
 export function actionSetTokens(tokens) {
     return {
         type: SET_TOKENS,
