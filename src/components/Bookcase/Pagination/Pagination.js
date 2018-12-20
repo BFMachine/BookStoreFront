@@ -44,6 +44,16 @@ const disabledPage = css`
   cursor: default;
 `;
 
+const firstSpan = css`
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+`;
+
+const lastSpan = css`
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+`;
+
 const ToolPageButton = styled.li`
   display: inline-block;
   //margin-bottom: -3px;
@@ -61,6 +71,8 @@ const ToolPageButton = styled.li`
     user-select: none;
     ${props => (props.selected ? selectedPage: "")}
     ${props => (props.disabled ? disabledPage: "")}
+    ${props => (props.first && firstSpan)}
+    ${props => (props.last && lastSpan)}
 
     :hover {
       background-color: ${props => (props.disabled ? "": borderColor)};
@@ -132,7 +144,7 @@ class Pagination extends React.Component {
       <DummyTool>
         <ToolWrap>
           <ToolPagination>
-            <ToolPageButton disabled={page === 1}>
+            <ToolPageButton disabled={page === 1} first>
               <span onClick={()=>this.onClickPageHandler(1)}>
                 Первая
               </span>
@@ -145,12 +157,12 @@ class Pagination extends React.Component {
             
             {this.getPagesMarkup(startPage, endPage)}
 
-            <ToolPageButton disabled={page === pages}>
+            <ToolPageButton disabled={page >= pages}>
               <span onClick={()=>this.onClickPageHandler("next")}>
                 Следующая
               </span>
             </ToolPageButton>
-            <ToolPageButton disabled={page === pages}>
+            <ToolPageButton disabled={page >= pages} last>
               <span onClick={()=>this.onClickPageHandler(pages)}>
                 Последняя
                 {/*pages*/}

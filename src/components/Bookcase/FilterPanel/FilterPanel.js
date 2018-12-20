@@ -32,6 +32,7 @@ function FilterPanel({
     <form className="filter-panel___form">
 
       <select 
+        className="first"
         name="category"
         onChange={setFilterCategory}
         value={selectedCategory}

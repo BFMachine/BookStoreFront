@@ -207,7 +207,8 @@ $color: #FEC71C;
     min-height: 40px;
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    align-items: center; 
+    //flex-wrap: nowrap;
     padding: 0 18px;
 
     span {
