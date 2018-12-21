@@ -86,10 +86,16 @@ const PanelForm = styled.form`
   margin: 4px 30px 16px 30px;
   align-self: left;
   flex-grow: 1;
-  height: 26px;
+  //height: 26px;
   display: flex;
   justify-content: flex-start;
   box-sizing: border-box;
+  
+  @media only screen and (max-width : 768px)  {
+    flex-wrap: wrap;
+    margin-right: 0;
+    margin-left: 0;
+
 `;
 
 const getAllAuthorToCustomSelect = (authors) => {

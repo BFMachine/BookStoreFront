@@ -9,9 +9,15 @@ const fontColor = "#337ab7";
 
 const MainWrapper = styled.div`
     position: relative;
-    color: ${fontColor};
     user-select: none;
     width: ${props => props.width || "auto"};
+
+    @media only screen and (max-width : 768px)  {
+      width: auto;
+      flex: 1 2 auto;
+      margin-top: -1px;
+      min-width: 120px;
+    }
 `;
 
 const arrow_up = keyframes`
@@ -96,6 +102,14 @@ const MainButton = styled.button`
   ${props => (props.first && firstRoundBorder)}
   ${props => (props.last && lastRoundBorder)}
   
+  @media only screen and (max-width : 768px)  {
+    border-left: 1px solid ${borderColor};
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+  }
+
   span {
     padding: 0 5px;
     display: inline-block;

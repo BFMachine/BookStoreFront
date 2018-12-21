@@ -1,10 +1,6 @@
 $background-color: white;
-//`$main-font: Geneva, Arial, Helvetica, sans-serif;
 $font: 12px/14px -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
-$font-color-header-footer: #0083ca;
-$background-color-footer: #e8f0f7;
-$font-color-footer-item-title: #333;
-$font-color-footer-item: #777;
+$max-width: 1330px;
 
 html,
 body {
@@ -19,63 +15,18 @@ input, button {
   font: $font;
 }
 
-.App__div-page-wrapper {
+.app__page-wrapper {
   display: flex;
   flex-direction: column;
   height: 100vh;
 }
 
-.App__div-content-wrapper {
-  //max-width: 960px;
+.app__content-wrapper {
   position: relative;
-  max-width: 1330px;
+  max-width: $max-width;
   margin: 0 auto;
   width: 100%;
   flex: 1 0 auto;
-  //padding: 16px 0;
   padding: 0;
   background-color: $background-color;  
 }
-
-.App__div-footer-wrapper {
-  width: 100%;
-  min-width: 748px;
-  flex: 0 0 auto;
-  background-color: $background-color-footer;
-  color: $font-color-header-footer;
-}
-
-.App__div-footer {
-  //max-width: 960px;
-  max-width: 1330px;
-  box-sizing: border-box;
-  margin: 0 auto;
-  padding: 16px;
-  display: flex;
-}
-
-.App__div-footer-item {
-  box-sizing: border-box;
-  width: 25%;
-  padding: 0 10px 10px;
-  margin-bottom: 10px;
-  font-size: 14px;
-
-  span {
-    color: $font-color-footer-item-title;
-    display: block;
-    margin-bottom: 10px;
-  }
-  a {
-    display: block;
-    text-decoration: none;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    margin-bottom: 8px;
-    color: $font-color-footer-item;
-  }
-}
-
-
-

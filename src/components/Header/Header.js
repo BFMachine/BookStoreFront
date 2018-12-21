@@ -7,7 +7,8 @@ import PopupMenu from "../PopupMenu/PopupMenu";
 import { actionLogoutUser, actionSetFilterCategory, actionSetPageCurrent, CATEGORY_ALL, 
   CATEGORY_CLASSIC, CATEGORY_FANTASY, CATEGORY_ADVENTURE, CATEGORY_DETECTIVE,
   CATEGORY_FICTION, CATEGORY_SCIENTIFIC, CATEGORY_CHILDREN, actionGetBooks
- } from "../../actions/actions";
+ } from "../../actions/actions"; 
+
 import "./Header.scss";
 
 class Header extends React.Component {
@@ -21,7 +22,6 @@ class Header extends React.Component {
   }
 
   onClickPopupMenuHandler = () => {
-
     if(this.state.menuTimer) {
       clearTimeout(this.state.menuTimer);
     }
@@ -33,7 +33,6 @@ class Header extends React.Component {
   }
 
   onMouseEnterHandler = () => {
-
     if(!this.state.menuTimer) { 
       this.setState({
         menuTimer: setTimeout(()=>{
@@ -48,8 +47,7 @@ class Header extends React.Component {
   }
 
   onMouseLeaveHandler = (e) => {
-    // eslint-disable-next-line
-    if(this.state.menuVisible && e.target == this) {
+    if(this.state.menuVisible && e.target === this) {
       return;
     }
 
@@ -76,44 +74,50 @@ class Header extends React.Component {
   render() {
     const { name, authorized, logoutUser, role } = this.props;
     return (
-      <div className="Header__div-wrapper">
-        <div className="Header__div-top-wrapper">
-          <div className="Header__div-top">
-            <div className="Header__div-top_links">
-              <a href="#p1">Пункты выдачи</a>
-              <a href="#p1">Доставка</a>
-              <a href="#p1">Оплата</a>
-              <a href="#p1">Помощь</a>
+      <div className="header__wrapper">
+        <div className="header__top-wrapper">
+          <div className="header__top">
+            <div className="header__top_links">
+              <Link to="/founderror">
+                Пункты выдачи
+              </Link>
+              <Link to="/founderror">
+                Доставка
+              </Link>
+              <Link to="/founderror">
+                Оплата
+              </Link>
+              <Link to="/founderror">
+                Помощь
+              </Link>
             </div>
-            <div className="Header__div-top_phone">
+            <div className="header__top_phone">
                 +7 999 999-99-99
             </div>
           </div>
         </div>
-        <div className="Header__div-middle">
+        <div className="header__middle">
 
-          <Link className="Header__div-logo" to='/' />  
+          <Link className="header__logo" to='/' />  
 
-          <div className="Header__div-search-bar">
+          <div className="header__search-bar">
             <input type="text" maxLength="255" autoComplete="off" placeholder="Выбирайте..." />
-            <button type="submit" className="Header__div-search-button">
-              <div className="Header__div-search-bar_icon" />
+            <button type="submit" className="header__search-button">
+              <div className="header__search-bar_icon" />
             </button>
           </div>
 
-          <div className="Header__div-user-menu">
+          <div className="header__user-menu">
             <div
               className="header__menu-popup" 
               onMouseLeave={this.onMouseLeaveHandler}
               onMouseEnter={this.onMouseEnterHandler}
               onClick={this.onClickPopupMenuHandler}
             >
-              {/*<Link className="Header__div-menu-item" to='/login'>*/}
-              <div className="Header__div-menu-item">
-                <div className="Header__div-icon-cabinet" />
+              <div className="header__menu-item">
+                <div className="header__icon-cabinet" />
                 {authorized ? name.match(/^\S+@/i) : "Профиль"}
               </div>
-              {/*</Link>*/}
               {<PopupMenu
                 mouseLeave={this.onMouseLeaveHandler} 
                 menuVisible={this.state.menuVisible} 
@@ -123,22 +127,22 @@ class Header extends React.Component {
               />}
             </div>
 
-            <Link className="Header__div-menu-item" to='/orders'>  
-              <div className="Header__div-icon-order" />
+            <Link className="header__menu-item" to='/orders'>  
+              <div className="header__icon-order" />
               Заказы
             </Link>
-            <Link className="Header__div-menu-item" to='/favorite'>  
-              <div className="Header__div-icon-favorit" />
+            <Link className="header__menu-item" to='/favorite'>  
+              <div className="header__icon-favorit" />
               Избранное
             </Link>
-            <Link className="Header__div-menu-item" to='/cart'>
-              <div className="Header__div-icon-chart" />
+            <Link className="header__menu-item" to='/cart'>
+              <div className="header__icon-chart" />
               Корзина
             </Link>
           </div>
 
         </div>
-        <div className="Header__div-bottom"> 
+        <div className="header__bottom"> 
           <span onClick={()=>this.setCategoryFilter(CATEGORY_ALL)}>Все</span>
           <span onClick={()=>this.setCategoryFilter(CATEGORY_CLASSIC)}>Классика</span>
           <span onClick={()=>this.setCategoryFilter(CATEGORY_FANTASY)}>Фэнтэзи</span>
@@ -186,7 +190,6 @@ let mapDipatchToProps = (dispatch) => {
       dispatch(actionSetPageCurrent(1));
       dispatch(actionGetBooks());
     }
-
   };
 };
 

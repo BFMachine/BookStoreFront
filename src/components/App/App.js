@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-
-import './App.scss';
 
 import Login from "../Login/Login";
 import Header from "../Header/Header";
@@ -15,72 +13,45 @@ import Favorite from "../Favorite/Favorite";
 import Bookcase from "../Bookcase/Bookcase";
 import Book from "../Book/Book";
 import BookEdit from "../BookEdit/BookEdit";
+import Footer from "../Footer/Footer";
 
+import './App.scss';
 
-/* eslint-disable */
-class App extends Component {
-  render() {
-    return (
-      <div id="p1" className="App__div-page-wrapper">        
-        
-        <Header />
+const App = () => {
+  return (
+    <div id="p1" className="app__page-wrapper">        
+      <Header />
 
-        <div className="App__div-content-wrapper">
+      <div className="app__content-wrapper">
+        <Switch>
+          <Route exact path="/" component={Bookcase} />
+          <Route exact path="/login" component={Login} />
+          <Route path="/login/new" component={AddNewUser} />
+          <Route path="/books/:id" component={Book} />
+          <Route path="/cart" component={Cart} />
+          <Route path="/favorite" component={Favorite} />
+          <Route 
+            path="/founderror"
+            render={(props) => (
+              <InfoPage {...props} message="Эта страница еще не реализована" />
+            )} 
+          />
+          
+          <PrivateRoute path="/cabinet" component={Cabinet} />
+          <PrivateRoute path="/orders" component={Orders} />
+          <PrivateRoute path="/bookedit" component={BookEdit} adminOnly="true" />
+          <PrivateRoute 
+            path="/logout" 
+            render={(props) => (
+              <InfoPage {...props} message="Вы вышли из системы" />
+            )} 
+          />
+        </Switch>
+      </div>        
 
-          <Switch>
-            
-            <Route exact path="/" component={Bookcase}/>
-            <Route exact path="/login" component={Login}/>
-            <Route path="/login/new" component={AddNewUser}/>
-            <Route path="/books/:id" component={Book}/>
-            <Route path="/cart" component={Cart} />
-            <Route path="/favorite" component={Favorite} />
-            
-            <PrivateRoute path="/cabinet" component={Cabinet} />
-            <PrivateRoute path="/orders" component={Orders} />
-            <PrivateRoute path="/bookedit" component={BookEdit} adminOnly={true} />
-            <PrivateRoute path="/logout" 
-              render={(props) => (
-                <InfoPage {...props} message="Вы вышли из системы" />
-              )} 
-            />
-            
-          </Switch>
+      <Footer />
+    </div>
+  );
+};
 
-        </div>
-
-        <footer className="App__div-footer-wrapper">
-          <div className="App__div-footer">
-            <div className="App__div-footer-item">
-              <span>О нас</span>
-              <a href="#p1">Пресса</a>
-              <a href="#p1">Реквизиты</a>
-              <a href="#p1">О компании</a>
-            </div>
-            <div className="App__div-footer-item">
-              <span>Помощь</span>
-              <a href="#p1">Как сделать заказ</a>
-              <a href="#p1">Доставка</a>
-              <a href="#p1">Оплата</a>
-              <a href="#p1">Контакты</a>
-            </div>
-            <div className="App__div-footer-item">
-              <span>Юридическим лицам</span>
-              <a href="#p1">Покупка книг</a>
-              <a href="#p1">Подарочные сертификаты</a>
-              <a href="#p1">Сотрудничество</a>
-            </div>
-            <div className="App__div-footer-item">
-              <span>+9 999 999-99-99 - круглосуточно</span>
-              <a href="#p1">&copy;2018-OOO "Telecom"</a>
-              <a href="#p1">Подарочные сертификаты</a>
-            </div>
-          </div>
-        </footer>
-
-      </div>
-    );
-  }
-}
-/* eslint-enable */
 export default App;

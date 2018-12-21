@@ -30,6 +30,11 @@ const ToolPagination = styled.ul`
   text-align: center;
   list-style-type: none;
   white-space : nowrap;
+  
+  @media only screen and (max-width : 768px)  {
+    white-space : pre-wrap;
+  }
+
 `;
 
 const selectedPage = css`
@@ -57,6 +62,10 @@ const lastSpan = css`
 const ToolPageButton = styled.li`
   display: inline-block;
   //margin-bottom: -3px;
+
+  @media only screen and (max-width : 768px)  {
+    margin-top: -4px;
+  }
 
   span {
     position: relative;
