@@ -52,6 +52,7 @@ const ArrowUp = styled.div`
   border-width: 0 2px 2px 0;
   animation: ${arrow_down} 100ms ease-in-out;
   transform: rotate(-135deg);
+
 `;  
 
 const ArrowDown = styled.div`
@@ -92,7 +93,7 @@ const MainButton = styled.button`
   padding: 5px 10px;
   display: flex;
   justify-content: space-between;
-  
+
   ${props => (props.first && firstRoundBorder)}
   ${props => (props.last && lastRoundBorder)}
   
@@ -103,6 +104,8 @@ const MainButton = styled.button`
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+
+    //width: 120%;
   }
 
   :hover {
@@ -139,6 +142,37 @@ const OptionsWrapper = styled.div`
   transform: translateX(-50%);
 `;
 
+const StarsGray = styled.div`
+  vertical-align: middle;
+  background: 0 0 url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMid' viewBox='0 0 15 15'%3E%3Cpath class='st0' fill='%23c8c8ce' d='M7.5 0l2.3 4.9 5.2.8-3.7 3.8.9 5.4-4.6-2.6L2.9 15l.9-5.4L0 5.7l5.2-.8L7.5 0z'/%3E%3C/svg%3E") no-repeat,17px 0 url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMid' viewBox='0 0 15 15'%3E%3Cpath class='st0' fill='%23c8c8ce' d='M7.5 0l2.3 4.9 5.2.8-3.7 3.8.9 5.4-4.6-2.6L2.9 15l.9-5.4L0 5.7l5.2-.8L7.5 0z'/%3E%3C/svg%3E") no-repeat,34px 0 url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMid' viewBox='0 0 15 15'%3E%3Cpath class='st0' fill='%23c8c8ce' d='M7.5 0l2.3 4.9 5.2.8-3.7 3.8.9 5.4-4.6-2.6L2.9 15l.9-5.4L0 5.7l5.2-.8L7.5 0z'/%3E%3C/svg%3E") no-repeat,51px 0 url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMid' viewBox='0 0 15 15'%3E%3Cpath class='st0' fill='%23c8c8ce' d='M7.5 0l2.3 4.9 5.2.8-3.7 3.8.9 5.4-4.6-2.6L2.9 15l.9-5.4L0 5.7l5.2-.8L7.5 0z'/%3E%3C/svg%3E") no-repeat,68px 0 url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMid' viewBox='0 0 15 15'%3E%3Cpath class='st0' fill='%23c8c8ce' d='M7.5 0l2.3 4.9 5.2.8-3.7 3.8.9 5.4-4.6-2.6L2.9 15l.9-5.4L0 5.7l5.2-.8L7.5 0z'/%3E%3C/svg%3E") no-repeat;
+  height: 14px;
+  width: 82px
+`;
+
+const StarsMask = styled.div`
+  background: 0 0 url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMid' viewBox='0 0 15 15'%3E%3Cpath class='st0' fill='%23FEC71C' d='M7.5 0l2.3 4.9 5.2.8-3.7 3.8.9 5.4-4.6-2.6L2.9 15l.9-5.4L0 5.7l5.2-.8L7.5 0z'/%3E%3C/svg%3E") no-repeat,17px 0 url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMid' viewBox='0 0 15 15'%3E%3Cpath class='st0' fill='%23FEC71C' d='M7.5 0l2.3 4.9 5.2.8-3.7 3.8.9 5.4-4.6-2.6L2.9 15l.9-5.4L0 5.7l5.2-.8L7.5 0z'/%3E%3C/svg%3E") no-repeat,34px 0 url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMid' viewBox='0 0 15 15'%3E%3Cpath class='st0' fill='%23FEC71C' d='M7.5 0l2.3 4.9 5.2.8-3.7 3.8.9 5.4-4.6-2.6L2.9 15l.9-5.4L0 5.7l5.2-.8L7.5 0z'/%3E%3C/svg%3E") no-repeat,51px 0 url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMid' viewBox='0 0 15 15'%3E%3Cpath class='st0' fill='%23FEC71C' d='M7.5 0l2.3 4.9 5.2.8-3.7 3.8.9 5.4-4.6-2.6L2.9 15l.9-5.4L0 5.7l5.2-.8L7.5 0z'/%3E%3C/svg%3E") no-repeat,68px 0 url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMid' viewBox='0 0 15 15'%3E%3Cpath class='st0' fill='%23FEC71C' d='M7.5 0l2.3 4.9 5.2.8-3.7 3.8.9 5.4-4.6-2.6L2.9 15l.9-5.4L0 5.7l5.2-.8L7.5 0z'/%3E%3C/svg%3E") no-repeat;
+  height: 14px;
+  width: 82px;
+  width: ${props => ranking(props.rank)}
+`;
+
+function ranking (rank) {
+  switch(rank) {
+    case "one" : 
+      return "17px";
+    case "two" :
+      return "34px";
+    case "three" :
+      return "51px";
+    case "four" :
+      return "67px";
+    case "five" :
+      return "82px";
+    default:
+    return 0;
+  }
+}
+
 const Option = styled.div`
   padding: 6px;
   cursor: pointer;
@@ -156,7 +190,7 @@ const Option = styled.div`
 `;
 
 
-class CustomSelect extends React.Component {
+class CustomSelectStar extends React.Component {
   constructor(props) {
     super(props);
 
@@ -255,16 +289,6 @@ class CustomSelect extends React.Component {
     };
   }
 
-  renderOptions = () => {
-    const {options} = this.props;
-    /* eslint-disable react/no-array-index-key */
-    return options.map((item, i) => (
-      <Option onClick={this.onClickOptioin(item.value)} key={i}>
-        {item.name}
-      </Option>  
-    ));
-  }
-
   onAnimationEndHandler = () => {
     this.setState({
       inAnimation: false
@@ -277,19 +301,12 @@ class CustomSelect extends React.Component {
     });
   }
 
-  getName = () => {
-    const {value, options} = this.props;
-
-    if(!options || !options.length) {
-      return "";
-    }
-
-    let found = options.find(item => item.value === value);
-    if(!found) {
-      return "";
-    }
-    
-    return found.name;
+  getStarsMarkup = (rank) => {
+    return (
+      <StarsGray>
+        <StarsMask rank={rank} />  
+      </StarsGray>
+    );
   }
 
   render() {
@@ -304,7 +321,12 @@ class CustomSelect extends React.Component {
           last={this.props.last}
           onClick={this.onClickSelectHandler}
         >
-          <span>{this.getName()}</span>
+          <span>
+            {this.props.value === "" ? 
+              "Рейтинг" :
+              this.getStarsMarkup(this.props.value)
+            }
+          </span>
           {this.state.showOptions ? 
             <ArrowUp /> : 
             (
@@ -320,21 +342,33 @@ class CustomSelect extends React.Component {
             onAnimationStart={this.onAnimationStartHandler}
             onAnimationEnd={this.onAnimationEndHandler}
           >
-            {this.renderOptions()}
+            <Option onClick={this.onClickOptioin("")}>
+              {this.getStarsMarkup("")}
+            </Option>  
+            <Option onClick={this.onClickOptioin("one")}>
+              {this.getStarsMarkup("one")}
+            </Option>    
+            <Option onClick={this.onClickOptioin("two")}>
+              {this.getStarsMarkup("two")}
+            </Option>    
+            <Option onClick={this.onClickOptioin("three")}>
+              {this.getStarsMarkup("three")}
+            </Option>    
+            <Option onClick={this.onClickOptioin("four")}>
+              {this.getStarsMarkup("four")}
+            </Option>    
+            <Option onClick={this.onClickOptioin("five")}>
+              {this.getStarsMarkup("five")}
+            </Option>    
           </OptionsWrapper>
         )}
-
       </MainWrapper>
     );
   }
 }
 
 /* eslint-disable react/require-default-props */
-CustomSelect.propTypes = {
-  options: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired
-  })),
+CustomSelectStar.propTypes = {
   callback: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
   first: PropTypes.bool,
@@ -342,4 +376,4 @@ CustomSelect.propTypes = {
   width: PropTypes.string
 };
 
-export default CustomSelect;
+export default CustomSelectStar;

@@ -1,15 +1,126 @@
 import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import styled from "styled-components";
 
 import { actionSetFilterCategory, actionSetFilterRank, actionSetFilterAuthor,  actionGetBooks, 
   actionSetFilterSort, actionSetFilterSortDirection, actionSetPageCurrent, actionSetPageSize,
   CATEGORY_ALL, CATEGORY_CLASSIC, CATEGORY_FANTASY, CATEGORY_ADVENTURE, CATEGORY_DETECTIVE,
-  CATEGORY_FICTION, CATEGORY_SCIENTIFIC, CATEGORY_CHILDREN, RANK_ALL, RANK_1, RANK_2, RANK_3,
-  RANK_4, RANK_5, SORT_BY_ALL, SORT_BY_PRICE, SORT_BY_RANK, SORT_BY_AUTHOR
+  CATEGORY_FICTION, CATEGORY_SCIENTIFIC, CATEGORY_CHILDREN, SORT_BY_ALL, SORT_BY_PRICE,
+  SORT_BY_RANK, SORT_BY_AUTHOR
 } from "../../../actions/actions";
-import "./FilterPanel.scss";
-import SelectAuthor from "./SelectAuthor/SelectAuthor";
+import CustomSelect from "../../CustomSelect/CustomSelect";
+import CustomSelectStar from "../../CustomSelect/CustomSelectStar";
+
+const categorySelect = [{
+  name: "Любая категория",
+  value: CATEGORY_ALL
+}, {
+  name: "Классика",
+  value: CATEGORY_CLASSIC
+}, {
+  name: "Фэнтэзи",
+  value: CATEGORY_FANTASY
+}, {
+  name: "Приключения",
+  value: CATEGORY_ADVENTURE
+}, {
+  name: "Детектив",
+  value: CATEGORY_DETECTIVE
+}, {
+  name: "Фантастика",
+  value: CATEGORY_FICTION
+}, {
+  name: "Научная литература",
+  value: CATEGORY_SCIENTIFIC
+}, {
+  name: "Детская",
+  value: CATEGORY_CHILDREN
+}];
+
+const sortSelect = [{
+  name: "по актуальности",
+  value: ""
+}, {
+  name: "по автору (А-Я)",
+  value: "author_ASC"
+}, {
+  name: "по автору (Я-А)",
+  value: "author_DESC"
+}, {
+  name: "по цене (дешевле)",
+  value: "price_ASC"
+}, {
+  name: "по цене (дороже)",
+  value: "price_DESC"
+}, {
+  name: "по рейтингу (меньше)",
+  value: "rank_ASC"
+}, {
+  name: "по рейтингу (больше)",
+  value: "rank_DESC"
+}];
+
+const pagesSelect = [{
+  name: "Все книги",
+  value: "0"
+}, {
+  name: "4 книги",
+  value: "4"
+}, {
+  name: "7 книг",
+  value: "7"
+}, {
+  name: "10 книг",
+  value: "10"
+}, {
+  name: "15 книг",
+  value: "15"
+}, {
+  name: "20 книг",
+  value: "20"
+}];
+
+
+const PanelForm = styled.form`
+  margin: 4px 30px 16px 30px;
+  align-self: left;
+  flex-grow: 1;
+  height: 26px;
+  display: flex;
+  justify-content: flex-start;
+  box-sizing: border-box;
+`;
+
+const getAllAuthorToCustomSelect = (authors) => {
+
+  if(!authors) {
+    return null;
+  }
+  
+  let authorsCustom = authors.map((item)=>{
+    return {
+      name: item,
+      value: item
+    };
+  });
+
+  authorsCustom.unshift({
+    name: "Все авторы",
+    value: ""
+  });
+
+  return authorsCustom;
+};
+
+const getSelectedSort = (sort, direction) => {
+
+  if(sort === SORT_BY_ALL) {
+    return SORT_BY_ALL.toString();
+  }
+    
+  return sort + "_" + direction;
+};
 
 
 function FilterPanel({
@@ -21,85 +132,50 @@ function FilterPanel({
   filterAuthor,
   setFilterSort,
   selectedSort,
-  setFilterSortDirection,
-  selectedSortDirection,
+  selectedDirection,
   setPageSize,
   selectedPageSize,
   allAuthor
 }) {
 
   return (
-    <form className="filter-panel___form">
+    <PanelForm>
 
-      <select 
-        className="first"
-        name="category"
-        onChange={setFilterCategory}
-        value={selectedCategory}
-      >
-        <option value={CATEGORY_ALL}>Любая категория</option>
-        <option value={CATEGORY_CLASSIC}>Классика</option>
-        <option value={CATEGORY_FANTASY}>Фэнтэзи</option>
-        <option value={CATEGORY_ADVENTURE}>Приключения</option>
-        <option value={CATEGORY_DETECTIVE}>Детектив</option>
-        <option value={CATEGORY_FICTION}>Фантастика</option>
-        <option value={CATEGORY_SCIENTIFIC}>Научная литература</option>
-        <option value={CATEGORY_CHILDREN}>Детская</option>
-      </select>
-
-      <select 
-        name="rank"
-        onChange={setFilterRank}
+      <CustomSelect 
+        value={selectedCategory} 
+        options={categorySelect} 
+        callback={setFilterCategory} 
+        first
+        width="165px"
+      />
+      
+      <CustomSelectStar 
         value={selectedRank}
-      >
-        <option value={RANK_ALL}>Все</option>
-        <option value={RANK_1}>1</option>
-        <option value={RANK_2}>2</option>
-        <option value={RANK_3}>3</option>
-        <option value={RANK_4}>4</option>
-        <option value={RANK_5}>5</option>
-      </select>
-
-      <SelectAuthor 
-        authors={allAuthor}
-        filter={filterAuthor}
-        set_filer_author={setFilterAuthor}
+        callback={setFilterRank}
       />
 
-      <select 
-        name="sort"
-        onChange={setFilterSort}
-        value={selectedSort}
-      >
-        <option value={SORT_BY_ALL}>Без сортировки</option>
-        <option value={SORT_BY_PRICE}>По цене</option>
-        <option value={SORT_BY_RANK}>По рейтингу </option>
-        <option value={SORT_BY_AUTHOR}>По имени автора </option>
-      </select>
+      <CustomSelect 
+        value={filterAuthor} 
+        options={getAllAuthorToCustomSelect(allAuthor)} 
+        callback={setFilterAuthor} 
+        width="180px"
+      />
 
-      <select 
-        name="direction"
-        onChange={setFilterSortDirection}
-        value={selectedSortDirection}
-      >
-        <option value="ASC">по возрастанию</option>
-        <option value="DESC">по убыванию</option>
-      </select>
+      <CustomSelect 
+        value={getSelectedSort(selectedSort, selectedDirection)} 
+        options={sortSelect} 
+        callback={setFilterSort} 
+      />
 
-      <select 
-        name="item_to_page"
-        onChange={setPageSize}
-        value={selectedPageSize}
-      >
-        <option value={0}>Все</option>
-        <option value={4}>4</option>
-        <option value={7}>7</option>
-        <option value={10}>10</option>
-        <option value={15}>15</option>
-        <option value={20}>20</option>
-      </select>
+      <CustomSelect 
+        value={selectedPageSize.toString()} 
+        options={pagesSelect} 
+        callback={setPageSize} 
+        last
+        width="110px"
+      />
 
-    </form>
+    </PanelForm>
   );
 }
 
@@ -108,14 +184,13 @@ FilterPanel.propTypes = {
   selectedCategory: PropTypes.string,
   selectedRank: PropTypes.string,
   selectedSort: PropTypes.string,
-  selectedSortDirection: PropTypes.string,
+  selectedDirection: PropTypes.string,
   selectedPageSize: PropTypes.number,
   filterAuthor: PropTypes.string,
   setFilterCategory: PropTypes.func.isRequired,
   setFilterRank: PropTypes.func.isRequired,
   setFilterAuthor: PropTypes.func.isRequired,
   setFilterSort: PropTypes.func.isRequired,
-  setFilterSortDirection: PropTypes.func.isRequired,
   setPageSize: PropTypes.func.isRequired,
   allAuthor: PropTypes.arrayOf(PropTypes.string)
 };
@@ -125,10 +200,10 @@ const mapStateToProps = (state) => {
     selectedCategory: state.filter.category,
     selectedRank: state.filter.rank,
     selectedSort: state.filter.sort,
-    selectedSortDirection: state.filter.direction,
+    selectedDirection: state.filter.direction,
     selectedPageSize: state.pages.size,
-    allAuthor: state.authors,
-    filterAuthor: state.filter.author
+    filterAuthor: state.filter.author,
+    allAuthor: state.authors
   };
 };
 
@@ -136,46 +211,78 @@ const mapDispatchToProps = (dispatch) => {
   return {
 
     setFilterCategory: (e) => {
-      const filter = e.target.options[e.target.selectedIndex].value;
-      dispatch(actionSetFilterCategory(filter));
+      dispatch(actionSetFilterCategory(e));
       dispatch(actionSetPageCurrent(1));
       dispatch(actionGetBooks());
     },
 
     setFilterRank: (e) => {
-      const filter = e.target.options[e.target.selectedIndex].value;
-      dispatch(actionSetFilterRank(filter));
+      dispatch(actionSetFilterRank(e));
       dispatch(actionSetPageCurrent(1));
       dispatch(actionGetBooks());
     },
 
     setFilterAuthor: (e) => {
-      const filter = e.target.options[e.target.selectedIndex].value;
-      dispatch(actionSetFilterAuthor(filter));
+      dispatch(actionSetFilterAuthor(e));
       dispatch(actionSetPageCurrent(1));
       dispatch(actionGetBooks());
     },
 
     setFilterSort: (e) => {
-      const filter = e.target.options[e.target.selectedIndex].value;
-      dispatch(actionSetFilterSort(filter));
+      const filter = e;
+      let sort, direction;
+      
+      switch (filter) {
+        case "price_ASC" : 
+          sort = SORT_BY_PRICE;
+          direction = "ASC";
+          break;
+
+        case "price_DESC" : 
+          sort = SORT_BY_PRICE;
+          direction = "DESC";
+          break;
+
+        case "rank_ASC" : 
+          sort = SORT_BY_RANK;
+          direction = "ASC";
+          break;
+
+        case "rank_DESC" : 
+          sort = SORT_BY_RANK;
+          direction = "DESC";
+          break;
+
+        case "author_ASC" : 
+          sort = SORT_BY_AUTHOR;
+          direction = "ASC";
+          break;
+
+        case "author_DESC" : 
+          sort = SORT_BY_AUTHOR;
+          direction = "DESC";
+          break;
+
+        default: 
+          sort = "";
+          direction = "ASC";
+      }
+
+      dispatch(actionSetFilterSort(sort));
+      dispatch(actionSetFilterSortDirection(direction));
       dispatch(actionGetBooks());
     },
 
     setFilterSortDirection: (e) => {
-      const filter = e.target.options[e.target.selectedIndex].value;
-      dispatch(actionSetFilterSortDirection(filter));
+      dispatch(actionSetFilterSortDirection(e));
       dispatch(actionGetBooks());
     },
 
     setPageSize: (e) => {
-      const pageSize = +e.target.options[e.target.selectedIndex].value;
-      dispatch(actionSetPageSize(pageSize));
+      dispatch(actionSetPageSize(+e));
       dispatch(actionSetPageCurrent(1));
       dispatch(actionGetBooks());
     },
-
-
   };
 };
 
