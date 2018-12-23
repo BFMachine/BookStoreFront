@@ -34,6 +34,12 @@ $font-color-light: #888;
     padding: 10px;
     background-color: white;
     font-family: inherit;
+    margin: 0;
+
+    &:focus {
+        position: relative;
+        z-index: 1;
+    }
 }
 
 .login__form_input_password {

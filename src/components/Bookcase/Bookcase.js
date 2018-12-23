@@ -20,6 +20,7 @@ const CaseWrapper = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
+  //justify-content: space-around;
 `;
 
 const getCoversToBook = createSelector(

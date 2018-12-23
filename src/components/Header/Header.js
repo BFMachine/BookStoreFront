@@ -102,9 +102,7 @@ class Header extends React.Component {
 
           <div className="header__search-bar">
             <input type="text" maxLength="255" autoComplete="off" placeholder="Выбирайте..." />
-            <button type="submit" className="header__search-button">
-              <div className="header__search-bar_icon" />
-            </button>
+            <button type="submit" className="header__search-button" />
           </div>
 
           <div className="header__user-menu">
@@ -116,7 +114,9 @@ class Header extends React.Component {
             >
               <div className="header__menu-item">
                 <div className="header__icon-cabinet" />
-                {authorized ? name.match(/^\S+@/i) : "Профиль"}
+                <span>
+                  {authorized ? name.match(/^\S+@/i) : "Профиль"}
+                </span>
               </div>
               {<PopupMenu
                 mouseLeave={this.onMouseLeaveHandler} 
@@ -129,15 +129,15 @@ class Header extends React.Component {
 
             <Link className="header__menu-item" to='/orders'>  
               <div className="header__icon-order" />
-              Заказы
+              <span>Заказы</span>
             </Link>
             <Link className="header__menu-item" to='/favorite'>  
               <div className="header__icon-favorit" />
-              Избранное
+              <span>Избранное</span>
             </Link>
             <Link className="header__menu-item" to='/cart'>
               <div className="header__icon-chart" />
-              Корзина
+              <span>Корзина</span>
             </Link>
           </div>
 

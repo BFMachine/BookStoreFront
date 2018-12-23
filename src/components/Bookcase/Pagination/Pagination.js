@@ -16,30 +16,38 @@ const DummyTool = styled.div`
   width: 33px;
 `;
 
-const ToolWrap = styled.div`
+const ToolPagination = styled.ul`
+
   position: absolute;
   bottom: 0px;
   left: 0;
   right: 0;
-`;
-
-const ToolPagination = styled.ul`
-  display: block;
   padding-left: 0;
-  //margin: 0 auto;
-  text-align: center;
   list-style-type: none;
-  white-space : nowrap;
+  display: flex;
+  justify-content: center;
   
   @media only screen and (max-width : 768px)  {
-    white-space : pre-wrap;
+    flex-wrap : wrap;
   }
 
+  > li:first-child  span{
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px;
+  }
+  > li:last-child  span{
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+  }
 `;
+
 
 const selectedPage = css`
   background-color: ${selectedColor};
   border-color: ${selectedColor};
+  :hover {
+    background-color: ${selectedColor};
+  }
   color: white;
 `;
 
@@ -49,22 +57,13 @@ const disabledPage = css`
   cursor: default;
 `;
 
-const firstSpan = css`
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-`;
-
-const lastSpan = css`
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
-`;
-
 const ToolPageButton = styled.li`
-  display: inline-block;
+  //display: inline-block;
   //margin-bottom: -3px;
+  display: inline-flex;
 
   @media only screen and (max-width : 768px)  {
-    margin-top: -4px;
+    margin-top: -1px;
   }
 
   span {
@@ -78,14 +77,13 @@ const ToolPageButton = styled.li`
     border: 1px solid ${borderColor};
     cursor: pointer;
     user-select: none;
-    ${props => (props.selected ? selectedPage: "")}
-    ${props => (props.disabled ? disabledPage: "")}
-    ${props => (props.first && firstSpan)}
-    ${props => (props.last && lastSpan)}
-
+    
     :hover {
       background-color: ${props => (props.disabled ? "": borderColor)};
     }
+
+    ${props => (props.selected ? selectedPage: "")}
+    ${props => (props.disabled ? disabledPage: "")}
   }
 `;
 
@@ -151,34 +149,32 @@ class Pagination extends React.Component {
     
     return (
       <DummyTool>
-        <ToolWrap>
-          <ToolPagination>
-            <ToolPageButton disabled={page === 1} first>
-              <span onClick={()=>this.onClickPageHandler(1)}>
-                Первая
-              </span>
-            </ToolPageButton>
-            <ToolPageButton disabled={page === 1}>
-              <span onClick={()=>this.onClickPageHandler("prev")}>
-                Предыдущая
-              </span>
-            </ToolPageButton>
-            
-            {this.getPagesMarkup(startPage, endPage)}
+        <ToolPagination>
+          <ToolPageButton disabled={page === 1}>
+            <span onClick={()=>this.onClickPageHandler(1)}>
+              Первая
+            </span>
+          </ToolPageButton>
+          <ToolPageButton disabled={page === 1}>
+            <span onClick={()=>this.onClickPageHandler("prev")}>
+              Предыдущая
+            </span>
+          </ToolPageButton>
+          
+          {this.getPagesMarkup(startPage, endPage)}
 
-            <ToolPageButton disabled={page >= pages}>
-              <span onClick={()=>this.onClickPageHandler("next")}>
-                Следующая
-              </span>
-            </ToolPageButton>
-            <ToolPageButton disabled={page >= pages} last>
-              <span onClick={()=>this.onClickPageHandler(pages)}>
-                Последняя
-                {/*pages*/}
-              </span>
-            </ToolPageButton>
-          </ToolPagination>
-        </ToolWrap>
+          <ToolPageButton disabled={page >= pages}>
+            <span onClick={()=>this.onClickPageHandler("next")}>
+              Следующая
+            </span>
+          </ToolPageButton>
+          <ToolPageButton disabled={page >= pages}>
+            <span onClick={()=>this.onClickPageHandler(pages)}>
+              Последняя
+              {/*pages*/}
+            </span>
+          </ToolPageButton>
+        </ToolPagination>
       </DummyTool>  
     );
   }

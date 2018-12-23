@@ -25,6 +25,7 @@ const StyledLink = styled(Link)`
   padding: 5px 20px;
   text-align: left;
   white-space: nowrap;
+  color: ${colorLine};
   
   :first-child {
     padding-top: 15px;
@@ -33,9 +34,9 @@ const StyledLink = styled(Link)`
   :last-child {
     padding-bottom: 15px;
   }
-
-  :checked {
-    color:  ${colorLine};
+  
+  :visited {
+    color: ${colorLine};
   }
 `;
 const ArrowUp = styled.div`

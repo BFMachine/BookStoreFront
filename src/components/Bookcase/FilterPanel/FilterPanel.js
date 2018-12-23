@@ -81,21 +81,24 @@ const pagesSelect = [{
   value: "20"
 }];
 
+const mobile_layout = "768px";
+//const phone_layout = "480px";
 
 const PanelForm = styled.form`
   margin: 4px 30px 16px 30px;
-  align-self: left;
-  flex-grow: 1;
-  //height: 26px;
   display: flex;
   justify-content: flex-start;
   box-sizing: border-box;
   
-  @media only screen and (max-width : 768px)  {
+  @media only screen and (max-width : ${mobile_layout})  {
     flex-wrap: wrap;
+    justify-content: center;
     margin-right: 0;
     margin-left: 0;
 
+    > div:last-child {
+      display: none;
+    }
 `;
 
 const getAllAuthorToCustomSelect = (authors) => {

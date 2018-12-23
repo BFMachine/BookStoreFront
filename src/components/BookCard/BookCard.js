@@ -4,19 +4,36 @@ import PropTypes from "prop-types";
 
 import config from "../../config";
 
+const mobile_layout = "768px";
+const phone_layout = "480px";
+
 const CardWrap = styled.div`
-    min-width: 140px;
-    max-width: 180px;
+    flex: 1 1 160px;
+    max-width: 240px;
     padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     cursor: pointer;
+
+    @media only screen and (max-width : ${mobile_layout})  {
+      flex-basis: 140px;
+    }
+    @media only screen and (max-width : ${phone_layout})  {
+      flex-basis: 110px;
+    }
 `;
 
 const ImgContainer = styled.div `
-  height: 176px;
+  height: 200px;
   margin-bottom: 16px;
+
+  @media only screen and (max-width : ${mobile_layout})  {
+    height: 170px;
+  }
+  @media only screen and (max-width : ${phone_layout})  {
+    height: 140px;
+  }
 `;
 
 const Img = styled.img`
@@ -42,6 +59,7 @@ const Title = styled.div`
   font-size: 1.2rem;
   line-height: 1.75rem;
   padding-left: 16px;
+  white-space: pre-wrap;
 `;
 
 const Author = styled.div`
@@ -49,6 +67,7 @@ const Author = styled.div`
   font-size: 1.12rem;
   line-height: 1.75rem;
   padding-left: 16px;
+  white-space: pre-wrap;
 `;
 
 const StarsGray = styled.div`
@@ -91,7 +110,7 @@ function BookCard ({ id, title, author, price, rank, cover, bookClick }) {
   
   let path = config.SERVER + cover;
   
-  function testClick() { /// уточнить!!!
+  function testClick() {
     bookClick(id);
   }
   

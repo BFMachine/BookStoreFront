@@ -5,7 +5,7 @@ import styled, {css, keyframes} from "styled-components";
 const colorLine = "#0083ca";
 const borderColor = "#ddd";
 const fontColor = "#337ab7";
-
+ 
 
 const MainWrapper = styled.div`
     position: relative;
@@ -89,7 +89,6 @@ const lastRoundBorder = css`
 const MainButton = styled.button`
   width: 100%;
   position: relative;
-  z-index: 2;
   color: ${fontColor};
   border: 1px solid ${borderColor};
   border-left: 0;
@@ -100,6 +99,7 @@ const MainButton = styled.button`
   display: flex;
   justify-content: space-between;
 
+  z-index: ${props => (props.showOptions ? 2 : 0)};
   ${props => (props.first && firstRoundBorder)}
   ${props => (props.last && lastRoundBorder)}
   
@@ -133,7 +133,7 @@ const MainButton = styled.button`
 const dropdown_menu = keyframes`
   from {
     opacity: 0;
-    z-index: -1;
+    z-index: 0;
     transform: translateY(-26px) translateX(-50%);
   }
   to {
@@ -334,6 +334,7 @@ class CustomSelectStar extends React.Component {
           first={this.props.first}
           last={this.props.last}
           onClick={this.onClickSelectHandler}
+          showOptions={this.state.showOptions}
         >
           <span>
             {this.props.value === "" ? 

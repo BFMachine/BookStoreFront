@@ -9,11 +9,15 @@ body {
   	margin: 0;
     padding: 0;
     font: $font;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-input, button {
-  font: $font;
-}
+//input, button {
+ // font: $font;
+ // margin: 0;
+ // padding: 0;
+//}
 
 .app__page-wrapper {
   display: flex;
