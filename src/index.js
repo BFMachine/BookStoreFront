@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
+import { Router } from 'react-router-dom';
 import { Provider } from "react-redux";
 import * as serviceWorker from './serviceWorker';
 
@@ -8,15 +8,16 @@ import './normalize.css';
 import App from "./components/App/App";
 
 import store from "./store/store";
+import history from "./modules/history";
 
 ReactDOM.render((
   <Provider store={store}>
-    <BrowserRouter>
+    <Router history={history}>
       <React.Fragment>
         <App /> 
         {/*<DevTools />*/}
       </React.Fragment>
-    </BrowserRouter>
+    </Router>
   </Provider>
 ), document.getElementById('root'));
 

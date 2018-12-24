@@ -3,6 +3,8 @@ $background-color-footer: #e8f0f7;
 $font-color-footer-item-title: #333;
 $font-color-footer-item: #777;
 $max-width: 1330px;
+$mobile_layout: 768px;
+$phone_layout: 480px;
 
 .footer__wrapper {
   width: 100%;
@@ -42,7 +44,7 @@ $max-width: 1330px;
   }
 }
 
-@media only screen and (max-width : 768px)  {
+@media only screen and (max-width : $mobile_layout)  {
   .footer__wrapper {
       display: none;
   }

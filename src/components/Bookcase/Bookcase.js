@@ -7,7 +7,7 @@ import { createSelector } from "reselect";
 import BookCard from "../BookCard/BookCard";
 import FilterPanel from "./FilterPanel/FilterPanel";
 import Pagination from "./Pagination/Pagination";
-import { actionGetBooks } from "../../actions/actions";
+import { actionGetBooks, actionSetSearchString, actionSetSearchMode } from "../../actions/actions";
 
 const MainWrapper = styled.div`
   padding: 16px;
@@ -38,7 +38,31 @@ const getCoversToBook = createSelector(
 class Bookcase extends React.Component {
   
   componentDidMount() {
+
+    if(this.props.location.search) {
+      this.props.setSearch(true, this.props.location.search);  
+
+    } else{
+      this.props.setSearch(false, "");  
+    }
+   
     this.props.getBooks();
+  }
+
+  componentDidUpdate (prevProps) {
+    
+    if(prevProps.location.pathname !== this.props.location.pathname || 
+      prevProps.location.search !== this.props.location.search ) {
+
+      if(this.props.location.search) {
+        this.props.setSearch(true, this.props.location.search);  
+
+      } else {
+        this.props.setSearch(false, "");  
+      }
+      
+      this.props.getBooks();
+    }
   }
 
   bookClickHandler = id => {
@@ -84,7 +108,12 @@ Bookcase.propTypes = {
   })), 
   history: PropTypes.instanceOf(Object),
   getBooks: PropTypes.func.isRequired,
+  setSearch: PropTypes.func.isRequired,
   covers: PropTypes.arrayOf(PropTypes.string),
+  location: (PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+    search: PropTypes.string.isRequired
+  }))
 };
 
 function mapStateToProps(state) {
@@ -98,6 +127,10 @@ function mapDispatchToProps(dispatch) {
   return {
       getBooks: () => {
           dispatch(actionGetBooks());
+      },
+      setSearch: (search, string) => {
+        dispatch(actionSetSearchMode(search));
+        dispatch(actionSetSearchString(string));
       }
   };
 }

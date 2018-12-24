@@ -5,14 +5,14 @@ import styled, {css, keyframes} from "styled-components";
 const colorLine = "#0083ca";
 const borderColor = "#ddd";
 const fontColor = "#337ab7";
- 
+const mobile_layout = "768px";
 
 const MainWrapper = styled.div`
     position: relative;
     user-select: none;
     width: ${props => props.width || "auto"};
     
-    @media only screen and (max-width : 768px)  {
+    @media only screen and (max-width : ${mobile_layout})  {
       width: auto;
       flex: 1 1 auto;
       margin-top: -1px;
@@ -103,7 +103,7 @@ const MainButton = styled.button`
   ${props => (props.first && firstRoundBorder)}
   ${props => (props.last && lastRoundBorder)}
   
-  @media only screen and (max-width : 768px)  {
+  @media only screen and (max-width : ${mobile_layout})  {
     border-left: 1px solid ${borderColor};
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;

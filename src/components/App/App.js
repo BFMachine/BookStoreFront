@@ -25,6 +25,7 @@ const App = () => {
       <div className="app__content-wrapper">
         <Switch>
           <Route exact path="/" component={Bookcase} />
+          <Route exact path="/search" component={Bookcase} />
           <Route exact path="/login" component={Login} />
           <Route path="/login/new" component={AddNewUser} />
           <Route path="/books/:id" component={Book} />

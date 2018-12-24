@@ -8,6 +8,7 @@ import { actionGetFavorite, actionSetFavorite, actionDeleteAllFavoriteOnServer }
 import BookCard from "../BookCard/BookCard";
 
 const colorLine = "#c9d3d8";
+const phone_layout = "480px";
 
 const OrderWrapper = styled.div`
     padding: 24px 46px;
@@ -16,9 +17,19 @@ const OrderWrapper = styled.div`
 const HeaderOwner = styled.div`
   width: 100%;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid ${colorLine};
+
+
+  @media only screen and (max-width : ${phone_layout})  {
+    :before {
+      content: "";
+      width: 100%;
+      order: 1;
+    }   
+  }
 `;
 
 const TitleMain = styled.h3`
@@ -46,6 +57,7 @@ const Button = styled.button`
   border-radius: .25rem;
   padding: 8px;
   background-color: #0083ca;
+  order: 1;
   color: white;
 
   :active {

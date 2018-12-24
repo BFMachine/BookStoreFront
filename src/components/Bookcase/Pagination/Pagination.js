@@ -9,6 +9,7 @@ import { actionSetPageCurrent, actionGetBooks } from "../../../actions/actions";
 const borderColor = "#ddd";
 const selectedColor = "#337ab7";
 const pagesInPagigation = 5;
+const mobile_layout = "768px";
 
 const DummyTool = styled.div`
   margin: 0 auto;
@@ -27,7 +28,7 @@ const ToolPagination = styled.ul`
   display: flex;
   justify-content: center;
   
-  @media only screen and (max-width : 768px)  {
+  @media only screen and (max-width : ${mobile_layout})  {
     flex-wrap : wrap;
   }
 
@@ -62,7 +63,7 @@ const ToolPageButton = styled.li`
   //margin-bottom: -3px;
   display: inline-flex;
 
-  @media only screen and (max-width : 768px)  {
+  @media only screen and (max-width : ${mobile_layout})  {
     margin-top: -1px;
   }
 

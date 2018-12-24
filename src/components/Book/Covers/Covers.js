@@ -4,11 +4,24 @@ import PropTypes from "prop-types";
 
 import config from "../../../config";
 
+const mobile_layout = "768px";
+const phone_layout = "480px";
+
+
 const MainContainer = styled.div `
   height: 430px;
   widht: 300px;
   display: flex;
   justify-content: start;
+
+  @media only screen and (max-width : ${mobile_layout})  {
+    margin-right: 10px;
+    height: 400px;
+  }
+  @media only screen and (max-width : ${phone_layout})  {
+    margin-right: 10px;
+    height: 370px;
+  }
 `;
 
 const ToolBar = styled.div`
@@ -27,6 +40,13 @@ const ImgToolbarContainer = styled.div `
 const ImgContainer = styled.div `
   height: 400px;
   margin-bottom: 16px;
+
+  @media only screen and (max-width : ${mobile_layout})  {
+    height: 370px;
+  }
+  @media only screen and (max-width : ${phone_layout})  {
+    height: 340px;
+  }
 `;
 
 const Img = styled.img`

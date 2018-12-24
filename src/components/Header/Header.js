@@ -6,9 +6,10 @@ import PropTypes from "prop-types";
 import PopupMenu from "../PopupMenu/PopupMenu";
 import { actionLogoutUser, actionSetFilterCategory, actionSetPageCurrent, CATEGORY_ALL, 
   CATEGORY_CLASSIC, CATEGORY_FANTASY, CATEGORY_ADVENTURE, CATEGORY_DETECTIVE,
-  CATEGORY_FICTION, CATEGORY_SCIENTIFIC, CATEGORY_CHILDREN, actionGetBooks
+  CATEGORY_FICTION, CATEGORY_SCIENTIFIC, CATEGORY_CHILDREN, actionGetBooks,
  } from "../../actions/actions"; 
 
+import history from "../../modules/history";
 import "./Header.scss";
 
 class Header extends React.Component {
@@ -71,6 +72,25 @@ class Header extends React.Component {
     this.props.setFilter(filter);
   }
 
+  onClickSearchHandler = (e) => {
+    const search = e.target.children[0].value;
+
+    e.preventDefault();
+    e.target.children[0].value = "";
+
+    if(search === "") {
+      this.props.setSearchMode();
+      history.push("/");
+      return;
+    }
+    this.props.setSearchMode();
+    history.push({
+      pathname: "/search",
+      search: `?text=${search}`
+    });
+    
+  }
+
   render() {
     const { name, authorized, logoutUser, role } = this.props;
     return (
@@ -97,13 +117,25 @@ class Header extends React.Component {
           </div>
         </div>
         <div className="header__middle">
-
           <Link className="header__logo" to='/' />  
-
-          <div className="header__search-bar">
-            <input type="text" maxLength="255" autoComplete="off" placeholder="Выбирайте..." />
-            <button type="submit" className="header__search-button" />
-          </div>
+          <form 
+            className="header__search-bar"
+            onSubmit={this.onClickSearchHandler}
+          >
+            <input 
+              type="text"
+              maxLength="255"
+              autoComplete="off"
+              placeholder={this.props.search === "" ?
+                "поиск..." : 
+                "результат поиска " + decodeURIComponent(this.props.search.slice(6))
+              } 
+            />
+            <button
+              type="submit"
+              className="header__search-button"
+            />
+          </form>
 
           <div className="header__user-menu">
             <div
@@ -164,6 +196,8 @@ Header.propTypes = {
   authorized: PropTypes.bool.isRequired,
   role: PropTypes.string,
   setFilter: PropTypes.func.isRequired,
+  setSearchMode: PropTypes.func.isRequired,
+  search: PropTypes.string,
   history:PropTypes.shape({
     push: PropTypes.func.isRequired
   })
@@ -176,7 +210,8 @@ function mapStateToProps(state) {
     return { 
         name: state.authentications.email,
         authorized: state.authentications.authorized,
-        role: state.authentications.role
+        role: state.authentications.role,
+        search: state.search.string
     };
 }
 
@@ -189,6 +224,9 @@ let mapDipatchToProps = (dispatch) => {
       dispatch(actionSetFilterCategory(filter));
       dispatch(actionSetPageCurrent(1));
       dispatch(actionGetBooks());
+    },
+    setSearchMode : () => {
+      dispatch(actionSetPageCurrent(1));
     }
   };
 };

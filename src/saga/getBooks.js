@@ -5,12 +5,14 @@ import config from "../config";
 
 const getFilter = state => state.filter;
 const getPages = state => state.pages;
+const getSearch = state => state.search;
 
 
 export default function* getBooks() {
 
     let params = {...yield select(getFilter)};
     let pages = yield select(getPages);
+    const search = yield select(getSearch);
 
     if(params.category === CATEGORY_ALL) {
         delete params.category;
@@ -35,8 +37,11 @@ export default function* getBooks() {
         .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
         .join('&');
 
+    const pathString = search.search ? "books/search" + search.string + "&" : "books?";
+   
+
     try{
-        const answer = yield call(fetch, config.SERVER + "books?" + query, {
+        const answer = yield call(fetch, config.SERVER + pathString + query, {
             method: "get",
             headers: {
                 "Accept": "application/json",

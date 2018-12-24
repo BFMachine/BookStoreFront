@@ -15,18 +15,24 @@ import InputComments from "./InputComment/InputComment";
 import config from "../../config";
 
 const colorLine = "#0083ca";
+const mobile_layout = "768px";
+const phone_layout = "480px";
+
 
 const MainWrap = styled.div`
   padding-bottom: 20px;
 `;
 
 const BookWrap = styled.div`
-    //min-width: 140px;
-    //max-width: 180px;
     padding: 10px;
     display: flex;
     flex-direction: row;
     align-items: stretch;
+
+    @media only screen and (max-width : ${mobile_layout})  {
+      flex-direction: column;
+      margin-top: 5px;
+    }
 `;
 
 const BaseInfo = styled.div `
@@ -153,24 +159,31 @@ const ContentColumn = styled.div`
   position: relative;
   font-size: 12px;
   white-space: nowrap;
-  order: 0;
   flex: 1 1 auto;
   align-self: auto;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
+  @media only screen and (max-width : ${phone_layout})  {
+    flex-direction: column;
+    padding-left: 0;
+  }
 `;
 
 const SaleBlock = styled.div`
   width: 258px;
   margin: 25px 0 0 -258px;
-  
   vertical-align: top;
   white-space: normal;
-  
   background-color: #fff;
   border: 1px solid #e1e1e1;
   border-radius: 3px;
+
+  @media only screen and (max-width : ${phone_layout})  {
+    margin: 10px auto;
+    width: 200px;
+  }
 `;
 
 const Price = styled.div`
@@ -178,7 +191,6 @@ const Price = styled.div`
   padding-top: 6px;
   margin-bottom: 16px;
   padding-left: 0;
- 
   font-family: 'MuseoSans',Arial,Verdana,sans-serif;
   font-size: 2.25rem;
   line-height: normal;
@@ -195,7 +207,6 @@ const SaleButton = styled.div`
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
   margin-top: 31px;
-
   font-size: 16px;
   font-weight: bold;
   text-decoration: none;
@@ -222,6 +233,10 @@ const Author = styled.div`
     font-size: 1rem;
     line-height: 1.5rem;
     font-weight: normal;
+  }
+
+  @media only screen and (max-width : ${phone_layout})  {
+    padding-left: 20px;
   }
 `;
 
@@ -316,7 +331,13 @@ const CommentContainer = styled.div`
     margin: 0 30px;
     display: block;
     width: 92%;
+    word-break: break-all;
   }
+
+  @media only screen and (max-width : ${phone_layout})  {
+    margin-left: 10px;
+  }
+
 `;
 
 const CommentHeader = styled.div`
@@ -545,8 +566,8 @@ class Book extends React.Component {
     }
   }
 
-
   onReadFileClickHandler = () => {
+
     let fileName = this.props.files[0].name;
     if(!fileName) {
       return;
@@ -749,24 +770,24 @@ function mapDispatchToProps(dispatch) {
       },
 
       addToCart: (book) => {
-        dispatch(actionAddToCart(book)); //// if authorized call server method else local debug!
+        dispatch(actionAddToCart(book));
         dispatch(actionAddBookToCash(book));
         dispatch(actionAddToCartOnServer([book.id]));
       },
 
       delteFromCart: (book) => {
-        dispatch(actionDeleteFromCart(book)); //// if authorized call server method else local debug!
+        dispatch(actionDeleteFromCart(book)); 
         dispatch(actionDeleteFromCartOnServer(book));
       },
 
       addToFavorite: (book) => {
-        dispatch(actionAddToFavorite(book)); //// if authorized call server method else local debug!
+        dispatch(actionAddToFavorite(book)); 
         dispatch(actionAddBookToCash(book));
         dispatch(actionAddToFavoriteOnServer([book.id]));
       },
 
       delteFromFavorite: (book) => {
-        dispatch(actionDeleteFromFavorite(book)); //// if authorized call server method else local debug!
+        dispatch(actionDeleteFromFavorite(book)); 
         dispatch(actionDeleteFromFavoriteOnServer(book));
       }
   };

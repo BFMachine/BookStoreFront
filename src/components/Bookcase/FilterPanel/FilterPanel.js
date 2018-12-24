@@ -82,7 +82,6 @@ const pagesSelect = [{
 }];
 
 const mobile_layout = "768px";
-//const phone_layout = "480px";
 
 const PanelForm = styled.form`
   margin: 4px 30px 16px 30px;

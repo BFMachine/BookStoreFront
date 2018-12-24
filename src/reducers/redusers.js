@@ -5,7 +5,7 @@ import { SET_TOKENS, SET_AUTHENTICATION_ERROR, SET_AUTH_USER, SET_ORDERS,
   DELETE_FROM_FAVORITE , SET_COMMENTS, SET_FILTER_CATEGORY, SET_FILTER_RANK,
   SET_FILTER_AUTHOR, SET_AUTHORS, SET_PAGE_TOTAL, SET_PAGE_SIZE, SET_PAGE_CURRENT,
   SET_FILTER_SORT, SET_FILTER_SORT_DIRECTION, ADD_BOOK_TO_CAСH, CATEGORY_ALL,
-  RANK_ALL, SORT_BY_ALL,
+  RANK_ALL, SORT_BY_ALL, SET_SEARCH_MODE, SET_SEARCH_STRING
 } from "../actions/actions";
 
 function tokens(state = { accessToken: "", refreshToken: "" }, action) {
@@ -220,6 +220,24 @@ function cach(state = [], action) {
   }
 }
 
+function search(state = {search: false, string: ""}, action) {
+
+  switch(action.type) {
+    case SET_SEARCH_MODE:
+      return {...state,
+        search: action.search
+      };
+
+    case SET_SEARCH_STRING:
+      return {...state,
+        string: action.string
+      };
+  
+    default:
+        return state;  
+  }
+}
+
 
 export default combineReducers({
     tokens,
@@ -232,5 +250,6 @@ export default combineReducers({
     authors,
     filter,
     pages,
-    cach
+    cach,
+    search
 });

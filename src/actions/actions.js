@@ -20,6 +20,8 @@ export const SET_FILTER_SORT_DIRECTION = "SET_FILTER_SORT_DIRECTION";
 export const SET_PAGE_TOTAL = "SET_PAGE_TOTAL";
 export const SET_PAGE_SIZE = "SET_PAGE_SIZE";
 export const SET_PAGE_CURRENT = "SET_PAGE_CURRENT";
+export const SET_SEARCH_MODE = "SET_SEARCH_MODE";
+export const SET_SEARCH_STRING = "SET_SEARCH_STRING";
 
 // for saga 
 export const INITIAL_LOAD_TOKEN = "INITIAL_LOAD_TOKEN";
@@ -376,5 +378,19 @@ export function actionSetPageCurrent(page) {
     return {
         type: SET_PAGE_CURRENT,
         page
+    };
+}
+
+export function actionSetSearchMode(search) {
+    return {
+        type: SET_SEARCH_MODE,
+        search
+    };
+}
+
+export function actionSetSearchString(string) {
+    return {
+        type: SET_SEARCH_STRING,
+        string
     };
 }
