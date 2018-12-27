@@ -80,14 +80,14 @@ class Covers extends React.Component {
       <MainContainer>
         <ToolBar>
           {this.props.img_array.map((item, index) => (
-            <ImgToolbarContainer key={item.id}>
+            <ImgToolbarContainer 
+              key={item.id}
+              onClick={()=>this.onClickSmallPic(index) /*BAD */} 
+            >
               <Img 
                 src={config.SERVER + item.name}
                 alt="обложка"
                 title="нажмите, чтобы увеличить" 
-                         
-                onClick={()=>this.onClickSmallPic(index) /*BAD */} 
-
               />
             </ImgToolbarContainer>
           ))}
