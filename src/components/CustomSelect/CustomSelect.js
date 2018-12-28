@@ -14,7 +14,6 @@ const MainWrapper = styled.div`
     width: ${props => props.width || "auto"};
 
     @media only screen and (max-width : ${mobile_layout})  {
-      //width: auto;
       flex: 1 1 auto;
       margin-top: -1px;
       min-width: 120px;
@@ -185,7 +184,6 @@ class CustomSelect extends React.Component {
   }
 
   onClickSelectHandler = (e) => {
-
     this.setState({
       animationArrow: true
     });
@@ -219,7 +217,6 @@ class CustomSelect extends React.Component {
   }
 
   onMouseEnterHandler = () => {
-
     if(this.state.menuTimerOut) {
         clearTimeout(this.state.menuTimerOut);
         this.setState({
@@ -241,7 +238,6 @@ class CustomSelect extends React.Component {
   }
 
   onMouseLeaveHandler = () => {
-
     if(this.state.menuTimerIn) {
         clearTimeout(this.state.menuTimerIn);
         this.setState({

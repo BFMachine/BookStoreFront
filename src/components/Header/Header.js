@@ -178,9 +178,9 @@ class Header extends React.Component {
           <span onClick={()=>this.setCategoryFilter(CATEGORY_ALL)}>Все</span>
           <span onClick={()=>this.setCategoryFilter(CATEGORY_CLASSIC)}>Классика</span>
           <span onClick={()=>this.setCategoryFilter(CATEGORY_FANTASY)}>Фэнтэзи</span>
-          <span onClick={()=>this.setCategoryFilter(CATEGORY_ADVENTURE)}>Приключения</span>
+          <span onClick={()=>this.setCategoryFilter(CATEGORY_ADVENTURE)}>Публицистика</span>
           <span onClick={()=>this.setCategoryFilter(CATEGORY_DETECTIVE)}>Детектив</span>
-          <span onClick={()=>this.setCategoryFilter(CATEGORY_FICTION)}>Фантастика</span>
+          <span onClick={()=>this.setCategoryFilter(CATEGORY_FICTION)}>Женские романы</span>
           <span onClick={()=>this.setCategoryFilter(CATEGORY_SCIENTIFIC)}>Научная литература</span>
           <span onClick={()=>this.setCategoryFilter(CATEGORY_CHILDREN)}>Детская</span>
         </div>

@@ -6,7 +6,7 @@ import "./Cabinet.scss";
 
 function Cabinet({ address, authorized, email, full_name, id, phone, role }) {
   return (
-    <div className="cabinet__div-wrap">
+    <div className="cabinet__wrap">
 
       <h3>Личный кабинет</h3>
       <hr />

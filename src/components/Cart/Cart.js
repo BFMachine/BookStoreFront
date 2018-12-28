@@ -29,7 +29,6 @@ const HeaderOwner = styled.div`
       order: 1;
     }   
   }
-
 `;
 
 const TitleMain = styled.h3`
@@ -77,7 +76,6 @@ const getCoversToBook = createSelector(
     if(!book) {
       return null;
     }
-    
     return book.map((item)=>(item.Files.filter(itemFile => itemFile.type === "cover")[0].name));
   }
 );

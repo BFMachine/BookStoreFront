@@ -32,7 +32,6 @@ const initialAuthState = {
 };
 
 function authentications(state = initialAuthState, action) {
-
   switch(action.type) {
     case SET_AUTHENTICATION_ERROR:
       return { ...state,
@@ -56,7 +55,6 @@ function authentications(state = initialAuthState, action) {
 }
 
 function orders(state = [], action) {
-
   switch(action.type) {
     case SET_ORDERS:
       return [...action.payload];
@@ -68,7 +66,6 @@ function orders(state = [], action) {
 
 
 function comments(state = [], action) {
-
   switch(action.type) {
     case SET_COMMENTS:
       return [...action.payload];
@@ -79,7 +76,6 @@ function comments(state = [], action) {
 }
 
 function cart(state = [], action) {
-
   switch(action.type) {
     case SET_CART:
       return [...action.cart];
@@ -100,7 +96,6 @@ function cart(state = [], action) {
 }
 
 function favorite(state = [], action) {
-
   switch(action.type) {
     case SET_FAVORITE:
       return [...action.favorite];
@@ -121,7 +116,6 @@ function favorite(state = [], action) {
 }
 
 function books(state = [], action) {
-
   switch(action.type) {
     case SET_BOOKS:
       return [...action.books];
@@ -132,7 +126,6 @@ function books(state = [], action) {
 }
 
 function authors(state = [], action) {
-
   switch(action.type) {
     case SET_AUTHORS:
       return [...action.authors];
@@ -149,7 +142,6 @@ function filter(state = {
   sort: SORT_BY_ALL,
   direction: "ASC"
 }, action) {
-
   switch(action.type) {
     case SET_FILTER_CATEGORY:
       return {...state,
@@ -210,7 +202,6 @@ function pages(state = {
 }
 
 function cach(state = [], action) {
-
   switch(action.type) {
     case ADD_BOOK_TO_CAСH:
       return [...state, action.book];
@@ -221,7 +212,6 @@ function cach(state = [], action) {
 }
 
 function search(state = {search: false, string: ""}, action) {
-
   switch(action.type) {
     case SET_SEARCH_MODE:
       return {...state,
@@ -237,7 +227,6 @@ function search(state = {search: false, string: ""}, action) {
         return state;  
   }
 }
-
 
 export default combineReducers({
     tokens,

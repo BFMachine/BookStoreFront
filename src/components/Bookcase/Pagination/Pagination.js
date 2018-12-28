@@ -59,8 +59,6 @@ const disabledPage = css`
 `;
 
 const ToolPageButton = styled.li`
-  //display: inline-block;
-  //margin-bottom: -3px;
   display: inline-flex;
 
   @media only screen and (max-width : ${mobile_layout})  {
@@ -92,7 +90,6 @@ const ToolPageButton = styled.li`
 class Pagination extends React.Component {
 
   onClickPageHandler = (page) => {
-
     if(page === "prev") {
       page = this.props.page - 1;
     }

@@ -12,7 +12,7 @@ import history from "./modules/history";
 
 ReactDOM.render((
   <Provider store={store}>
-    <Router history={history}>
+    <Router history={history}> 
       <React.Fragment>
         <App /> 
         {/*<DevTools />*/}

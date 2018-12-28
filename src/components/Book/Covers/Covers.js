@@ -7,7 +7,6 @@ import config from "../../../config";
 const mobile_layout = "768px";
 const phone_layout = "480px";
 
-
 const MainContainer = styled.div `
   height: 430px;
   widht: 300px;

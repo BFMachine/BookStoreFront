@@ -14,10 +14,11 @@ import { actionAddToCart, actionAddToCartOnServer,
 import InputComments from "./InputComment/InputComment";
 import config from "../../config";
 
+
 const colorLine = "#0083ca";
 const mobile_layout = "768px";
 const phone_layout = "480px";
-
+const fontPointColor = "#256aa1";
 
 const MainWrap = styled.div`
   padding-bottom: 20px;
@@ -29,14 +30,14 @@ const BookWrap = styled.div`
     flex-direction: row;
     align-items: stretch;
 
-    @media only screen and (max-width : ${mobile_layout})  {
+    @media only screen and (max-width : ${mobile_layout}) {
       flex-direction: column;
       margin-top: 5px;
     }
 `;
 
 const BaseInfo = styled.div `
-  flex: 1 1 auto;
+  flex: 1 3 auto;
 `;
 
 const Panel = styled.div `
@@ -56,7 +57,7 @@ const Panel = styled.div `
   span {
     cursor: pointer;
     display: inline-block;
-    color: #256aa1;
+    color: ${fontPointColor};
     text-decoration: none;
     vertical-align: middle;
     margin-left: 16px;
@@ -173,7 +174,11 @@ const ContentColumn = styled.div`
 
 const SaleBlock = styled.div`
   width: 258px;
-  margin: 25px 0 0 -258px;
+  //margin: 25px 0 0 -258px;
+  margin: 25px 0 0 0px;
+  display: inline-flex;
+  flex-direction: column;
+  flex: 0 0 auto;
   vertical-align: top;
   white-space: normal;
   background-color: #fff;
@@ -222,10 +227,12 @@ const SaleButton = styled.div`
 `;
 
 const Author = styled.div`
+  display: inline-block;
   word-wrap: break-word;
   white-space: pre-wrap;
   font-size: 1.25rem;
   line-height: 1.5rem;
+  padding-right: 20px;
 
   span {
     margin-top: 0.5rem;
@@ -237,6 +244,48 @@ const Author = styled.div`
 
   @media only screen and (max-width : ${phone_layout})  {
     padding-left: 20px;
+  }
+`;
+
+const SmallDescripton = styled.div`
+  position: relative;
+  flex: 1 1 auto;
+  max-width: 30rem;
+  max-height: 6.5rem;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  overflow: hidden;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: normal;
+
+  span {
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+    margin-top: 0.25rem;
+  }
+`;
+
+const ReadDescripton= styled.div`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: inline-block;
+  background-color: white;
+  color: ${fontPointColor};
+  cursor: pointer;
+
+  ::after {
+    content: "";
+    position: absolute;
+    left: -180px;
+    top: 0;
+    height: 19px;
+    width: 180px;
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJod…EiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -webkit-gradient(linear,left top,right top,from(rgba(255,255,255,0)),color-stop(22%,rgba(255,255,255,0)),to(rgba(255,255,255,1)));
+    background: linear-gradient(to right,rgba(255,255,255,0) 0%,rgba(255,255,255,0) 22%,rgba(255,255,255,1) 100%);
   }
 `;
 
@@ -278,9 +327,25 @@ const ReadFragment = styled.div`
   line-height: 1.5rem;
   font-weight: normal;
   cursor: pointer;
-  color: #256aa1;
+  color: ${fontPointColor};
   :hover {
     text-decoration: underline;
+  }
+`;
+
+const Description = styled.div`
+  padding: 10px 35px;
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: normal;
+  
+  span {
+    margin-bottom: 0.25rem;
+    margin-top: 0.25rem;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
   }
 `;
 
@@ -363,7 +428,6 @@ const NewComment = styled.div`
   margin-left: 50px;
 `;
 
-
 const getBooks = (state) => state.books;
 const getCach = (state) => state.cach;
 const getCart = (state) => state.cart;
@@ -375,11 +439,9 @@ const getSelectedBook = createSelector(
   [getBooks, getCach, getId],
   (books, cach, id) => {
     let book = books.find(item => item.id === parseInt(id));
-    
     if(book) {
       return book;
     }
-
     return cach.find(item => item.id === parseInt(id));
   }
 );
@@ -404,7 +466,12 @@ const getCoversToBook = createSelector(
     if(!book) {
       return null;
     }
-    return book.Files.filter(item => item.type === "cover");
+    let covers = book.Files.filter(item => item.type === "cover");
+
+    if(covers.length > 1) {
+      covers = covers.slice(1);
+    }
+    return covers;
   }
 );
 
@@ -427,12 +494,12 @@ class Book extends React.Component {
       showAnimation: false,
       showComments: false,
       animationArrow: false,
-      showInputComment: false
+      showInputComment: false,
+      showDescription: false
     };
   }
 
   componentDidMount() {
-
     if(!this.props.book){
       this.props.getBook(this.props.match.params.id);
 
@@ -442,7 +509,6 @@ class Book extends React.Component {
   }
 
   buttonAddDelCartHandler = () => {
-
     if(this.props.inCart) {
       this.props.delteFromCart(this.props.book);
 
@@ -452,7 +518,6 @@ class Book extends React.Component {
   }
 
   onClickFavoriteHandler = () =>  {
-
     if(this.props.inFavorite) {
       this.props.delteFromFavorite(this.props.book);
 
@@ -472,8 +537,7 @@ class Book extends React.Component {
     }
   }
  
-  onClickCommentsHandler = () => {
-    
+  onClickCommentsHandler = () => { 
     if(!this.props.comments.length) {
       return; 
     }
@@ -498,6 +562,10 @@ class Book extends React.Component {
   getCommentsRef = (node) => {
     this._CommentsHeader = node;
   }
+
+  getDescriptionRef = (node) => {
+    this._DescriptionHeader = node;
+  }
   
   onClickNewCommentHandler = () => {
     this.setState({
@@ -506,7 +574,6 @@ class Book extends React.Component {
   }
 
   onAddComment = (commenter, content) => {
-
     this.props.sendComment(this.props.book.id, commenter, content);
 
     this.setState({
@@ -518,8 +585,7 @@ class Book extends React.Component {
     });
   }
 
-  getCommentCountString = (count) => {
-    
+  getCommentCountString = (count) => {    
     let returnString = " отзывов";
     let lastNumber = count % 10;
     
@@ -548,15 +614,15 @@ class Book extends React.Component {
   getCategory = (category) => {
     switch(category) {
       case 1 : 
-        return "Классика";
+        return "Классика"; 
       case 2 : 
         return "Фэнтэзи";
       case 3 : 
-        return "Приключения";
+        return "Публицистика";
       case 4 : 
         return "Детектив";
       case 5 : 
-        return "Фантастика";
+        return "Женские романы";
       case 6 : 
         return "Научная литература";
       case 7 : 
@@ -567,7 +633,6 @@ class Book extends React.Component {
   }
 
   onReadFileClickHandler = () => {
-
     let fileName = this.props.files[0].name;
     if(!fileName) {
       return;
@@ -576,9 +641,22 @@ class Book extends React.Component {
     window.open(config.SERVER + fileName);
   }
 
+  onClickShowDescription = () => {   
+    this.setState(state => {
+      return {
+        showDescription: !state.showDescription
+      };
+    });
 
-  render() {
-    
+    if(this._DescriptionHeader) {
+      setTimeout(() => {
+        this._DescriptionHeader.scrollIntoView(true);
+      }, 50);
+    }
+  }
+  
+
+  render() {   
     if(!this.props.book) {
       return null;
     }
@@ -586,14 +664,12 @@ class Book extends React.Component {
     return (
       <MainWrap>
         <BookWrap>
-          
           <Covers 
             title={this.props.book.title}
             img_array={this.props.covers} 
           />
-
           <BaseInfo>
-          
+
             <Panel>
               <h1>{this.props.book.title}</h1>
               <ToolPanel>
@@ -610,16 +686,22 @@ class Book extends React.Component {
                 >
                   в избранное
                 </FavoriteIcon>
-
               </ToolPanel>
             </Panel>
-        
+            
             <ContentColumn>
               <Author>
                 {this.props.book.author}
                 <span>
                   {this.getCategory(this.props.book.category)}
                 </span>
+                <SmallDescripton>
+                  <span>О книге</span>
+                  {this.props.book.description}
+                  <ReadDescripton onClick={this.onClickShowDescription}>
+                    Читать далее
+                  </ReadDescripton>
+                </SmallDescripton>
                 {this.props.files.length > 0 && 
                 (
                   <ReadFragment onClick={this.onReadFileClickHandler}>
@@ -627,7 +709,6 @@ class Book extends React.Component {
                   </ReadFragment>
                 )}
               </Author>
-              
               <SaleBlock>
                 <Price>
                   {this.props.book.price} 
@@ -641,6 +722,15 @@ class Book extends React.Component {
           </BaseInfo>
         </BookWrap>
         
+        <div ref={this.getDescriptionRef}>
+          {this.state.showDescription && (
+            <Description>
+              <span>Описание</span>
+              {this.props.book.description}
+            </Description>
+          )}
+        </div>
+
         <Comments ref={this.getCommentsRef}>
           
           <CommentsHeader onClick={this.onClickCommentsHandler}>
@@ -697,7 +787,7 @@ Book.propTypes = {
     author: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     category: PropTypes.number,
-    description: PropTypes.string.isRequired,
+    description: PropTypes.string,
     price: PropTypes.number,
     rank: PropTypes.string,
     Files: PropTypes.arrayOf(PropTypes.shape({

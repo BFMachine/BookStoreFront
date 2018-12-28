@@ -45,7 +45,6 @@ const Th = styled.td`
     padding: 5px 15px;
     text-align: right;
     font-weight: bold;
-    //font-size: 1.1rem
 `;
 
 const Th1 = styled(Th)`

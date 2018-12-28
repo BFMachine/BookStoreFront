@@ -13,7 +13,7 @@ import CustomSelect from "../../CustomSelect/CustomSelect";
 import CustomSelectStar from "../../CustomSelect/CustomSelectStar";
 
 const categorySelect = [{
-  name: "Любая категория",
+  name: "Любая категория", 
   value: CATEGORY_ALL
 }, {
   name: "Классика",
@@ -22,13 +22,13 @@ const categorySelect = [{
   name: "Фэнтэзи",
   value: CATEGORY_FANTASY
 }, {
-  name: "Приключения",
+  name: "Публицистика",
   value: CATEGORY_ADVENTURE
 }, {
   name: "Детектив",
   value: CATEGORY_DETECTIVE
 }, {
-  name: "Фантастика",
+  name: "Женские романы",
   value: CATEGORY_FICTION
 }, {
   name: "Научная литература",
@@ -101,7 +101,6 @@ const PanelForm = styled.form`
 `;
 
 const getAllAuthorToCustomSelect = (authors) => {
-
   if(!authors) {
     return null;
   }
@@ -122,7 +121,6 @@ const getAllAuthorToCustomSelect = (authors) => {
 };
 
 const getSelectedSort = (sort, direction) => {
-
   if(sort === SORT_BY_ALL) {
     return SORT_BY_ALL.toString();
   }

@@ -20,13 +20,11 @@ const CaseWrapper = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
-  //justify-content: space-around;
 `;
 
 const getCoversToBook = createSelector(
   [state => state.books],
   (books) => {
-
     if(!books) {
       return null;
     }
@@ -38,7 +36,6 @@ const getCoversToBook = createSelector(
 class Bookcase extends React.Component {
   
   componentDidMount() {
-
     if(this.props.location.search) {
       this.props.setSearch(true, this.props.location.search);  
 
@@ -49,8 +46,7 @@ class Bookcase extends React.Component {
     this.props.getBooks();
   }
 
-  componentDidUpdate (prevProps) {
-    
+  componentDidUpdate (prevProps) {  
     if(prevProps.location.pathname !== this.props.location.pathname || 
       prevProps.location.search !== this.props.location.search ) {
 
@@ -102,7 +98,7 @@ Bookcase.propTypes = {
     author: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     category: PropTypes.number,
-    description: PropTypes.string.isRequired,
+    description: PropTypes.string,
     price: PropTypes.number,
     rank: PropTypes.string,
   })), 

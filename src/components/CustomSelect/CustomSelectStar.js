@@ -58,7 +58,6 @@ const ArrowUp = styled.div`
   border-width: 0 2px 2px 0;
   animation: ${arrow_down} 100ms ease-in-out;
   transform: rotate(-135deg);
-
 `;  
 
 const ArrowDown = styled.div`
@@ -118,8 +117,6 @@ const MainButton = styled.button`
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-
-    //width: 120%;
   }
 
   :hover {
@@ -252,7 +249,6 @@ class CustomSelectStar extends React.Component {
   }
 
   onMouseEnterHandler = () => {
-
     if(this.state.menuTimerOut) {
         clearTimeout(this.state.menuTimerOut);
         this.setState({
@@ -274,7 +270,6 @@ class CustomSelectStar extends React.Component {
   }
 
   onMouseLeaveHandler = () => {
-
     if(this.state.menuTimerIn) {
         clearTimeout(this.state.menuTimerIn);
         this.setState({

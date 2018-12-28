@@ -12,7 +12,6 @@ import { actionCreateNewBook } from "../../actions/actions";
 class BookEdit extends React.Component {
   
   onSubmitHandle = (e) => {
-
     this.props.createNewBook(
       e.target["title"].value,
       e.target["author"].value,

@@ -12,6 +12,7 @@ const Substrate = styled.div`
   left: -43px;
   z-index: 3;
 `;
+
 const MainWin = styled.div`
   margin: 10px;
   padding: 0px;
@@ -19,6 +20,7 @@ const MainWin = styled.div`
   border-radius: 0.25rem;
   background-color: white;
 `;
+
 const StyledLink = styled(Link)`
   display: block;
   text-decoration: none;
@@ -39,6 +41,7 @@ const StyledLink = styled(Link)`
     color: ${colorLine};
   }
 `;
+
 const ArrowUp = styled.div`
   position: absolute;
   top: 5px;
