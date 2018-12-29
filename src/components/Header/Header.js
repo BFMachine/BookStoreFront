@@ -4,10 +4,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
 
 import PopupMenu from "../PopupMenu/PopupMenu";
-import { actionLogoutUser, actionSetFilterCategory, actionSetPageCurrent, CATEGORY_ALL, 
-  CATEGORY_CLASSIC, CATEGORY_FANTASY, CATEGORY_ADVENTURE, CATEGORY_DETECTIVE,
-  CATEGORY_FICTION, CATEGORY_SCIENTIFIC, CATEGORY_CHILDREN, actionGetBooks,
- } from "../../actions/actions"; 
+import * as actions from "../../actions/actions"; 
 
 import history from "../../modules/history";
 import "./Header.scss";
@@ -16,34 +13,32 @@ class Header extends React.Component {
   constructor(props) {
     super(props);
 
+    this.menuTimer = 0;
+
     this.state = {
-      menuTimer: 0,
       menuVisible: false
     };
   }
 
   onClickPopupMenuHandler = () => {
-    if(this.state.menuTimer) {
-      clearTimeout(this.state.menuTimer);
+    if(this.menuTimer) {
+      clearTimeout(this.menuTimer);
     }
 
+    this.menuTimer = 0;
     this.setState({
-      menuTimer: 0,
       menuVisible: true
     });
   }
 
   onMouseEnterHandler = () => {
-    if(!this.state.menuTimer) { 
-      this.setState({
-        menuTimer: setTimeout(()=>{
-          let self = this;
-          self.setState({
-            menuTimer: 0,
+    if(!this.menuTimer) { 
+      this.menuTimer = setTimeout(()=>{
+          this.menuTimer = 0;
+          this.setState({
             menuVisible: true
           });
-        }, 400)
-      });
+      }, 400);
     }
   }
 
@@ -52,12 +47,12 @@ class Header extends React.Component {
       return;
     }
 
-    if(this.state.menuTimer) {
-        clearTimeout(this.state.menuTimer);
+    if(this.menuTimer) {
+        clearTimeout(this.menuTimer);
     }
     
+    this.menuTimer = 0;
     this.setState({
-        menuTimer: 0,
         menuVisible: false
     });
   }
@@ -175,14 +170,14 @@ class Header extends React.Component {
 
         </div>
         <div className="header__bottom"> 
-          <span onClick={()=>this.setCategoryFilter(CATEGORY_ALL)}>Все</span>
-          <span onClick={()=>this.setCategoryFilter(CATEGORY_CLASSIC)}>Классика</span>
-          <span onClick={()=>this.setCategoryFilter(CATEGORY_FANTASY)}>Фэнтэзи</span>
-          <span onClick={()=>this.setCategoryFilter(CATEGORY_ADVENTURE)}>Публицистика</span>
-          <span onClick={()=>this.setCategoryFilter(CATEGORY_DETECTIVE)}>Детектив</span>
-          <span onClick={()=>this.setCategoryFilter(CATEGORY_FICTION)}>Женские романы</span>
-          <span onClick={()=>this.setCategoryFilter(CATEGORY_SCIENTIFIC)}>Научная литература</span>
-          <span onClick={()=>this.setCategoryFilter(CATEGORY_CHILDREN)}>Детская</span>
+          <span onClick={()=>this.setCategoryFilter(actions.CATEGORY_ALL)}>Все</span>
+          <span onClick={()=>this.setCategoryFilter(actions.CATEGORY_CLASSIC)}>Классика</span>
+          <span onClick={()=>this.setCategoryFilter(actions.CATEGORY_FANTASY)}>Фэнтэзи</span>
+          <span onClick={()=>this.setCategoryFilter(actions.CATEGORY_ADVENTURE)}>Публицистика</span>
+          <span onClick={()=>this.setCategoryFilter(actions.CATEGORY_DETECTIVE)}>Детектив</span>
+          <span onClick={()=>this.setCategoryFilter(actions.CATEGORY_FICTION)}>Женские романы</span>
+          <span onClick={()=>this.setCategoryFilter(actions.CATEGORY_SCIENTIFIC)}>Научная литература</span>
+          <span onClick={()=>this.setCategoryFilter(actions.CATEGORY_CHILDREN)}>Детская</span>
         </div>
       </div>
     );
@@ -218,15 +213,15 @@ function mapStateToProps(state) {
 let mapDipatchToProps = (dispatch) => {
   return {
     logoutUser: () => {
-      dispatch(actionLogoutUser());
+      dispatch(actions.actionLogoutUser());
     },
     setFilter: (filter) => {
-      dispatch(actionSetFilterCategory(filter));
-      dispatch(actionSetPageCurrent(1));
-      dispatch(actionGetBooks());
+      dispatch(actions.actionSetFilterCategory(filter));
+      dispatch(actions.actionSetPageCurrent(1));
+      dispatch(actions.actionGetBooks());
     },
     setSearchMode : () => {
-      dispatch(actionSetPageCurrent(1));
+      dispatch(actions.actionSetPageCurrent(1));
     }
   };
 };

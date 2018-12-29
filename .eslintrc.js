@@ -2,7 +2,8 @@ module.exports = {
     "extends": [
         "airbnb",
         "eslint:recommended",
-        "plugin:react/recommended"
+        "plugin:react/recommended",
+        "react-app"
     ],
     "env": {
         "browser": true,
@@ -27,5 +28,6 @@ module.exports = {
         "jsx-a11y/no-static-element-interactions": "off",
         "no-constant-condition": "off",
         "react/destructuring-assignment": "off",
+        "react/require-default-props" : "off"
     },
 };

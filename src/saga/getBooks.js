@@ -1,5 +1,5 @@
 import { put, call, select } from "redux-saga/effects";
-import { actionSetBooks, actionSetPageTotal, CATEGORY_ALL, RANK_ALL, SORT_BY_ALL } from "../actions/actions";
+import * as actions from "../actions/actions";
 
 import config from "../config";
 
@@ -14,16 +14,16 @@ export default function* getBooks() {
     let pages = yield select(getPages);
     const search = yield select(getSearch);
 
-    if(params.category === CATEGORY_ALL) {
+    if(params.category === actions.CATEGORY_ALL) {
         delete params.category;
     }
-    if(params.rank === RANK_ALL) {
+    if(params.rank === actions.RANK_ALL) {
         delete params.rank;
     }
     if(params.author === "") {
         delete params.author;
     }
-    if(params.sort === SORT_BY_ALL) {
+    if(params.sort === actions.SORT_BY_ALL) {
         delete params.sort;
         delete params.direction;
     } 
@@ -76,8 +76,8 @@ export default function* getBooks() {
           }
         });
 
-        yield put(actionSetPageTotal(max_pages));
-        yield put(actionSetBooks(books));
+        yield put(actions.actionSetPageTotal(max_pages));
+        yield put(actions.actionSetBooks(books));
 
     } catch (error) {
         console.log(`server response error ${error}`);

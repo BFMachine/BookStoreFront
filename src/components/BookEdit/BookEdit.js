@@ -10,27 +10,27 @@ import { actionCreateNewBook } from "../../actions/actions";
 /* eslint-disable jsx-a11y/label-has-for */
 
 class BookEdit extends React.Component {
-  
+
   onSubmitHandle = (e) => {
     this.props.createNewBook(
-      e.target["title"].value,
-      e.target["author"].value,
-      e.target["description"].value,
-      e.target["price"].value, 
-      e.target["rank"].value, 
-      e.target["category"].value, 
-      e.target["cover-file"].files, 
-      e.target["fragment-file"].files
+      e.target.title.value,
+      e.target.author.value,
+      e.target.description.value,
+      e.target.price.value,
+      e.target.rank.value,
+      e.target.category.value,
+      e.target.coverFile.files,
+      e.target.fragmentFile.files
     );
-          
+
     e.preventDefault();
     this.props.history.push("/");
   }
 
   render() {
     return (
-      <form 
-        className="book-edit__form" 
+      <form
+        className="book-edit__form"
         onSubmit={this.onSubmitHandle}
       >
         <p>
@@ -39,10 +39,10 @@ class BookEdit extends React.Component {
 
         <label>
           <span>Наименование</span>
-          <input  
+          <input
             type="text"
             className="book-edit__form_input_text"
-            placeholder="введите наименование произведения" 
+            placeholder="введите наименование произведения"
             name="title"
             autoComplete="off"
             required
@@ -51,10 +51,10 @@ class BookEdit extends React.Component {
 
         <label>
           <span>Автор</span>
-          <input 
+          <input
             type="text"
             className="book-edit__form_input_text"
-            placeholder="введите автора произведения" 
+            placeholder="введите автора произведения"
             name="author"
             autoComplete="off"
             required
@@ -63,11 +63,11 @@ class BookEdit extends React.Component {
 
         <label>
           <span>Описание</span>
-          <textarea 
-            rows="10" 
-            cols="45" 
+          <textarea
+            rows="10"
+            cols="45"
             className="book-edit__form_input_text"
-            placeholder="описание книги" 
+            placeholder="описание книги"
             name="description"
             autoComplete="off"
             title="введите описание книги"
@@ -77,20 +77,20 @@ class BookEdit extends React.Component {
         <div className="book-edit__form-input-wraper">
           <label className="book-edit__form-third">
             <span>Цена</span>
-            <input 
+            <input
               type="number"
               min="1"
               className="book-edit__form_input_text"
-              placeholder="цена в рублях" 
-              name="price" 
+              placeholder="цена в рублях"
+              name="price"
               required
             />
           </label>
 
           <label className="book-edit__form-third">
             <span>Рейтинг</span>
-            <select 
-              className="book-edit__form_input_text" 
+            <select
+              className="book-edit__form_input_text"
               name="rank"
               defaultValue="five"
             >
@@ -102,11 +102,11 @@ class BookEdit extends React.Component {
             </select>
 
           </label>
-          
+
           <label className="book-edit__form-third">
             <span>Жанр</span>
-            <select 
-              className="book-edit__form_input_text" 
+            <select
+              className="book-edit__form_input_text"
               name="category"
               defaultValue="1"
             >
@@ -124,44 +124,44 @@ class BookEdit extends React.Component {
 
         <label>
           <span>Файлы обложки</span>
-          <input 
-            type="file" 
-            className="book-edit__form_input_text" 
-            name="cover-file"
+          <input
+            type="file"
+            className="book-edit__form_input_text"
+            name="coverFile"
             multiple
           />
         </label>
 
         <label>
           <span>Файл фрагмента</span>
-          <input 
-            type="file" 
-            className="book-edit__form_input_text" 
-            name="fragment-file"
+          <input
+            type="file"
+            className="book-edit__form_input_text"
+            name="fragmentFile"
           />
         </label>
-        
-        <button 
+
+        <button
           className="book-edit__form_button"
           type="submit"
         >
           Сохранить изменения
         </button>
       </form>
-    );       
+    );
   }
 }
 
 /* eslint-disable react/require-default-props */
 BookEdit.propTypes = {
-    createNewBook: PropTypes.func.isRequired,
-    history: PropTypes.instanceOf(Object)
+  createNewBook: PropTypes.func.isRequired,
+  history: PropTypes.instanceOf(Object)
 };
 
 function mapDispatchToProps(dispatch) {
   return {
     createNewBook: (title, author, description, price, rank, category, coverFile, fragmentFile) => {
-      dispatch( actionCreateNewBook(title, author, description, price, rank, category, coverFile, fragmentFile));
+      dispatch(actionCreateNewBook(title, author, description, price, rank, category, coverFile, fragmentFile));
     }
   };
 }

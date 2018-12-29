@@ -1,16 +1,10 @@
 import { combineReducers } from "redux";
 
-import { SET_TOKENS, SET_AUTHENTICATION_ERROR, SET_AUTH_USER, SET_ORDERS,
-  SET_CART, ADD_TO_CART, SET_FAVORITE, SET_BOOKS, DELETE_FROM_CART, ADD_TO_FAVORITE, 
-  DELETE_FROM_FAVORITE , SET_COMMENTS, SET_FILTER_CATEGORY, SET_FILTER_RANK,
-  SET_FILTER_AUTHOR, SET_AUTHORS, SET_PAGE_TOTAL, SET_PAGE_SIZE, SET_PAGE_CURRENT,
-  SET_FILTER_SORT, SET_FILTER_SORT_DIRECTION, ADD_BOOK_TO_CAСH, CATEGORY_ALL,
-  RANK_ALL, SORT_BY_ALL, SET_SEARCH_MODE, SET_SEARCH_STRING
-} from "../actions/actions";
+import * as actions from "../actions/actions";
 
 function tokens(state = { accessToken: "", refreshToken: "" }, action) {
   switch(action.type) {
-    case SET_TOKENS:
+    case actions.SET_TOKENS:
 
       return {
         accessToken: action.tokens.accessToken,
@@ -33,12 +27,12 @@ const initialAuthState = {
 
 function authentications(state = initialAuthState, action) {
   switch(action.type) {
-    case SET_AUTHENTICATION_ERROR:
+    case actions.SET_AUTHENTICATION_ERROR:
       return { ...state,
         message: action.message
       };
 
-    case SET_AUTH_USER:
+    case actions.SET_AUTH_USER:
       return {...state,
         authorized: action.authorized,
         id: action.id,
@@ -56,7 +50,7 @@ function authentications(state = initialAuthState, action) {
 
 function orders(state = [], action) {
   switch(action.type) {
-    case SET_ORDERS:
+    case actions.SET_ORDERS:
       return [...action.payload];
   
     default:
@@ -67,7 +61,7 @@ function orders(state = [], action) {
 
 function comments(state = [], action) {
   switch(action.type) {
-    case SET_COMMENTS:
+    case actions.SET_COMMENTS:
       return [...action.payload];
   
     default:
@@ -77,15 +71,15 @@ function comments(state = [], action) {
 
 function cart(state = [], action) {
   switch(action.type) {
-    case SET_CART:
+    case actions.SET_CART:
       return [...action.cart];
 
-    case ADD_TO_CART:
+    case actions.ADD_TO_CART:
       return [...state, 
         action.book
       ];
 
-    case DELETE_FROM_CART:
+    case actions.DELETE_FROM_CART:
       return [
         ...state.filter(item => action.book.id !== item.id)
       ];  
@@ -97,15 +91,15 @@ function cart(state = [], action) {
 
 function favorite(state = [], action) {
   switch(action.type) {
-    case SET_FAVORITE:
+    case actions.SET_FAVORITE:
       return [...action.favorite];
 
-    case ADD_TO_FAVORITE:
+    case actions.ADD_TO_FAVORITE:
       return [...state,
         action.book
       ];
 
-    case DELETE_FROM_FAVORITE:
+    case actions.DELETE_FROM_FAVORITE:
       return [
         ...state.filter(item => action.book.id !== item.id)
       ];  
@@ -117,7 +111,7 @@ function favorite(state = [], action) {
 
 function books(state = [], action) {
   switch(action.type) {
-    case SET_BOOKS:
+    case actions.SET_BOOKS:
       return [...action.books];
   
     default:
@@ -127,7 +121,7 @@ function books(state = [], action) {
 
 function authors(state = [], action) {
   switch(action.type) {
-    case SET_AUTHORS:
+    case actions.SET_AUTHORS:
       return [...action.authors];
   
     default:
@@ -136,34 +130,34 @@ function authors(state = [], action) {
 }
 
 function filter(state = {
-  category: CATEGORY_ALL,
-  rank: RANK_ALL,
+  category: actions.CATEGORY_ALL,
+  rank: actions.RANK_ALL,
   author: "",
-  sort: SORT_BY_ALL,
+  sort: actions.SORT_BY_ALL,
   direction: "ASC"
 }, action) {
   switch(action.type) {
-    case SET_FILTER_CATEGORY:
+    case actions.SET_FILTER_CATEGORY:
       return {...state,
         category: action.filter_params
       };
 
-    case SET_FILTER_RANK:
+    case actions.SET_FILTER_RANK:
       return {...state,
         rank: action.filter_params
       };
 
-    case SET_FILTER_AUTHOR:
+    case actions.SET_FILTER_AUTHOR:
       return {...state,
         author: action.filter_params
       };
   
-    case SET_FILTER_SORT:
+    case actions.SET_FILTER_SORT:
       return {...state,
         sort: action.sort,
       };
 
-    case SET_FILTER_SORT_DIRECTION:
+    case actions.SET_FILTER_SORT_DIRECTION:
       return {...state,
         direction: action.direction,
       };
@@ -177,33 +171,39 @@ function filter(state = {
 function pages(state = {
   pages: 1,
   page: 1,
-  size: 4
+  size: 4,
+  lazy: false
 }, action) {
 
   switch(action.type) {
-    case SET_PAGE_TOTAL:
+    case actions.SET_PAGE_TOTAL:
       return {...state,
         pages: action.pages
       };
 
-    case SET_PAGE_SIZE:
+    case actions.SET_PAGE_SIZE:
       return {...state,
         size: action.size
       };
 
-    case SET_PAGE_CURRENT:
+    case actions.SET_PAGE_CURRENT:
       return {...state,
         page: action.page
       };
-  
+
+    case actions.SET_PAGE_LAZY:
+      return {...state,
+        lazy: action.lazy
+      };
+
     default:
         return state;  
   }
 }
 
-function cach(state = [], action) {
+function cache(state = [], action) {
   switch(action.type) {
-    case ADD_BOOK_TO_CAСH:
+    case actions.ADD_BOOK_TO_CACHE:
       return [...state, action.book];
   
     default:
@@ -213,12 +213,12 @@ function cach(state = [], action) {
 
 function search(state = {search: false, string: ""}, action) {
   switch(action.type) {
-    case SET_SEARCH_MODE:
+    case actions.SET_SEARCH_MODE:
       return {...state,
         search: action.search
       };
 
-    case SET_SEARCH_STRING:
+    case actions.SET_SEARCH_STRING:
       return {...state,
         string: action.string
       };
@@ -239,6 +239,6 @@ export default combineReducers({
     authors,
     filter,
     pages,
-    cach,
+    cache,
     search
 });

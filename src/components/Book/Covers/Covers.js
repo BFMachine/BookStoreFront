@@ -9,7 +9,7 @@ const phone_layout = "480px";
 
 const MainContainer = styled.div `
   height: 430px;
-  widht: 300px;
+  width: 300px;
   display: flex;
   justify-content: start;
 

@@ -101,7 +101,7 @@ class Cart extends React.Component {
           <IserInfo>{full_name}</IserInfo>
           <Button 
             onClick={this.props.clearCart}
-            disabled={this.props.cart.length < 1 ? true : false}
+            disabled={this.props.cart.length < 1}
           >
             Очистить корзину
           </Button>

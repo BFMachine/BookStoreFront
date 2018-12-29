@@ -1,19 +1,19 @@
 import { put } from "redux-saga/effects";
 
-import { actionSetTokens, actionSetAuthUser, actionSetCart, actionSetFavorite, actionSetOrders } from "../actions/actions";
+import * as actions from "../actions/actions";
 
 export default function* logoutUser() {
 
   localStorage.removeItem("RefreshT");
 
-  yield put(actionSetTokens({
+  yield put(actions.actionSetTokens({
     accessToken: "",
     refreshToken: ""
   }));
 
-  yield put(actionSetAuthUser(false)); 
-  yield put(actionSetCart([]));
-  yield put(actionSetFavorite([]));
-  yield put(actionSetOrders([]));
+  yield put(actions.actionSetAuthUser(false)); 
+  yield put(actions.actionSetCart([]));
+  yield put(actions.actionSetFavorite([]));
+  yield put(actions.actionSetOrders([]));
 
 }

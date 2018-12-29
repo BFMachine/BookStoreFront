@@ -3,39 +3,34 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
-import { actionSetFilterCategory, actionSetFilterRank, actionSetFilterAuthor,  actionGetBooks, 
-  actionSetFilterSort, actionSetFilterSortDirection, actionSetPageCurrent, actionSetPageSize,
-  CATEGORY_ALL, CATEGORY_CLASSIC, CATEGORY_FANTASY, CATEGORY_ADVENTURE, CATEGORY_DETECTIVE,
-  CATEGORY_FICTION, CATEGORY_SCIENTIFIC, CATEGORY_CHILDREN, SORT_BY_ALL, SORT_BY_PRICE,
-  SORT_BY_RANK, SORT_BY_AUTHOR
-} from "../../../actions/actions";
+import *as actions from "../../../actions/actions";
 import CustomSelect from "../../CustomSelect/CustomSelect";
 import CustomSelectStar from "../../CustomSelect/CustomSelectStar";
 
 const categorySelect = [{
   name: "Любая категория", 
-  value: CATEGORY_ALL
+  value: actions.CATEGORY_ALL
 }, {
   name: "Классика",
-  value: CATEGORY_CLASSIC
+  value: actions.CATEGORY_CLASSIC
 }, {
   name: "Фэнтэзи",
-  value: CATEGORY_FANTASY
+  value: actions.CATEGORY_FANTASY
 }, {
   name: "Публицистика",
-  value: CATEGORY_ADVENTURE
+  value: actions.CATEGORY_ADVENTURE
 }, {
   name: "Детектив",
-  value: CATEGORY_DETECTIVE
+  value: actions.CATEGORY_DETECTIVE
 }, {
   name: "Женские романы",
-  value: CATEGORY_FICTION
+  value: actions.CATEGORY_FICTION
 }, {
   name: "Научная литература",
-  value: CATEGORY_SCIENTIFIC
+  value: actions.CATEGORY_SCIENTIFIC
 }, {
   name: "Детская",
-  value: CATEGORY_CHILDREN
+  value: actions.CATEGORY_CHILDREN
 }];
 
 const sortSelect = [{
@@ -89,7 +84,7 @@ const PanelForm = styled.form`
   justify-content: flex-start;
   box-sizing: border-box;
   
-  @media only screen and (max-width : ${mobile_layout})  {
+  @media only screen and (max-width : ${mobile_layout}) {
     flex-wrap: wrap;
     justify-content: center;
     margin-right: 0;
@@ -98,6 +93,7 @@ const PanelForm = styled.form`
     > div:last-child {
       display: none;
     }
+  }
 `;
 
 const getAllAuthorToCustomSelect = (authors) => {
@@ -121,8 +117,8 @@ const getAllAuthorToCustomSelect = (authors) => {
 };
 
 const getSelectedSort = (sort, direction) => {
-  if(sort === SORT_BY_ALL) {
-    return SORT_BY_ALL.toString();
+  if(sort === actions.SORT_BY_ALL) {
+    return actions.SORT_BY_ALL.toString();
   }
     
   return sort + "_" + direction;
@@ -217,21 +213,21 @@ const mapDispatchToProps = (dispatch) => {
   return {
 
     setFilterCategory: (e) => {
-      dispatch(actionSetFilterCategory(e));
-      dispatch(actionSetPageCurrent(1));
-      dispatch(actionGetBooks());
+      dispatch(actions.actionSetFilterCategory(e));
+      dispatch(actions.actionSetPageCurrent(1));
+      dispatch(actions.actionGetBooks());
     },
 
     setFilterRank: (e) => {
-      dispatch(actionSetFilterRank(e));
-      dispatch(actionSetPageCurrent(1));
-      dispatch(actionGetBooks());
+      dispatch(actions.actionSetFilterRank(e));
+      dispatch(actions.actionSetPageCurrent(1));
+      dispatch(actions.actionGetBooks());
     },
 
     setFilterAuthor: (e) => {
-      dispatch(actionSetFilterAuthor(e));
-      dispatch(actionSetPageCurrent(1));
-      dispatch(actionGetBooks());
+      dispatch(actions.actionSetFilterAuthor(e));
+      dispatch(actions.actionSetPageCurrent(1));
+      dispatch(actions.actionGetBooks());
     },
 
     setFilterSort: (e) => {
@@ -240,32 +236,32 @@ const mapDispatchToProps = (dispatch) => {
       
       switch (filter) {
         case "price_ASC" : 
-          sort = SORT_BY_PRICE;
+          sort = actions.SORT_BY_PRICE;
           direction = "ASC";
           break;
 
         case "price_DESC" : 
-          sort = SORT_BY_PRICE;
+          sort =actions.SORT_BY_PRICE;
           direction = "DESC";
           break;
 
         case "rank_ASC" : 
-          sort = SORT_BY_RANK;
+          sort = actions.SORT_BY_RANK;
           direction = "ASC";
           break;
 
         case "rank_DESC" : 
-          sort = SORT_BY_RANK;
+          sort = actions.SORT_BY_RANK;
           direction = "DESC";
           break;
 
         case "author_ASC" : 
-          sort = SORT_BY_AUTHOR;
+          sort = actions.SORT_BY_AUTHOR;
           direction = "ASC";
           break;
 
         case "author_DESC" : 
-          sort = SORT_BY_AUTHOR;
+          sort = actions.SORT_BY_AUTHOR;
           direction = "DESC";
           break;
 
@@ -274,20 +270,20 @@ const mapDispatchToProps = (dispatch) => {
           direction = "ASC";
       }
 
-      dispatch(actionSetFilterSort(sort));
-      dispatch(actionSetFilterSortDirection(direction));
-      dispatch(actionGetBooks());
+      dispatch(actions.actionSetFilterSort(sort));
+      dispatch(actions.actionSetFilterSortDirection(direction));
+      dispatch(actions.actionGetBooks());
     },
 
     setFilterSortDirection: (e) => {
-      dispatch(actionSetFilterSortDirection(e));
-      dispatch(actionGetBooks());
+      dispatch(actions.actionSetFilterSortDirection(e));
+      dispatch(actions.actionGetBooks());
     },
 
     setPageSize: (e) => {
-      dispatch(actionSetPageSize(+e));
-      dispatch(actionSetPageCurrent(1));
-      dispatch(actionGetBooks());
+      dispatch(actions.actionSetPageSize(+e));
+      dispatch(actions.actionSetPageCurrent(1));
+      dispatch(actions.actionGetBooks());
     },
   };
 };

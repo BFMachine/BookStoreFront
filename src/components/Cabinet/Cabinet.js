@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 import "./Cabinet.scss";
 
-function Cabinet({ address, authorized, email, full_name, id, phone, role }) {
+function Cabinet({ address, /*authorized,*/ email, full_name, /*id,*/ phone, role }) {
   return (
     <div className="cabinet__wrap">
 
@@ -75,10 +75,10 @@ function Cabinet({ address, authorized, email, full_name, id, phone, role }) {
 /* eslint-disable react/require-default-props */
 Cabinet.propTypes = {
   address: PropTypes.string,
-  authorized: PropTypes.bool.isRequired,
+  //authorized: PropTypes.bool.isRequired,
   email: PropTypes.string.isRequired,
   full_name: PropTypes.string,
-  id: PropTypes.number.isRequired,
+  //id: PropTypes.number.isRequired,
   phone: PropTypes.string,
   role: PropTypes.string.isRequired
 };

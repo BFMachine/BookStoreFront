@@ -10,7 +10,7 @@ export const SET_FAVORITE = "SET_FAVORITE";
 export const ADD_TO_FAVORITE = "ADD_TO_FAVORITE";
 export const DELETE_FROM_FAVORITE = "DELETE_FROM_FAVORITE";
 export const SET_BOOKS = "SET_BOOKS";
-export const ADD_BOOK_TO_CAСH = "ADD_BOOK_TO_CAСH";
+export const ADD_BOOK_TO_CACHE = "ADD_BOOK_TO_CACHE";
 export const SET_AUTHORS = "SET_AUTHORS";
 export const SET_FILTER_CATEGORY = "SET_FILTER_CATEGORY";
 export const SET_FILTER_RANK = "SET_FILTER_RANK";
@@ -20,6 +20,7 @@ export const SET_FILTER_SORT_DIRECTION = "SET_FILTER_SORT_DIRECTION";
 export const SET_PAGE_TOTAL = "SET_PAGE_TOTAL";
 export const SET_PAGE_SIZE = "SET_PAGE_SIZE";
 export const SET_PAGE_CURRENT = "SET_PAGE_CURRENT";
+export const SET_PAGE_LAZY = "SET_PAGE_LAZY";
 export const SET_SEARCH_MODE = "SET_SEARCH_MODE";
 export const SET_SEARCH_STRING = "SET_SEARCH_STRING";
 
@@ -250,9 +251,9 @@ export function actionSetBooks(books) {
     };
 }
 
-export function actionAddBookToCash(book) {
+export function actionAddBookToCache(book) {
     return {
-        type: ADD_BOOK_TO_CAСH,
+        type: ADD_BOOK_TO_CACHE,
         book
     };
 }
@@ -367,7 +368,7 @@ export function actionSetPageTotal(pages) {
     };
 }
 
-export function actionSetPageSize(size) {
+export function actionSetPageSize(size) { 
     return {
         type: SET_PAGE_SIZE,
         size
@@ -378,6 +379,13 @@ export function actionSetPageCurrent(page) {
     return {
         type: SET_PAGE_CURRENT,
         page
+    };
+}
+
+export function actionSetPageLazy(lazy) {
+    return {
+        type: SET_PAGE_LAZY,
+        lazy
     };
 }
 

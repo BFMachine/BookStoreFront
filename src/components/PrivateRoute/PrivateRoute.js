@@ -3,7 +3,6 @@ import { Redirect, Route } from "react-router-dom";
 import { connect } from "react-redux";
 
 const PrivateRoute = ({ authorized, role, adminOnly, component: Component, render: renderProps, ...rest }) => {
-
   if(Component){
 
     if(!authorized){

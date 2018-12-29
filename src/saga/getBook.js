@@ -1,5 +1,5 @@
 import { put, call } from "redux-saga/effects";
-import { actionSetComments, actionAddBookToCash } from "../actions/actions";
+import { actionSetComments, actionAddBookToCache } from "../actions/actions";
 
 import config from "../config";
 
@@ -40,7 +40,7 @@ export default function* getBook({book_id}) {
           book.Files.push(defaultCover);
         }
 
-        yield put(actionAddBookToCash(book));
+        yield put(actionAddBookToCache(book));
         yield put(actionSetComments(book.Comments));
 
     } catch (error) {

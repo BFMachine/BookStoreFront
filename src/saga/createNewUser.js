@@ -1,9 +1,6 @@
 import { put, call, select } from "redux-saga/effects";
 import * as jwt from "jsonwebtoken";
-
-import { actionSetAuthUser, actionSetAuthenticationError, actionSetTokens, 
-  actionAddToFavoriteOnServer, actionSetOrders, actionAddToCartOnServer 
-  } from "../actions/actions";
+import * as actions from "../actions/actions";
 
 import config from "../config";
 
@@ -18,7 +15,7 @@ export default function* createNewUser({address, email, name, password, phone, r
       method: "post",
       headers: {
           "Accept": "application/json",
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
           //"Authorization": "Bearer " + tokens.accessToken
       },
       body: JSON.stringify({ email, password, full_name: name, address, phone, role })
@@ -42,31 +39,28 @@ export default function* createNewUser({address, email, name, password, phone, r
     console.log(`Server return new tokens: ${tokens.accessToken} ${tokens.refreshToken}`);
 
     localStorage.setItem("RefreshT", tokens.refreshToken);
-    yield put(actionSetTokens(tokens));
+    yield put(actions.actionSetTokens(tokens));
     
     const decToken = jwt.decode(tokens.accessToken, {complete: false});
-    yield put(actionSetAuthUser(true, decToken.id, decToken.email, decToken.role, resJson.full_name, resJson.address, resJson.phone));
+    yield put(actions.actionSetAuthUser(true, decToken.id, decToken.email, decToken.role, resJson.full_name, resJson.address, resJson.phone));
 
 
     //save favorite and cart on server
-    //let auth = yield select(getAuthentications);
     let cart = yield select(getCart);
     
     if(cart.length > 0) {
-      yield put(actionAddToCartOnServer(cart.map(item => item.id)));
+      yield put(actions.actionAddToCartOnServer(cart.map(item => item.id)));
       yield localStorage.removeItem("Cart");
     }
     
     let favorite = yield select(getFavorite);
 
     if(favorite.length > 0) {
-      yield put(actionAddToFavoriteOnServer(favorite.map(item => item.id)));
+      yield put(actions.actionAddToFavoriteOnServer(favorite.map(item => item.id)));
       yield localStorage.removeItem("Favorite");
     }
 
-    //yield put(actionSetCart([]));
-    //yield put(actionSetFavorite([]));
-    yield put(actionSetOrders([]));
+    yield put(actions.actionSetOrders([]));
 
   } catch (error) {
       
@@ -75,6 +69,6 @@ export default function* createNewUser({address, email, name, password, phone, r
       if( error.name !== "Error" ) {
           error.message = "Ошибка запроса сервера";
       }
-      yield put(actionSetAuthenticationError(error.message));
+      yield put(actions.actionSetAuthenticationError(error.message));
   }
 }

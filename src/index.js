@@ -15,7 +15,6 @@ ReactDOM.render((
     <Router history={history}> 
       <React.Fragment>
         <App /> 
-        {/*<DevTools />*/}
       </React.Fragment>
     </Router>
   </Provider>

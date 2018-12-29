@@ -1,11 +1,6 @@
 import { takeLatest, takeEvery } from "redux-saga/effects";
-import { INITIAL_LOAD_TOKEN, GET_AUTHENTICATION, REFRESH_ACCESS_TOKEN, 
-    GET_ORDERS, LOGOUT_USER, GET_CART, GET_FAVORITE, GET_BOOKS,
-    CREATE_NEW_USER, ADD_TO_CART_ON_SERVER, DELETE_FROM_CART_ON_SERVER,
-    DELETE_ALL_CART_ON_SERVER, ADD_TO_FAVORITE_ON_SERVER, DELETE_FROM_FAVORITE_ON_SERVER,
-    DELETE_ALL_FAVORITE_ON_SERVER, CREATE_NEW_BOOK, GET_BOOK_COMMENTS, CREATE_NEW_COMMENT,
-    GET_AUTHORS, GET_BOOK
-} from "../actions/actions";
+
+import * as actions from "../actions/actions";
 import initialLoadToken from "./initialLoadToken";
 import getAuthentication from "./getAuthentication";
 import refreshAccessToken from "./refreshAccessToken";
@@ -16,34 +11,32 @@ import getBooks from "./getBooks";
 import getAuthors from "./getAuthors";
 import getBookComments from "./getBookComments";
 import createNewUser from "./createNewUser";
-import { addToCartOnServer, deleteFromCartOnServer, deleteAllCartOnServer 
-} from "./addDelCartOnServer";
-import { addToFavoriteOnServer, deleteFromFavoriteOnServer, deleteAllFavoriteOnServer 
-} from "./addDelFavoriteOnServer";
+import * as cartFunctions from "./addDelCartOnServer";
+import * as favoriteFunctions from "./addDelFavoriteOnServer";
 import createNewBook from "./createNewBook";
 import createNewComment from "./createNewComment";
 import getBook from "./getBook";
 
 
 export default function* saga() {
-    yield takeLatest(INITIAL_LOAD_TOKEN, initialLoadToken);
-    yield takeEvery(GET_AUTHENTICATION, getAuthentication);
-    yield takeEvery(REFRESH_ACCESS_TOKEN, refreshAccessToken);
-    yield takeEvery(GET_ORDERS, getOrders);
-    yield takeEvery(LOGOUT_USER, logoutUser);
-    yield takeEvery(GET_FAVORITE, getFavorite);
-    yield takeEvery(GET_CART, getCart);
-    yield takeEvery(GET_BOOKS, getBooks);
-    yield takeEvery(GET_BOOK, getBook);
-    yield takeEvery(GET_AUTHORS, getAuthors);
-    yield takeEvery(GET_BOOK_COMMENTS, getBookComments);
-    yield takeEvery(CREATE_NEW_USER, createNewUser);
-    yield takeEvery(ADD_TO_CART_ON_SERVER, addToCartOnServer);
-    yield takeEvery(DELETE_FROM_CART_ON_SERVER, deleteFromCartOnServer);
-    yield takeEvery(DELETE_ALL_CART_ON_SERVER, deleteAllCartOnServer);
-    yield takeEvery(ADD_TO_FAVORITE_ON_SERVER, addToFavoriteOnServer);
-    yield takeEvery(DELETE_FROM_FAVORITE_ON_SERVER, deleteFromFavoriteOnServer);
-    yield takeEvery(DELETE_ALL_FAVORITE_ON_SERVER, deleteAllFavoriteOnServer);
-    yield takeEvery(CREATE_NEW_BOOK, createNewBook);
-    yield takeEvery(CREATE_NEW_COMMENT, createNewComment);
+    yield takeLatest(actions.INITIAL_LOAD_TOKEN, initialLoadToken);
+    yield takeEvery(actions.GET_AUTHENTICATION, getAuthentication);
+    yield takeEvery(actions.REFRESH_ACCESS_TOKEN, refreshAccessToken);
+    yield takeEvery(actions.GET_ORDERS, getOrders);
+    yield takeEvery(actions.LOGOUT_USER, logoutUser);
+    yield takeEvery(actions.GET_FAVORITE, getFavorite);
+    yield takeEvery(actions.GET_CART, getCart);
+    yield takeEvery(actions.GET_BOOKS, getBooks);
+    yield takeEvery(actions.GET_BOOK, getBook);
+    yield takeEvery(actions.GET_AUTHORS, getAuthors);
+    yield takeEvery(actions.GET_BOOK_COMMENTS, getBookComments);
+    yield takeEvery(actions.CREATE_NEW_USER, createNewUser);
+    yield takeEvery(actions.ADD_TO_CART_ON_SERVER, cartFunctions.addToCartOnServer);
+    yield takeEvery(actions.DELETE_FROM_CART_ON_SERVER, cartFunctions.deleteFromCartOnServer);
+    yield takeEvery(actions.DELETE_ALL_CART_ON_SERVER, cartFunctions.deleteAllCartOnServer);
+    yield takeEvery(actions.ADD_TO_FAVORITE_ON_SERVER, favoriteFunctions.addToFavoriteOnServer);
+    yield takeEvery(actions.DELETE_FROM_FAVORITE_ON_SERVER, favoriteFunctions.deleteFromFavoriteOnServer);
+    yield takeEvery(actions.DELETE_ALL_FAVORITE_ON_SERVER, favoriteFunctions.deleteAllFavoriteOnServer);
+    yield takeEvery(actions.CREATE_NEW_BOOK, createNewBook);
+    yield takeEvery(actions.CREATE_NEW_COMMENT, createNewComment);
  }

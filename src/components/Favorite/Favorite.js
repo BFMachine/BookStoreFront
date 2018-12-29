@@ -103,7 +103,7 @@ class Favorite extends React.Component {
           <IserInfo>{full_name}</IserInfo>
           <Button 
             onClick={this.props.clearFavorite}
-            disabled={this.props.favorite.length < 1 ? true : false}
+            disabled={this.props.favorite.length < 1}
           >
             Очистить избранное
           </Button>

@@ -1,8 +1,7 @@
 import * as jwt from "jsonwebtoken";
 
 import { put, call } from "redux-saga/effects";
-import { actionSetTokens, actionSetAuthenticationError, actionSetAuthUser,
-    actionSetCart, actionSetFavorite, actionGetCart, actionGetFavorite } from "../actions/actions";
+import * as actions from "../actions/actions";
     
 import config from "../config";
 
@@ -36,16 +35,16 @@ export default function* getAuthentication({ email, password }) {
         console.log(`Server return new tokens: ${tokens.accessToken} ${tokens.refreshToken}`);
 
         localStorage.setItem("RefreshT", tokens.refreshToken);
-        yield put(actionSetTokens(tokens));
+        yield put(actions.actionSetTokens(tokens));
         
         const decToken = jwt.decode(tokens.accessToken, {complete: false});
-        yield put(actionSetAuthUser(true, decToken.id, decToken.email, decToken.role, resJson.full_name, resJson.address, resJson.phone));
+        yield put(actions.actionSetAuthUser(true, decToken.id, decToken.email, decToken.role, resJson.full_name, resJson.address, resJson.phone));
         
-        yield put(actionSetCart([])); 
-        yield put(actionGetCart());
+        yield put(actions.actionSetCart([])); 
+        yield put(actions.actionGetCart());
         
-        yield put(actionSetFavorite([]));
-        yield put(actionGetFavorite()); 
+        yield put(actions.actionSetFavorite([]));
+        yield put(actions.actionGetFavorite()); 
 
     } catch (error) {
         
@@ -54,6 +53,6 @@ export default function* getAuthentication({ email, password }) {
         if( error.name !== "Error" ) {
             error.message = "Ошибка запроса сервера";
         }
-        yield put(actionSetAuthenticationError(error.message));
+        yield put(actions.actionSetAuthenticationError(error.message));
     }
 }

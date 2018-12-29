@@ -1,8 +1,7 @@
 import * as jwt from "jsonwebtoken";
 
 import { put, call, select } from "redux-saga/effects";
-import { actionSetTokens, actionSetAuthUser, actionSetAuthenticationError, actionSetCart,
-    actionGetCart, actionSetFavorite, actionGetFavorite } from "../actions/actions";
+import * as actions from "../actions/actions";
 import config from "../config";
 
 const getTokens = state => state.tokens;
@@ -18,7 +17,7 @@ export default function* refreshAccessToken() {
 
     if (!isExpTokenValid(tokens.refreshToken)) {
         console.log("no valid refresh token");
-        yield put(actionSetAuthUser(false));
+        yield put(actions.actionSetAuthUser(false));
         return;
     }
 
@@ -46,23 +45,23 @@ export default function* refreshAccessToken() {
         console.log(`Server return new tokens: ${newTokens.accessToken} ${newTokens.refreshToken}`);
 
         localStorage.setItem("RefreshT", newTokens.refreshToken);
-        yield put(actionSetTokens(newTokens));
+        yield put(actions.actionSetTokens(newTokens));
 
         const { id, email, role } = jwt.decode(newTokens.accessToken, {complete: false});
-        yield put(actionSetAuthUser(true, id, email, role, resJson.full_name, resJson.address, resJson.phone));
+        yield put(actions.actionSetAuthUser(true, id, email, role, resJson.full_name, resJson.address, resJson.phone));
 
-        yield put(actionSetCart([])); 
-        yield put(actionGetCart());
+        yield put(actions.actionSetCart([])); 
+        yield put(actions.actionGetCart());
         
-        yield put(actionSetFavorite([]));
-        yield put(actionGetFavorite()); 
+        yield put(actions.actionSetFavorite([]));
+        yield put(actions.actionGetFavorite()); 
 
 
     } catch (error) {
 
         console.log(`refresh token request throw error ${error.message}`);
-        yield put(actionSetAuthUser(false));
-        yield put(actionSetAuthenticationError("Ошибка ответа сервера"));
+        yield put(actions.actionSetAuthUser(false));
+        yield put(actions.actionSetAuthenticationError("Ошибка ответа сервера"));
     }
  }
  
